@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Grid Forecasting · Muhammad Sheraz</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="bg"></div>
+  <nav class="nav glass container">
+    <span class="logo">Muhammad Sheraz</span>
+    <ul class="nav__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#projects" class="active">Projects</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <article class="project-page container glass">
+    <h1>Smart Grid Demand Forecasting</h1>
+    <p class="tags">LSTM · PyTorch · AWS Lambda</p>
+    <img
+      class="hero-img"
+      src="https://source.unsplash.com/1200x600?electricity"
+      alt="Smart grid"
+    />
+    <p>
+      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
+      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+    </p>
+    <a
+      class="btn"
+      href="https://github.com/muhammad-sheraz/smart-grid"
+      target="_blank"
+      >View Code ↗</a
+    >
+  </article>
+
+  <footer class="footer container">
+    © <span id="year"></span> Muhammad Sheraz
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
