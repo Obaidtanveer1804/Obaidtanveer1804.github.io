@@ -1,17 +1,17 @@
 /* ===================================================================
-styles.css — Complete stylesheet for Home, Projects, Project Pages, Contact & Skills
+styles-olive.css — Complete stylesheet with Olive Monochromatic Theme
 =================================================================== */
 
 /* THEME VARIABLES */
 :root {
-  --clr-bg: #0d0d1a;
-  --glass-bg: rgba(20, 20, 30, 0.8);
-  --clr-accent: #00d4ff;
-  --clr-accent-dark: #00a3c4;
+  --clr-bg: #3C403D; /* Dark Olive */
+  --glass-bg: rgba(60, 64, 61, 0.8); /* Semi-transparent Olive */
+  --clr-accent: #6B705C; /* Medium Olive */
+  --clr-accent-dark: #4A4F3F; /* Darker Olive */
   --radius-lg: 1.25rem;
   --radius-med: 1rem;
   --shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.4);
-  --glow: 0 0 10px rgba(0, 212, 255, 0.42); /* Dimmed glow remains */
+  --glow: 0 0 10px rgba(107, 112, 92, 0.42); /* Dimmed Olive glow */
   font-family: "Inter", sans-serif;
 }
 
@@ -27,7 +27,7 @@ html {
 body {
   margin: 0;
   background: var(--clr-bg);
-  color: #ffffff;
+  color: #E8E9E6; /* Light Olive for text */
   line-height: 1.5;
   overflow-x: hidden;
 }
@@ -38,9 +38,9 @@ body {
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(circle at 20% 30%, #2a2a40 0%, #1a1a2e 45%) no-repeat,
-    radial-gradient(circle at 80% 70%, #1e1e33 0%, #0d0d1a 40%) no-repeat;
-  filter: blur(80px) saturate(150%);
+    radial-gradient(circle at 20% 30%, #5A5F50 0%, #3C403D 45%) no-repeat,
+    radial-gradient(circle at 80% 70%, #4A4F3F 0%, #2F322E 40%) no-repeat;
+  filter: blur(80px) saturate(120%);
 }
 
 /* GLOBAL CONTAINER */
@@ -55,7 +55,7 @@ body {
   display: inline-block;
   padding: 0.75rem 1.6rem;
   background: var(--clr-accent);
-  color: #fff;
+  color: #E8E9E6;
   border-radius: 2rem;
   text-decoration: none;
   font-weight: 600;
@@ -65,7 +65,7 @@ body {
 .btn:hover {
   background: var(--clr-accent-dark);
   transform: translateY(-2px);
-  box-shadow: var(--shadow), 0 0 15px rgba(0, 212, 255, 0.9);
+  box-shadow: var(--shadow), 0 0 15px rgba(107, 112, 92, 0.9);
 }
 
 /* NAVBAR */
@@ -83,7 +83,7 @@ body {
 .logo {
   font-weight: 700;
   font-size: 1.2rem;
-  color: #ffffff;
+  color: #E8E9E6;
 }
 .nav__links {
   display: flex;
@@ -94,14 +94,14 @@ body {
 }
 .nav__links a {
   text-decoration: none;
-  color: #d0d0e0;
+  color: #C1C7B9; /* Lighter Olive for links */
   font-weight: 500;
   transition: color 0.25s, text-shadow 0.25s;
 }
 .nav__links a:hover,
 .nav__links .active {
   color: var(--clr-accent);
-  text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
+  text-shadow: 0 0 5px rgba(107, 112, 92, 0.5);
 }
 
 /* HERO */
@@ -113,8 +113,8 @@ body {
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 900;
   margin: 0;
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+  color: #E8E9E6;
+  text-shadow: 0 0 10px rgba(107, 112, 92, 0.3);
 }
 .headline span {
   color: var(--clr-accent);
@@ -123,7 +123,7 @@ body {
   margin: 0.8rem auto 2rem;
   font-size: 1.1rem;
   max-width: 55ch;
-  color: #d0d0e0;
+  color: #C1C7B9;
 }
 
 /* PROJECT GRID */
@@ -133,8 +133,8 @@ body {
 .section-title {
   font-size: 2rem;
   margin: 2.5rem 0 1.8rem;
-  color: #ffffff;
-  text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+  color: #E8E9E6;
+  text-shadow: 0 0 10px rgba(107, 112, 92, 0.3);
 }
 .grid-8 {
   display: grid;
@@ -152,7 +152,7 @@ body {
   overflow: hidden;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(232, 233, 230, 0.05);
 }
 .card::before {
   content: "";
@@ -168,7 +168,7 @@ body {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
-  color: #fff;
+  color: #E8E9E6;
   padding: 1.1rem;
   display: flex;
   flex-direction: column;
@@ -224,7 +224,7 @@ body {
 }
 .skill-logo i {
   font-size: 2.5rem;
-  color: #fff;
+  color: #E8E9E6;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -234,22 +234,22 @@ body {
 }
 .skill-logo span {
   font-size: 0.8rem;
-  color: #fff;
+  color: #E8E9E6;
   position: absolute;
-  bottom: 0.5rem; /* Position text at the bottom */
+  bottom: 0.5rem;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   padding: 0 0.2rem;
   font-weight: 700;
   opacity: 0.9;
-  text-shadow: 0 0 3px rgba(0, 212, 255, 0.3);
+  text-shadow: 0 0 3px rgba(107, 112, 92, 0.3);
 }
 .skill-logo:hover {
-  transform: scale(1.2); /* Container zooms without rotation */
+  transform: scale(1.2);
 }
 .skill-logo:hover i {
-  transform: translate(-50%, -50%) scale(1.8) rotate(360deg); /* Adjusted for absolute positioning */
+  transform: translate(-50%, -50%) scale(1.8) rotate(360deg);
 }
 @keyframes spinOnce {
   0% { transform: translate(-50%, -50%) scale(1.8) rotate(0deg); }
@@ -272,7 +272,7 @@ body {
   flex: 0 0 400px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(232, 233, 230, 0.1);
   border-radius: var(--radius-med);
   box-shadow: var(--shadow);
   display: flex;
@@ -280,7 +280,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 1rem;
-  color: #d0d0e0;
+  color: #C1C7B9;
 }
 .profile-img {
   width: 90%;
@@ -305,7 +305,7 @@ body {
 }
 .social-links a:hover {
   color: var(--clr-accent);
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  box-shadow: 0 0 10px rgba(107, 112, 92, 0.5);
 }
 
 /* CHAT FORM */
@@ -313,23 +313,23 @@ body {
   flex: 0 0 400px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(232, 233, 230, 0.1);
   border-radius: var(--radius-med);
   box-shadow: var(--shadow);
   padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: #d0d0e0;
+  color: #C1C7B9;
 }
 .contact-form h2 {
   margin-top: 0;
   font-size: 1.6rem;
-  color: #ffffff;
+  color: #E8E9E6;
 }
 .contact-form p {
   margin-bottom: 0.8rem;
-  color: #d0d0e0;
+  color: #C1C7B9;
   font-size: 1rem;
 }
 .contact-form form {
@@ -341,23 +341,23 @@ body {
   display: flex;
   flex-direction: column;
   font-weight: 500;
-  color: #d0d0e0;
+  color: #C1C7B9;
   font-size: 1rem;
 }
 .contact-form input,
 .contact-form textarea {
   margin-top: 0.3rem;
   padding: 0.5rem 0.8rem;
-  border: 1px solid #333;
+  border: 1px solid #4A4F3F;
   border-radius: 0.88rem;
   font-size: 0.9rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(232, 233, 230, 0.1);
+  color: #E8E9E6;
   transition: box-shadow 0.25s;
 }
 .contact-form input:focus,
 .contact-form textarea:focus {
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  box-shadow: 0 0 10px rgba(107, 112, 92, 0.5);
 }
 .contact-form textarea {
   height: 90px;
@@ -371,7 +371,7 @@ body {
 .contact-form .direct {
   margin-top: 0.8rem;
   font-size: 0.9rem;
-  color: #a0a0b0;
+  color: #A1A7A0; /* Very light Olive */
 }
 
 /* PROJECT PAGE */
@@ -381,14 +381,14 @@ body {
   max-width: 800px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(232, 233, 230, 0.1);
   border-radius: var(--radius-med);
   box-shadow: var(--shadow);
-  color: #d0d0e0;
+  color: #C1C7B9;
 }
 .project-page h1 {
   margin-top: 0;
-  color: #ffffff;
+  color: #E8E9E6;
 }
 .project-page .tags {
   color: var(--clr-accent);
@@ -408,7 +408,7 @@ body {
   padding: 1rem 0;
   font-size: 0.9rem;
   opacity: 0.7;
-  color: #a0a0b0;
+  color: #A1A7A0;
 }
 
 /* TILT EFFECT */
