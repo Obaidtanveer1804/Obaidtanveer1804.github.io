@@ -242,11 +242,11 @@ body {
   transform: scale(1.2); /* Container zooms without rotation */
 }
 .skill-logo:hover i {
-  transform: scale(2.8) rotate(360deg); /* Logo zooms to 2.8x and spins */
+  transform: scale(2.2) rotate(360deg); /* Logo zooms to 2.8x and spins */
 }
 @keyframes spinOnce {
-  0% { transform: scale(2.8) rotate(0deg); }
-  100% { transform: scale(2.8) rotate(360deg); }
+  0% { transform: scale(2.2) rotate(0deg); }
+  100% { transform: scale(2.2) rotate(360deg); }
 }
 
 /* CONTACT SECTION */
