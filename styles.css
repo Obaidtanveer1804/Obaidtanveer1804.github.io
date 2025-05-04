@@ -133,8 +133,8 @@ body {
 }
 .grid-16 {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); /* Half the size of grid-8 for Skills page */
-  gap: 1rem; /* Slightly smaller gap for smaller cards */
+  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+  gap: 1rem;
 }
 .card {
   position: relative;
@@ -176,15 +176,66 @@ body {
   font-size: 0.8rem;
   opacity: 0.85;
 }
-/* Adjust card__info for smaller cards in grid-16 */
 .grid-16 .card__info {
-  padding: 0.6rem; /* Reduced padding for smaller cards */
+  padding: 0.6rem;
 }
 .grid-16 .card__info h3 {
-  font-size: 0.8rem; /* Smaller font size for readability */
+  font-size: 0.8rem;
 }
 .grid-16 .card__info span {
-  font-size: 0.65rem; /* Smaller font size for readability */
+  font-size: 0.65rem;
+}
+
+/* SKILLS LOGO STYLES */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  padding: 1rem 0;
+}
+.skill-logo {
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  data-tilt;
+  data-tilt-max="10";
+  data-tilt-speed="400";
+  data-tilt-perspective="500";
+}
+.skill-logo i {
+  font-size: 2.5rem;
+  color: #fff;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+.skill-logo:hover {
+  transform: scale(1.2) rotate(360deg);
+  box-shadow: 0 15px 30px -10px rgba(0,0,0,0.3);
+}
+.skill-logo:hover i {
+  transform: scale(1.2);
+}
+.skill-logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96c93d);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+  z-index: 0;
+}
+@keyframes gradientShift {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
 }
 
 /* CONTACT SECTION */
@@ -355,5 +406,8 @@ body {
   }
   .contact-form {
     text-align: left;
+  }
+  .skills-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
   }
 }
