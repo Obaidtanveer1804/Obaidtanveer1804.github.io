@@ -225,13 +225,17 @@ body {
 .skill-logo i {
   font-size: 2.5rem;
   color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1;
   transition: transform 0.3s ease;
 }
 .skill-logo span {
   font-size: 0.8rem;
   color: #fff;
-  margin-top: 3rem; /* Increased to move text downward */
+  margin-top: 3rem; /* Keeps text positioned downward */
   text-align: center;
   padding: 0 0.2rem;
   font-weight: 700;
@@ -242,11 +246,11 @@ body {
   transform: scale(1.2); /* Container zooms without rotation */
 }
 .skill-logo:hover i {
-  transform: scale(1.8) rotate(360deg); /* Logo zooms to 2.8x and spins */
+  transform: translate(-50%, -50%) scale(1.8) rotate(360deg); /* Adjusted for absolute positioning */
 }
 @keyframes spinOnce {
-  0% { transform: scale(1.8) rotate(0deg); }
-  100% { transform: scale(1.8) rotate(360deg); }
+  0% { transform: translate(-50%, -50%) scale(1.8) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) scale(1.8) rotate(360deg); }
 }
 
 /* CONTACT SECTION */
