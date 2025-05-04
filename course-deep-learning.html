@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deep Learning · Obaid Tanveer</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <nav class="nav glass container">
+    <span class="logo">Obaid Tanveer</span>
+    <ul class="nav__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="education.html" class="active">Education</a></li>
+      <li><a href="skills.html">Skills</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <section class="project-page">
+      <h1>Deep Learning</h1>
+      <div class="tags">Coursera</div>
+      <img class="hero-img" src="https://source.unsplash.com/600x600?deeplearning" alt="Deep Learning"/>
+      <p><strong>Platform:</strong> Coursera</p>
+      <p><strong>Duration:</strong> 4 months (2022)</p>
+      <p><strong>Key Learnings:</strong> Explored neural networks, CNNs, and RNNs. Implemented projects like image classification using TensorFlow and Keras, achieving high accuracy on datasets like CIFAR-10.</p>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    © <span id="year"></span> Obaid Tanveer
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
