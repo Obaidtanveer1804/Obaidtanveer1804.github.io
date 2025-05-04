@@ -11,7 +11,7 @@ styles.css — Complete stylesheet for Home, Projects, Project Pages, Contact & 
   --radius-lg: 1.25rem;
   --radius-med: 1rem;
   --shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.4);
-  --glow: 0 0 10px rgba(0, 212, 255, 0.42); /* Reduced to 60% of 0.7 */
+  --glow: 0 0 10px rgba(0, 212, 255, 0.42); /* Dimmed glow remains */
   font-family: "Inter", sans-serif;
 }
 
@@ -227,8 +227,6 @@ body {
   color: #fff;
   z-index: 1;
   transition: transform 0.3s ease;
-  text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), inset 0 0 10px rgba(0, 212, 255, 0.2); /* Added 3D shadow */
 }
 .skill-logo span {
   font-size: 0.8rem;
@@ -244,11 +242,11 @@ body {
   transform: scale(1.2); /* Container zooms without rotation */
 }
 .skill-logo:hover i {
-  transform: scale(1.4) rotate(360deg); /* Logo zooms more and spins */
+  transform: scale(2.8) rotate(360deg); /* Logo zooms to 2.8x and spins */
 }
 @keyframes spinOnce {
-  0% { transform: scale(1.4) rotate(0deg); }
-  100% { transform: scale(1.4) rotate(360deg); }
+  0% { transform: scale(2.8) rotate(0deg); }
+  100% { transform: scale(2.8) rotate(360deg); }
 }
 
 /* CONTACT SECTION */
