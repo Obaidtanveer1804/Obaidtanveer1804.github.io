@@ -235,7 +235,10 @@ body {
 .skill-logo span {
   font-size: 0.8rem;
   color: #fff;
-  margin-top: 3rem; /* Keeps text positioned downward */
+  position: absolute;
+  bottom: 0.5rem; /* Position text at the bottom */
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
   padding: 0 0.2rem;
   font-weight: 700;
