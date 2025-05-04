@@ -196,12 +196,13 @@ body {
 .skill-logo {
   aspect-ratio: 1/1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #fff;
+  background: #4ecdc4;
   border-radius: 50%;
   box-shadow: var(--shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -211,31 +212,30 @@ body {
   data-tilt-perspective="500";
 }
 .skill-logo i {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #fff;
   z-index: 1;
   transition: transform 0.3s ease;
 }
+.skill-logo span {
+  font-size: 0.7rem;
+  color: #fff;
+  margin-top: 0.3rem;
+  text-align: center;
+  padding: 0 0.2rem;
+  opacity: 0.9;
+}
 .skill-logo:hover {
-  transform: scale(1.2) rotate(360deg);
+  transform: scale(1.2);
+  animation: spinOnce 0.5s ease forwards;
   box-shadow: 0 15px 30px -10px rgba(0,0,0,0.3);
 }
 .skill-logo:hover i {
   transform: scale(1.2);
 }
-.skill-logo::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96c93d);
-  background-size: 400% 400%;
-  animation: gradientShift 8s ease infinite;
-  z-index: 0;
-}
-@keyframes gradientShift {
-  0% { background-position: 0% 0%; }
-  50% { background-position: 100% 100%; }
-  100% { background-position: 0% 0%; }
+@keyframes spinOnce {
+  0% { transform: scale(1.2) rotate(0deg); }
+  100% { transform: scale(1.2) rotate(360deg); }
 }
 
 /* CONTACT SECTION */
