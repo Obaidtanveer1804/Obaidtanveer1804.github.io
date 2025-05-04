@@ -180,13 +180,12 @@ body {
   gap: 2rem;
   margin: 4rem auto;
   width: 100%;
-  max-width: 650px; /* Adjusted for new container widths: 300px + 300px + 2rem gap = 620px */
+  max-width: 850px; /* Adjusted for new container widths: 400px + 400px + 2rem gap = 820px */
 }
 
 /* PROFILE CARD */
 .profile-card {
-  flex: 0 0 300px; /* Reduced from 361px */
-  height: 300px; /* Fixed height to control total size */
+  flex: 0 0 400px; /* Increased from 300px */
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -196,10 +195,10 @@ body {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
 }
 .profile-img {
-  width: 90%; /* 90% of 300px = 270px, leaving 15px on each side */
+  width: 90%; /* 90% of 400px = 360px, leaving 20px on each side */
   height: auto;
   object-fit: cover;
   border-radius: var(--radius-med);
@@ -210,8 +209,8 @@ body {
   display: flex;
   gap: 0.8rem;
   justify-content: center;
-  padding-bottom: 1rem;
-  margin-top: 1.5rem; /* Adjusted for balanced spacing */
+  padding-bottom: 1.5rem;
+  margin-top: 2.5rem; /* Maintains space below the image */
 }
 .social-links a {
   width: 24px;
@@ -225,60 +224,59 @@ body {
 
 /* CHAT FORM */
 .contact-form {
-  flex: 0 0 300px; /* Reduced from 361px */
-  height: 300px; /* Fixed height to match profile-card */
+  flex: 0 0 400px; /* Increased from 300px */
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-med);
   box-shadow: var(--shadow);
-  padding: 0.5rem 1rem; /* Reduced padding to fit height */
+  padding: 1rem 1.5rem; /* Increased padding for better spacing */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 .contact-form h2 {
   margin-top: 0;
-  font-size: 1.4rem; /* Slightly reduced for height constraint */
+  font-size: 1.6rem; /* Restored to original size */
 }
 .contact-form p {
-  margin-bottom: 0.5rem; /* Reduced for height constraint */
+  margin-bottom: 0.8rem; /* Restored to original size */
   color: #444;
-  font-size: 0.9rem; /* Slightly reduced for height constraint */
+  font-size: 1rem; /* Restored to original size */
 }
 .contact-form form {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; /* Reduced for height constraint */
+  gap: 0.8rem; /* Restored to original size */
 }
 .contact-form label {
   display: flex;
   flex-direction: column;
   font-weight: 500;
   color: #333;
-  font-size: 0.9rem; /* Slightly reduced for height constraint */
+  font-size: 1rem; /* Restored to original size */
 }
 .contact-form input,
 .contact-form textarea {
-  margin-top: 0.2rem; /* Reduced for height constraint */
-  padding: 0.4rem 0.6rem; /* Reduced for height constraint */
+  margin-top: 0.3rem; /* Restored to original size */
+  padding: 0.5rem 0.8rem; /* Restored to original size */
   border: 1px solid #bbb;
   border-radius: 0.88rem;
-  font-size: 0.8rem; /* Reduced for height constraint */
-  resize: none; /* Prevent manual resizing */
+  font-size: 0.9rem; /* Restored to original size */
+  resize: none;
 }
 .contact-form textarea {
-  height: 80px; /* Reduced from 100px to fit height */
-  max-height: 80px;
+  height: 90px; /* Adjusted to fit content comfortably */
+  max-height: 90px;
 }
 .contact-form .btn {
   width: fit-content;
-  margin-top: 0.5rem; /* Reduced for height constraint */
-  padding: 0.5rem 1.2rem; /* Reduced for height constraint */
+  margin-top: 0.8rem; /* Restored to original size */
+  padding: 0.75rem 1.6rem; /* Restored to original size */
 }
 .contact-form .direct {
-  margin-top: 0.5rem; /* Reduced for height constraint */
-  font-size: 0.8rem; /* Reduced for height constraint */
+  margin-top: 0.8rem; /* Restored to original size */
+  font-size: 0.9rem; /* Restored to original size */
   color: #555;
 }
 
