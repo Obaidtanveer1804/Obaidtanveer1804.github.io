@@ -45,19 +45,19 @@
 
     <h2 class="section-title">Featured Courses</h2>
     <div class="grid-8">
-      <a class="card tilt" href="#" style="--img:url('https://source.unsplash.com/600x600?machinelearning');">
+      <a class="card tilt" href="course-machine-learning.html" style="--img:url('https://source.unsplash.com/600x600?machinelearning');">
         <div class="card__info"><h3>Machine Learning</h3><span>Coursera</span></div>
       </a>
-      <a class="card tilt" href="#" style="--img:url('https://source.unsplash.com/600 EDx600?deeplearning');">
+      <a class="card tilt" href="course-deep-learning.html" style="--img:url('https://source.unsplash.com/600x600?deeplearning');">
         <div class="card__info"><h3>Deep Learning</h3><span>Coursera</span></div>
       </a>
-      <a class="card tilt" href="#" style="--img:url('https://source.unsplash.com/600x600?algorithms');">
+      <a class="card tilt" href="course-algorithms.html" style="--img:url('https://source.unsplash.com/600x600?algorithms');">
         <div class="card__info"><h3>Algorithms & DS</h3><span>edX</span></div>
       </a>
-      <a class="card tilt" href="#" style="--img:url('https://source.unsplash.com/600x600?vision');">
+      <a class="card tilt" href="course-computer-vision.html" style="--img:url('https://source.unsplash.com/600x600?vision');">
         <div class="card__info"><h3>Computer Vision</h3><span>Udacity</span></div>
       </a>
-      <a class="card tilt" href="#" style="--img:url('https://source.unsplash.com/600x600?nlp');">
+      <a class="card tilt" href="course-nlp.html" style="--img:url('https://source.unsplash.com/600x600?nlp');">
         <div class="card__info"><h3>Natural Language Processing</h3><span>Udemy</span></div>
       </a>
     </div>
@@ -68,6 +68,8 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
-  <script src="script.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
