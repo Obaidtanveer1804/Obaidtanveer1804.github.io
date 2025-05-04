@@ -1,414 +1,155 @@
-/* ===================================================================
-styles.css — Complete stylesheet for Home, Projects, Project Pages, Contact & Skills
-=================================================================== */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Skills · Obaid Tanveer</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <!-- Font Awesome for skill icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+</head>
+<body>
+  <div class="bg"></div>
 
-/* THEME VARIABLES */
-:root {
-  --clr-bg: #f9f9ff;
-  --glass-bg: rgba(255,255,255,0.6);
-  --clr-accent: #5644ff;
-  --clr-accent-dark: #4436e6;
-  --radius-lg: 1.25rem;
-  --radius-med: 1rem;
-  --shadow: 0 10px 20px -8px rgba(0,0,0,0.12);
-  font-family: "Inter", sans-serif;
-}
+  <nav class="nav glass container">
+    <span class="logo">Obaid Tanveer</span>
+    <ul class="nav__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="education.html">Education</a></li>
+      <li><a href="skills.html" class="active">Skills</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
 
-/* RESET & BASE */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-html {
-  scroll-behavior: smooth;
-}
-body {
-  margin: 0;
-  background: var(--clr-bg);
-  color: #1a1a1a;
-  line-height: 1.5;
-  overflow-x: hidden;
-}
+  <main class="container">
+    <h2 class="section-title">My Skills</h2>
+    <div class="skills-grid">
+      <!-- C -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-code"></i>
+        <span>C</span>
+      </div>
+      <!-- C++ -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-code"></i>
+        <span>C++</span>
+      </div>
+      <!-- FreeRTOS -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-microchip"></i>
+        <span>FreeRTOS</span>
+      </div>
+      <!-- Embedded C -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-microchip"></i>
+        <span>Embedded C</span>
+      </div>
+      <!-- Assembly -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-code"></i>
+        <span>Assembly</span>
+      </div>
+      <!-- STM32 Cube IDE -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-tools"></i>
+        <span>STM32 IDE</span>
+      </div>
+      <!-- Arduino IDE -->
+      <div class="skill-logo" data-tilt>
+        <i class="fab fa-arduino"></i>
+        <span>Arduino</span>
+      </div>
+      <!-- ESP-IDF -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-tools"></i>
+        <span>ESP-IDF</span>
+      </div>
+      <!-- Raspbian -->
+      <div class="skill-logo" data-tilt>
+        <i class="fab fa-raspberry-pi"></i>
+        <span>Raspbian</span>
+      </div>
+      <!-- Linux -->
+      <div class="skill-logo" data-tilt>
+        <i class="fab fa-linux"></i>
+        <span>Linux</span>
+      </div>
+      <!-- Raspberry Pi Pico -->
+      <div class="skill-logo" data-tilt>
+        <i class="fab fa-raspberry-pi"></i>
+        <span>Pi Pico</span>
+      </div>
+      <!-- STM32 -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-microchip"></i>
+        <span>STM32</span>
+      </div>
+      <!-- ESP32 -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-microchip"></i>
+        <span>ESP32</span>
+      </div>
+      <!-- Sensor Interfacing -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Sensor</span>
+      </div>
+      <!-- Motor Control -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-cogs"></i>
+        <span>Motor</span>
+      </div>
+      <!-- Robotics -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-robot"></i>
+        <span>Robotics</span>
+      </div>
+      <!-- IoT -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-network-wired"></i>
+        <span>IoT</span>
+      </div>
+      <!-- Cloud Computing -->
+      <div class="skill-logo" data-tilt>
+        <i class="fas fa-cloud"></i>
+        <span>Cloud</span>
+      </div>
+      <!-- Python -->
+      <div class="skill-logo" data-tilt>
+        <i class="fab fa-python"></i>
+        <span>Python</span>
+      </div>
+      <!-- HTML -->
+      <div class="skill-logo" data-tilt>
+        <i class="fab fa-html5"></i>
+        <span>HTML</span>
+      </div>
+      <!-- CSS -->
+      <div class="skill-logo" data-tilt>
+        <i class="fab fa-css3-alt"></i>
+        <span>CSS</span>
+      </div>
+      <!-- JavaScript -->
+      <div class="skill-logo" data-tilt>
+        <i class="fab fa-js"></i>
+        <span>JS</span>
+      </div>
+    </div>
+  </main>
 
-/* BACKGROUND BLOBS */
-.bg {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  background:
-    radial-gradient(circle at 20% 30%, #ffefd5 0%, #ffe0c3 45%) no-repeat,
-    radial-gradient(circle at 80% 70%, #d4f1ff 0%, #c1d9ff 40%) no-repeat;
-  filter: blur(80px) saturate(120%);
-}
+  <footer class="footer container">
+    © <span id="year"></span> Obaid Tanveer
+  </footer>
 
-/* GLOBAL CONTAINER */
-.container {
-  width: min(1200px, 90%);
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* BUTTONS */
-.btn {
-  display: inline-block;
-  padding: 0.75rem 1.6rem;
-  background: var(--clr-accent);
-  color: #fff;
-  border-radius: 2rem;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background 0.25s, transform 0.25s;
-}
-.btn:hover {
-  background: var(--clr-accent-dark);
-  transform: translateY(-2px);
-}
-
-/* NAVBAR */
-.nav.container {
-  margin: 1rem auto;
-  padding: 0.8rem 1.4rem;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.logo {
-  font-weight: 700;
-  font-size: 1.2rem;
-}
-.nav__links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.nav__links a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.25s;
-}
-.nav__links a:hover,
-.nav__links .active {
-  color: var(--clr-accent);
-}
-
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 5rem 0 4rem;
-}
-.headline {
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  font-weight: 900;
-  margin: 0;
-}
-.headline span {
-  color: var(--clr-accent);
-}
-.sub {
-  margin: 0.8rem auto 2rem;
-  font-size: 1.1rem;
-  max-width: 55ch;
-}
-
-/* PROJECT GRID */
-.projects {
-  padding-bottom: 4rem;
-}
-.section-title {
-  font-size: 2rem;
-  margin: 2.5rem 0 1.8rem;
-}
-.grid-8 {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
-.grid-16 {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
-  gap: 1rem;
-}
-.card {
-  position: relative;
-  aspect-ratio: 1/1;
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
-}
-.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--img) center/cover no-repeat;
-  transition: transform 0.45s;
-}
-.card:hover::before {
-  transform: scale(1.07) rotate(0.5deg);
-}
-.card__info {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
-  padding: 1.1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  transition: background 0.35s;
-}
-.card:hover .card__info {
-  background: rgba(0, 0, 0, 0.35);
-}
-.card__info h3 {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-.card__info span {
-  font-size: 0.8rem;
-  opacity: 0.85;
-}
-.grid-16 .card__info {
-  padding: 0.6rem;
-}
-.grid-16 .card__info h3 {
-  font-size: 0.8rem;
-}
-.grid-16 .card__info span {
-  font-size: 0.65rem;
-}
-
-/* SKILLS LOGO STYLES */
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 1.5rem;
-  padding: 1rem 0;
-}
-.skill-logo {
-  aspect-ratio: 1/1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #8a63d2;
-  border-radius: 50%;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  data-tilt;
-  data-tilt-max="10";
-  data-tilt-speed="400";
-  data-tilt-perspective="500";
-}
-.skill-logo i {
-  font-size: 2.5rem;
-  color: #fff;
-  z-index: 1;
-  transition: transform 0.3s ease;
-}
-.skill-logo span {
-  font-size: 0.8rem;
-  color: #fff;
-  margin-top: 0.4rem;
-  text-align: center;
-  padding: 0 0.2rem;
-  font-weight: 700;
-  opacity: 0.9;
-}
-.skill-logo:hover {
-  transform: scale(1.2);
-  animation: spinOnce 0.5s ease forwards;
-  box-shadow: 0 15px 30px -10px rgba(0,0,0,0.3);
-}
-.skill-logo:hover i {
-  transform: scale(1.2);
-}
-@keyframes spinOnce {
-  0% { transform: scale(1.2) rotate(0deg); }
-  100% { transform: scale(1.2) rotate(360deg); }
-}
-
-/* CONTACT SECTION */
-.contact-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: 2rem;
-  margin: 4rem auto;
-  width: 100%;
-  max-width: 850px;
-}
-
-/* PROFILE CARD */
-.profile-card {
-  flex: 0 0 400px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-med);
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 1rem;
-}
-.profile-img {
-  width: 90%;
-  height: auto;
-  object-fit: cover;
-  border-radius: var(--radius-med);
-  box-shadow: var(--shadow);
-  margin: 0;
-}
-.social-links {
-  display: flex;
-  gap: 0.8rem;
-  justify-content: center;
-  padding-bottom: 1.5rem;
-  margin-top: 2.5rem;
-}
-.social-links a {
-  width: 24px;
-  height: 24px;
-  color: var(--clr-accent-dark);
-  transition: color 0.25s;
-}
-.social-links a:hover {
-  color: var(--clr-accent);
-}
-
-/* CHAT FORM */
-.contact-form {
-  flex: 0 0 400px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-med);
-  box-shadow: var(--shadow);
-  padding: 1rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.contact-form h2 {
-  margin-top: 0;
-  font-size: 1.6rem;
-}
-.contact-form p {
-  margin-bottom: 0.8rem;
-  color: #444;
-  font-size: 1rem;
-}
-.contact-form form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-.contact-form label {
-  display: flex;
-  flex-direction: column;
-  font-weight: 500;
-  color: #333;
-  font-size: 1rem;
-}
-.contact-form input,
-.contact-form textarea {
-  margin-top: 0.3rem;
-  padding: 0.5rem 0.8rem;
-  border: 1px solid #bbb;
-  border-radius: 0.88rem;
-  font-size: 0.9rem;
-  resize: none;
-}
-.contact-form textarea {
-  height: 90px;
-  max-height: 90px;
-}
-.contact-form .btn {
-  width: fit-content;
-  margin-top: 0.8rem;
-  padding: 0.75rem 1.6rem;
-}
-.contact-form .direct {
-  margin-top: 0.8rem;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-/* PROJECT PAGE */
-.project-page {
-  margin: 5rem auto;
-  padding: 3rem 2rem;
-  max-width: 800px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-med);
-  box-shadow: var(--shadow);
-}
-.project-page h1 {
-  margin-top: 0;
-}
-.project-page .tags {
-  color: var(--clr-accent-dark);
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-}
-.hero-img {
-  width: 100%;
-  border-radius: var(--radius-med);
-  box-shadow: var(--shadow);
-  margin: 1.8rem 0;
-}
-
-/* FOOTER */
-.footer {
-  text-align: center;
-  padding: 1rem 0;
-  font-size: 0.9rem;
-  opacity: 0.7;
-}
-
-/* TILT EFFECT */
-.tilt {
-  will-change: transform;
-}
-
-/* REVEAL ON SCROLL */
-.reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.6s, transform 0.6s;
-}
-.in-view {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* RESPONSIVE */
-@media (max-width: 600px) {
-  .contact-wrap {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: none;
-  }
-  .contact-form {
-    text-align: left;
-  }
-  .skills-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  }
-}
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
+  <script>
+    VanillaTilt.init(document.querySelectorAll(".skill-logo"), {
+      max: 10,
+      speed: 400,
+      perspective: 500
+    });
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
