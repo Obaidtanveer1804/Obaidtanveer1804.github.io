@@ -176,7 +176,7 @@ body {
 .contact-wrap {
   display: flex;
   justify-content: center;
-  align-items: stretch; /* Ensures both containers match the taller one's height */
+  align-items: stretch;
   gap: 2rem;
   margin: 4rem auto;
   width: 100%;
@@ -193,23 +193,24 @@ body {
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Vertically centers content */
-  align-items: center; /* Horizontally centers content */
+  justify-content: space-between; /* Distributes space: image at top, social links at bottom */
+  align-items: center;
   padding: 1rem;
 }
 .profile-img {
-  width: 150px; /* Increased from 112px for better balance */
-  height: 150px;
+  width: 90%; /* 90% of 500px = 450px, leaving 25px on each side */
+  height: auto; /* Maintain aspect ratio */
   object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: 0.8rem;
+  border-radius: var(--radius-med); /* Matches container's border-radius (1rem) */
   box-shadow: var(--shadow);
+  margin: 0; /* Remove default margin */
 }
 .social-links {
   display: flex;
   gap: 0.8rem;
   justify-content: center;
-  margin-top: 0.4rem;
+  padding-bottom: 1rem; /* Space at the bottom of the container */
+  margin-top: 1rem; /* Space between image and icons */
 }
 .social-links a {
   width: 24px;
