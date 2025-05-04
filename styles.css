@@ -133,7 +133,8 @@ body {
 }
 .card {
   position: relative;
-  aspect-ratio: 1/1;
+  /* aspect-ratio: 1/1; */  <-- remove or comment this
+  min-height: 250px; /* optional: forces a decent height */
   overflow: hidden;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
