@@ -1,5 +1,5 @@
 /* ===================================================================
-styles.css — Complete stylesheet for Home, Projects, Project Pages & Contact
+styles.css — Complete stylesheet for Home, Projects, Project Pages, Contact & Skills
 =================================================================== */
 
 /* THEME VARIABLES */
@@ -131,6 +131,11 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
 }
+.grid-16 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); /* Half the size of grid-8 for Skills page */
+  gap: 1rem; /* Slightly smaller gap for smaller cards */
+}
 .card {
   position: relative;
   aspect-ratio: 1/1;
@@ -171,6 +176,16 @@ body {
   font-size: 0.8rem;
   opacity: 0.85;
 }
+/* Adjust card__info for smaller cards in grid-16 */
+.grid-16 .card__info {
+  padding: 0.6rem; /* Reduced padding for smaller cards */
+}
+.grid-16 .card__info h3 {
+  font-size: 0.8rem; /* Smaller font size for readability */
+}
+.grid-16 .card__info span {
+  font-size: 0.65rem; /* Smaller font size for readability */
+}
 
 /* CONTACT SECTION */
 .contact-wrap {
@@ -180,12 +195,12 @@ body {
   gap: 2rem;
   margin: 4rem auto;
   width: 100%;
-  max-width: 850px; /* Adjusted for new container widths: 400px + 400px + 2rem gap = 820px */
+  max-width: 850px;
 }
 
 /* PROFILE CARD */
 .profile-card {
-  flex: 0 0 400px; /* Increased from 300px */
+  flex: 0 0 400px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -198,7 +213,7 @@ body {
   padding: 1.5rem 1rem;
 }
 .profile-img {
-  width: 90%; /* 90% of 400px = 360px, leaving 20px on each side */
+  width: 90%;
   height: auto;
   object-fit: cover;
   border-radius: var(--radius-med);
@@ -210,7 +225,7 @@ body {
   gap: 0.8rem;
   justify-content: center;
   padding-bottom: 1.5rem;
-  margin-top: 2.5rem; /* Maintains space below the image */
+  margin-top: 2.5rem;
 }
 .social-links a {
   width: 24px;
@@ -224,59 +239,59 @@ body {
 
 /* CHAT FORM */
 .contact-form {
-  flex: 0 0 400px; /* Increased from 300px */
+  flex: 0 0 400px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-med);
   box-shadow: var(--shadow);
-  padding: 1rem 1.5rem; /* Increased padding for better spacing */
+  padding: 1rem 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 .contact-form h2 {
   margin-top: 0;
-  font-size: 1.6rem; /* Restored to original size */
+  font-size: 1.6rem;
 }
 .contact-form p {
-  margin-bottom: 0.8rem; /* Restored to original size */
+  margin-bottom: 0.8rem;
   color: #444;
-  font-size: 1rem; /* Restored to original size */
+  font-size: 1rem;
 }
 .contact-form form {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem; /* Restored to original size */
+  gap: 0.8rem;
 }
 .contact-form label {
   display: flex;
   flex-direction: column;
   font-weight: 500;
   color: #333;
-  font-size: 1rem; /* Restored to original size */
+  font-size: 1rem;
 }
 .contact-form input,
 .contact-form textarea {
-  margin-top: 0.3rem; /* Restored to original size */
-  padding: 0.5rem 0.8rem; /* Restored to original size */
+  margin-top: 0.3rem;
+  padding: 0.5rem 0.8rem;
   border: 1px solid #bbb;
   border-radius: 0.88rem;
-  font-size: 0.9rem; /* Restored to original size */
+  font-size: 0.9rem;
   resize: none;
 }
 .contact-form textarea {
-  height: 90px; /* Adjusted to fit content comfortably */
+  height: 90px;
   max-height: 90px;
 }
 .contact-form .btn {
   width: fit-content;
-  margin-top: 0.8rem; /* Restored to original size */
-  padding: 0.75rem 1.6rem; /* Restored to original size */
+  margin-top: 0.8rem;
+  padding: 0.75rem 1.6rem;
 }
 .contact-form .direct {
-  margin-top: 0.8rem; /* Restored to original size */
-  font-size: 0.9rem; /* Restored to original size */
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
   color: #555;
 }
 
