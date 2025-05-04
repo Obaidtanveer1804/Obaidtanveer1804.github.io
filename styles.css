@@ -126,15 +126,14 @@ body {
   font-size: 2rem;
   margin: 2.5rem 0 1.8rem;
 }
-.grid-12 {
+.grid-8 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 .card {
   position: relative;
-  /* aspect-ratio: 1/1; */  <-- remove or comment this
-  min-height: 250px; /* optional: forces a decent height */
+  aspect-ratio: 1/1;
   overflow: hidden;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
