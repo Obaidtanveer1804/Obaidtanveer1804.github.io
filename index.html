@@ -4,16 +4,22 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Obaid Tanveer · Portfolio</title>
-
   <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet"/>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
   <div class="bg"></div>
 
   <nav class="nav glass container">
-    <span class="logo">Obaid Tanveer</span>
+    <span class="logo">
+      Obaid Tanveer
+      <a href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" class="nav-social"><i class="fab fa-linkedin"></i></a>
+      <a href="https://github.com/Obaidtanveer1804" target="_blank" class="nav-social"><i class="fab fa-github"></i></a>
+      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"><i class="fas fa-envelope"></i></a>
+    </span>
     <ul class="nav__links">
       <li><a href="index.html" class="active">Home</a></li>
       <li><a href="index.html#projects">Projects</a></li>
@@ -77,6 +83,8 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
-  <script src="script.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
