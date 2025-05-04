@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lab Assistant at PIEAS · Obaid Tanveer</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <nav class="nav glass container">
+    <span class="logo">Obaid Tanveer</span>
+    <ul class="nav__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="education.html">Education</a></li>
+      <li><a href="experience.html" class="active">Experience</a></li>
+      <li><a href="skills.html">Skills</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <section class="project-page">
+      <h1>Lab Assistant</h1>
+      <div class="tags">PIEAS Lab</div>
+      <img class="hero-img" src="https://source.unsplash.com/600x600?lab" alt="Lab"/>
+      <p><strong>Duration:</strong> 6 months</p>
+      <p><strong>Responsibilities:</strong> Served as a lab assistant in the Microprocessing and Interfacing Lab at PIEAS, teaching assembly language basics, STM32 architecture, and coding on STM32 Cube IDE, including timers and ADCs. Click for more details on specific lab activities.</p>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    © <span id="year"></span> Obaid Tanveer
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
