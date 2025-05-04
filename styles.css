@@ -173,33 +173,33 @@ body {
 }
 
 /* CONTACT SECTION */
-/* Now centered in viewport via margin auto + fixed max-width */
 .contact-wrap {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch; /* Ensures both containers match the taller one's height */
   gap: 2rem;
   margin: 4rem auto;
   width: 100%;
-  max-width: 800px; /* sum of 280px + 500px + gap ≈800px */
+  max-width: 800px;
 }
 
 /* PROFILE CARD */
 .profile-card {
-  flex: 0 0 280px; /* fixed width */
+  flex: 0 0 500px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: var(--radius-med);
   box-shadow: var(--shadow);
-  text-align: center;
-  padding: 1.5rem 1rem 0.5rem;
-  align-self: start;
-  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically centers content */
+  align-items: center; /* Horizontally centers content */
+  padding: 1rem;
 }
 .profile-img {
-  width: 112px;
-  height: 112px;
+  width: 150px; /* Increased from 112px for better balance */
+  height: 150px;
   object-fit: cover;
   border-radius: 50%;
   margin-bottom: 0.8rem;
@@ -223,7 +223,7 @@ body {
 
 /* CHAT FORM */
 .contact-form {
-  flex: 0 0 500px;  /* fixed width */
+  flex: 0 0 500px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -329,7 +329,7 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    max-width: none; /* allow full width on small screens */
+    max-width: none;
   }
   .contact-form {
     text-align: left;
