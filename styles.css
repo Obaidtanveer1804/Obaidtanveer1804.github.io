@@ -180,12 +180,12 @@ body {
   gap: 2rem;
   margin: 4rem auto;
   width: 100%;
-  max-width: 800px;
+  max-width: 900px; /* Adjusted for new container widths: 425px + 425px + 2rem gap ≈ 870px */
 }
 
 /* PROFILE CARD */
 .profile-card {
-  flex: 0 0 500px;
+  flex: 0 0 425px; /* Reduced by 15% from 500px */
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -193,24 +193,24 @@ body {
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Distributes space: image at top, social links at bottom */
+  justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem 1rem; /* Increased top/bottom padding for better vertical spacing */
 }
 .profile-img {
-  width: 90%; /* 90% of 500px = 450px, leaving 25px on each side */
-  height: auto; /* Maintain aspect ratio */
+  width: 90%; /* 90% of 425px = 382.5px, leaving ~21.25px on each side */
+  height: auto;
   object-fit: cover;
-  border-radius: var(--radius-med); /* Matches container's border-radius (1rem) */
+  border-radius: var(--radius-med);
   box-shadow: var(--shadow);
-  margin: 0; /* Remove default margin */
+  margin: 0;
 }
 .social-links {
   display: flex;
   gap: 0.8rem;
   justify-content: center;
-  padding-bottom: 1rem; /* Space at the bottom of the container */
-  margin-top: 1rem; /* Space between image and icons */
+  padding-bottom: 1.5rem; /* Increased to match top padding for symmetry */
+  margin-top: 1.5rem; /* Increased to match padding for balanced spacing */
 }
 .social-links a {
   width: 24px;
@@ -224,7 +224,7 @@ body {
 
 /* CHAT FORM */
 .contact-form {
-  flex: 0 0 500px;
+  flex: 0 0 425px; /* Reduced by 15% from 500px */
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.3);
