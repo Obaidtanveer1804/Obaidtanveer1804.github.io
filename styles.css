@@ -1,6 +1,11 @@
 /* ===================================================================
 styles-trio.css — Complete stylesheet with Three-Color Combo Theme
 =================================================================== */
+/* in styles.css, at the top or bottom */
+html {
+  /* forces the scrollbar track to always be there, even on short pages */
+  overflow-y: scroll;
+}
 
 /* THEME VARIABLES */
 :root {

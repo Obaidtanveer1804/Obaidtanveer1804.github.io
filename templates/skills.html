@@ -4,15 +4,36 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Skills · Obaid Tanveer</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <!-- point up one level for your main CSS -->
+  <link rel="stylesheet" href="../styles.css"/>
   <!-- Font Awesome for skill icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
 </head>
 <body>
   <div class="bg"></div>
 
   <nav class="nav glass container">
-    <span class="logo">Obaid Tanveer</span>
+    <span class="logo">
+      Obaid Tanveer
+      <a
+        href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/"
+        target="_blank"
+        class="nav-social"
+        ><i class="fab fa-linkedin"></i
+      ></a>
+      <a
+        href="https://github.com/Obaidtanveer1804"
+        target="_blank"
+        class="nav-social"
+        ><i class="fab fa-github"></i
+      ></a>
+      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"
+        ><i class="fas fa-envelope"></i
+      ></a>
+    </span>
     <ul class="nav__links">
       <li><a href="index.html">Home</a></li>
       <li><a href="index.html#projects">Projects</a></li>
@@ -143,6 +164,7 @@
     © <span id="year"></span> Obaid Tanveer
   </footer>
 
+  <!-- VanillaTilt (CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
   <script>
     VanillaTilt.init(document.querySelectorAll(".skill-logo"), {

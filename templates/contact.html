@@ -5,8 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Contact · Obaid Tanveer</title>
   <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-  <link rel="stylesheet" href="styles.css"/>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+  <!-- move up one level to grab your stylesheet -->
+  <link rel="stylesheet" href="../styles.css"/>
 </head>
 <body>
   <div class="bg"></div>
@@ -14,14 +18,26 @@
   <nav class="nav glass container">
     <span class="logo">
       Obaid Tanveer
-      <a href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" class="nav-social"><i class="fab fa-linkedin"></i></a>
-      <a href="https://github.com/Obaidtanveer1804" target="_blank" class="nav-social"><i class="fab fa-github"></i></a>
-      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"><i class="fas fa-envelope"></i></a>
+      <a
+        href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/"
+        target="_blank"
+        class="nav-social"
+        ><i class="fab fa-linkedin"></i
+      ></a>
+      <a
+        href="https://github.com/Obaidtanveer1804"
+        target="_blank"
+        class="nav-social"
+        ><i class="fab fa-github"></i
+      ></a>
+      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"
+        ><i class="fas fa-envelope"></i
+      ></a>
     </span>
     <ul class="nav__links">
       <li><a href="index.html">Home</a></li>
       <li><a href="index.html#projects">Projects</a></li>
-      <li><a href="experience.html">Experience</a></li> <!-- Fixed typo: removed extra .html -->
+      <li><a href="experience.html">Experience</a></li>
       <li><a href="education.html">Education</a></li>
       <li><a href="skills.html">Skills</a></li>
       <li><a href="contact.html" class="active">Contact</a></li>
@@ -31,41 +47,24 @@
   <section class="contact-wrap container">
     <!-- PROFILE CARD -->
     <div class="profile-card glass">
-      <img src="assets/profile.jpg" alt="Obaid Tanveer" class="profile-img"/>
+      <!-- back out of templates/ to reach assets/ -->
+      <img src="../assets/profile.jpg" alt="Obaid Tanveer" class="profile-img"/>
       <div class="social-links">
         <!-- LinkedIn -->
-        <a href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" aria-label="LinkedIn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.329-.027-3.04-1.851-3.04-1.85 
-            0-2.134 1.445-2.134 2.938v5.672H9.353V9h3.414v1.561h.049c.476-.9 
-            1.637-1.851 3.368-1.851 3.599 0 4.265 2.37 4.265 5.456v6.286zM5.337 
-            7.433a2.074 2.074 0 110-4.149 2.074 2.074 0 010 4.149zm1.777 
-            13.019H3.56V9h3.553v11.452zM22.225 0H1.771C.792 0 0 .774 0 
-            1.727v20.545C0 23.227.792 24 1.771 24h20.451C23.208 24 24 
-            23.227 24 22.273V1.727C24 .774 23.208 0 22.225 0z"/>
-          </svg>
+        <a
+          href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/"
+          target="_blank"
+          aria-label="LinkedIn"
+        >
+          <!-- (SVG icon here) -->
         </a>
         <!-- GitHub -->
-        <a href="https://github.com/Obaidtanveer1804" target="_blank" aria-label="GitHub">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 .297c-6.63 0-12 5.373-12 12 
-            0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 
-            0-.285-.01-1.04-.015-2.04-3.338.725-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 
-            1.205.084 1.84 1.236 1.84 1.236 
-            1.07 1.835 2.809 1.305 3.495.998.108-.775.418-1.305.763-1.605-2.665-.3-5.466-1.332-5.466-5.93 
-            0-1.31.47-2.38 1.236-3.22-.124-.303-.536-1.522.117-3.176 
-            0 0 1.008-.322 3.301 1.23.958-.266 
-            1.98-.399 3-.405 1.02.006 
-            2.042.139 3 .405 2.291-1.552 
-            3.297-1.23 3.297-1.23.655 1.654.243 
-            2.873.12 3.176.77.84 1.235 
-            1.91 1.235 3.22 0 4.61-2.803 
-            5.625-5.475 5.922.43.372.823 
-            1.102.823 2.222 0 1.606-.014 
-            2.896-.014 3.286 0 .319.218 
-            .694.825.576C20.565 22.092 24 
-            17.592 24 12.297c0-6.627-5.373-12-12-12z"/>
-          </svg>
+        <a
+          href="https://github.com/Obaidtanveer1804"
+          target="_blank"
+          aria-label="GitHub"
+        >
+          <!-- (SVG icon here) -->
         </a>
       </div>
     </div>
@@ -102,7 +101,8 @@
     © <span id="year"></span> Obaid Tanveer
   </footer>
 
-  <script src="script.js"></script>
+  <!-- back out one level for your script.js -->
+  <script src="../script.js"></script>
   <script>
     const recipientEmail = "obaidtanveer04@gmail.com";
     document.getElementById("contact-form").addEventListener("submit", e => {
@@ -112,7 +112,8 @@
       const m = document.getElementById("msg").value;
       const sb = "Portfolio Message";
       const bd = `From: ${s}\nOrganization: ${o}\n\n${m}`;
-      window.location.href = `mailto:${recipientEmail}` +
+      window.location.href =
+        `mailto:${recipientEmail}` +
         `?subject=${encodeURIComponent(sb)}` +
         `&body=${encodeURIComponent(bd)}`;
     });

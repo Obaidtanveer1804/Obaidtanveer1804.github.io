@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Obaid Tanveer · Portfolio</title>
   <!-- Inter font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap"
+    rel="stylesheet"
+  />
   <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-  <link rel="stylesheet" href="styles.css"/>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+  <!-- your main stylesheet (up one level) -->
+  <link rel="stylesheet" href="../styles.css"/>
 </head>
 <body>
   <div class="bg"></div>
@@ -16,9 +23,21 @@
   <nav class="nav glass container">
     <span class="logo">
       Obaid Tanveer
-      <a href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" class="nav-social"><i class="fab fa-linkedin"></i></a>
-      <a href="https://github.com/Obaidtanveer1804" target="_blank" class="nav-social"><i class="fab fa-github"></i></a>
-      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"><i class="fas fa-envelope"></i></a>
+      <a
+        href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/"
+        target="_blank"
+        class="nav-social"
+        ><i class="fab fa-linkedin"></i
+      ></a>
+      <a
+        href="https://github.com/Obaidtanveer1804"
+        target="_blank"
+        class="nav-social"
+        ><i class="fab fa-github"></i
+      ></a>
+      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"
+        ><i class="fas fa-envelope"></i
+      ></a>
     </span>
     <ul class="nav__links">
       <li><a href="index.html" class="active">Home</a></li>
@@ -31,49 +50,137 @@
   </nav>
 
   <header class="hero container">
-    <h1 class="headline">Electrical Engineer <span>→</span> Embedded Firmware Engineer</h1>
-    <p class="sub">Transforming data ✧ code ✧ creativity into real-world products.</p>
+    <h1 class="headline">
+      Electrical Engineer <span>→</span> Embedded Firmware Engineer
+    </h1>
+    <p class="sub">
+      Transforming data ✧ code ✧ creativity into real-world products.
+    </p>
     <a href="#projects" class="btn">Explore my work</a>
   </header>
 
   <main id="projects" class="projects container">
     <h2 class="section-title">Featured Work</h2>
     <div class="grid-8">
-      <a class="card tilt" href="project-1.html" style="--img:url('https://source.unsplash.com/800x600?tech');">
-        <div class="card__info"><h3>Smart Gridd Forecasting</h3><span>LSTM · PyTorch</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-1.html"
+        style="--img:url('https://source.unsplash.com/800x600?tech');"
+      >
+        <div class="card__info">
+          <h3>Smart Gridd Forecasting</h3>
+          <span>LSTM · PyTorch</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-2.html" style="--img:url('https://source.unsplash.com/800x600?drone');">
-        <div class="card__info"><h3>RL Drone Control</h3><span>ROS2 · PPO</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-2.html"
+        style="--img:url('https://source.unsplash.com/800x600?drone');"
+      >
+        <div class="card__info">
+          <h3>RL Drone Control</h3>
+          <span>ROS2 · PPO</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-3.html" style="--img:url('https://source.unsplash.com/800x600?ai');">
-        <div class="card__info"><h3>OCR ID Parser</h3><span>PaddleOCR</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-3.html"
+        style="--img:url('https://source.unsplash.com/800x600?ai');"
+      >
+        <div class="card__info">
+          <h3>OCR ID Parser</h3>
+          <span>PaddleOCR</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-4.html" style="--img:url('https://source.unsplash.com/800x600?dashboard');">
-        <div class="card__info"><h3>Forecast Dashboard</h3><span>Plotly · AWS</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-4.html"
+        style="--img:url('https://source.unsplash.com/800x600?dashboard');"
+      >
+        <div class="card__info">
+          <h3>Forecast Dashboard</h3>
+          <span>Plotly · AWS</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-5.html" style="--img:url('https://source.unsplash.com/800x600?robot');">
-        <div class="card__info"><h3>Edge-AI Camera</h3><span>YOLOv8</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-5.html"
+        style="--img:url('https://source.unsplash.com/800x600?robot');"
+      >
+        <div class="card__info">
+          <h3>Edge-AI Camera</h3>
+          <span>YOLOv8</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-6.html" style="--img:url('https://source.unsplash.com/800x600?health');">
-        <div class="card__info"><h3>Medical Fax NLP</h3><span>ClinicalBERT</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-6.html"
+        style="--img:url('https://source.unsplash.com/800x600?health');"
+      >
+        <div class="card__info">
+          <h3>Medical Fax NLP</h3>
+          <span>ClinicalBERT</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-7.html" style="--img:url('https://source.unsplash.com/800x600?art');">
-        <div class="card__info"><h3>GAN Art Maker</h3><span>StyleGAN-XL</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-7.html"
+        style="--img:url('https://source.unsplash.com/800x600?art');"
+      >
+        <div class="card__info">
+          <h3>GAN Art Maker</h3>
+          <span>StyleGAN-XL</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-8.html" style="--img:url('https://source.unsplash.com/800x600?chatbot');">
-        <div class="card__info"><h3>Recruiting Chatbot</h3><span>RAG · LangChain</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-8.html"
+        style="--img:url('https://source.unsplash.com/800x600?chatbot');"
+      >
+        <div class="card__info">
+          <h3>Recruiting Chatbot</h3>
+          <span>RAG · LangChain</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-9.html" style="--img:url('https://source.unsplash.com/800x600?robot');">
-        <div class="card__info"><h3>SmartWatch - Esp32</h3><span>FreeRTOS - ESP32 - C++</span></div>
+      <a
+        class="card tilt"
+        href="projects/project-9.html"
+        style="--img:url('https://source.unsplash.com/800x600?robot');"
+      >
+        <div class="card__info">
+          <h3>SmartWatch – Esp32</h3>
+          <span>FreeRTOS · ESP32 · C++</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-10.html" style="--img:url('https://source.unsplash.com/800x600?health');">
-        <div class="card__info"><h3>Stepper Motor Control Library RPI-PICO</h3><span>RPI-PICO, C++, PIO </span></div>
+      <a
+        class="card tilt"
+        href="projects/project-10.html"
+        style="--img:url('https://source.unsplash.com/800x600?health');"
+      >
+        <div class="card__info">
+          <h3>Stepper Motor Control Library RPI-PICO</h3>
+          <span>RPI-PICO · C++ · PIO</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-11.html" style="--img:url('https://source.unsplash.com/800x600?art');">
-        <div class="card__info"><h3>Smart Home ESP-32</h3><span>IOT, ESP32, C++, Cloud </span></div>
+      <a
+        class="card tilt"
+        href="projects/project-11.html"
+        style="--img:url('https://source.unsplash.com/800x600?art');"
+      >
+        <div class="card__info">
+          <h3>Smart Home ESP-32</h3>
+          <span>IOT · ESP32 · C++ · Cloud</span>
+        </div>
       </a>
-      <a class="card tilt" href="project-12.html" style="--img:url('https://source.unsplash.com/800x600?chatbot');">
-        <div class="card__info"><h3>PortFolio Website (This website)</h3><span>html , css, js, Github </span></div>
+      <a
+        class="card tilt"
+        href="projects/project-12.html"
+        style="--img:url('https://source.unsplash.com/800x600?chatbot');"
+      >
+        <div class="card__info">
+          <h3>Portfolio Website (This website)</h3>
+          <span>HTML · CSS · JS · GitHub</span>
+        </div>
       </a>
     </div>
   </main>
@@ -82,7 +189,9 @@
     © <span id="year"></span> Obaid Tanveer
   </footer>
 
+  <!-- CDN tilt.js -->
   <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
+  <!-- year update -->
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
