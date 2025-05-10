@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact · Obaid Tanveer</title>
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+  />
+  <!-- move up one level to grab your stylesheet -->
+  <link rel="stylesheet" href="../styles.css"/>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <nav class="nav glass container">
+    <span class="logo">
+      Obaid Tanveer
+      <a
+        href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/"
+        target="_blank"
+        class="nav-social"
+        ><i class="fab fa-linkedin"></i
+      ></a>
+      <a
+        href="https://github.com/Obaidtanveer1804"
+        target="_blank"
+        class="nav-social"
+        ><i class="fab fa-github"></i
+      ></a>
+      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"
+        ><i class="fas fa-envelope"></i
+      ></a>
+    </span>
+    <ul class="nav__links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="experience.html">Experience</a></li>
+      <li><a href="education.html">Education</a></li>
+      <li><a href="skills.html">Skills</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="contact-wrap container">
+    <!-- PROFILE CARD -->
+    <div class="profile-card glass">
+      <!-- back out of templates/ to reach assets/ -->
+      <img src="../assets/profile.jpg" alt="Obaid Tanveer" class="profile-img"/>
+      <div class="social-links">
+        <!-- LinkedIn -->
+        <a
+          href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/"
+          target="_blank"
+          aria-label="LinkedIn"
+        >
+          <!-- (SVG icon here) -->
+        </a>
+        <!-- GitHub -->
+        <a
+          href="https://github.com/Obaidtanveer1804"
+          target="_blank"
+          aria-label="GitHub"
+        >
+          <!-- (SVG icon here) -->
+        </a>
+      </div>
+    </div>
+
+    <!-- CHAT FORM -->
+    <div class="contact-form glass">
+      <h2>Let’s Chat</h2>
+      <p>Always open for freelance, consulting, or a quick tech-chat ☕.</p>
+
+      <form id="contact-form">
+        <label>
+          Your Email
+          <input type="email" id="email" placeholder="you@example.com" required/>
+        </label>
+        <label>
+          Organization
+          <input type="text" id="org" placeholder="Company / School"/>
+        </label>
+        <label>
+          Message
+          <textarea id="msg" rows="4" placeholder="Hi there, …" required></textarea>
+        </label>
+        <button type="submit" class="btn">Send Message</button>
+      </form>
+
+      <p class="direct">
+        Or email me directly at
+        <a href="mailto:obaidtanveer04@gmail.com">obaidtanveer04@gmail.com</a>
+      </p>
+    </div>
+  </section>
+
+  <footer class="footer container">
+    © <span id="year"></span> Obaid Tanveer
+  </footer>
+
+  <!-- back out one level for your script.js -->
+  <script src="../script.js"></script>
+  <script>
+    const recipientEmail = "obaidtanveer04@gmail.com";
+    document.getElementById("contact-form").addEventListener("submit", e => {
+      e.preventDefault();
+      const s = document.getElementById("email").value;
+      const o = document.getElementById("org").value;
+      const m = document.getElementById("msg").value;
+      const sb = "Portfolio Message";
+      const bd = `From: ${s}\nOrganization: ${o}\n\n${m}`;
+      window.location.href =
+        `mailto:${recipientEmail}` +
+        `?subject=${encodeURIComponent(sb)}` +
+        `&body=${encodeURIComponent(bd)}`;
+    });
+  </script>
+</body>
+</html>
