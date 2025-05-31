@@ -70,7 +70,7 @@
     <p>
       I connected the Whitebeet boards to the Pi 4 via Ethernet using the Host Control Interface (HCI). The Pi 4’s quad-core processor handled the heavy lifting, processing data from the Whitebeet boards and controlling the bidirectional power flow through relays and inverters (not detailed due to classification). The OpenEVSE framework provided the base for CP signal generation and state management, which I extended with V2G logic.
     </p>
-    <img class="hero-img" src="../../assets/rpi4.png" alt="Raspberry Pi 4" />
+    <img class="hero-img" src="../../assets/rpi-4.png" alt="Raspberry Pi 4" />
     <p><em>Note: This image is taken from the Raspberry Pi site.</em></p>
 
     <h2>OpenEVSE Integration and V2G Firmware Development</h2>
@@ -80,7 +80,7 @@
     <p>
       My Python firmware managed the CP signal, a 1 kHz PWM signal per IEC 61851-1, with states like +12V (State A, not connected), +9V PWM (State B, connected), and +6V PWM (State C, charging or discharging). For V2G, I added a new state (State D) to indicate bidirectional operation, using the Whitebeet-EI board to adjust the CP duty cycle and signal the EV’s intent to discharge. The firmware also interfaced with the Whitebeet boards to enable ISO 15118-2 communication, which is crucial for V2G.
     </p>
-    <img class="hero-img" src="../../assets/CP-signal.png" alt="Control Pilot Signal" />
+    <img class="hero-img" src="../../assets/cp-signal.jpg" alt="Control Pilot Signal" />
     <p><em>Note: This image is taken from OpenEVSE.</em></p>
     <p>
       I designed a state machine to handle the complex transitions of V2G. For example, when the EV connects (State B), the system negotiates charging or discharging based on grid demand signals received via ISO 15118. If discharging is requested, the firmware adjusts the relays and inverter to reverse power flow, all while ensuring safety checks are met.
