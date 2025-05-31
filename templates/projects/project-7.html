@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCR ID Parser · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filling Machine · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -18,27 +40,82 @@
       <li><a href="../skills.html">Skills</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
-
   </nav>
 
   <article class="project-page container glass">
-    <h1>OCR ID Parser</h1>
-    <p class="tags">PaddleOCR</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
-    />
+    <div class="title-row">
+      <h1>Filling Machine</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/filling-machine" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">RPI-PICO · ESP32 · STEPPER-MOTORS · C++</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      During my tenure at <strong>Esforge Pvt Ltd</strong>, I led the development of a <strong>Filling Machine</strong> designed to automate packet filling in a manufacturing plant. This project replaced a manual process that required 15 people, achieving full automation through advanced embedded systems, precise motor control, and IoT integration. I was responsible for the embedded firmware development, PCB design, and PCB fabrication.
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The Filling Machine was engineered to automate the filling of packets in a manufacturing plant, streamlining a labor-intensive process. The system utilized <strong>11 NEMA 34 stepper motors</strong> to control various stages of the filling process, including material dispensing, packet positioning, and sealing. Two <strong>RPI Picos</strong> were employed to manage the parallel control of these motors, while an <strong>ESP32</strong> handled data transmission to the cloud over Wi-Fi for real-time monitoring and analytics.
+    </p>
+
+    <h2>System Architecture</h2>
+    <p>
+      The system architecture was designed for scalability and precision. Two <strong>RPI Picos</strong> were used as the primary controllers, each managing a subset of the 11 stepper motors to ensure parallel operation without latency. The RPI Picos communicated with each other via a custom <strong>I2C protocol</strong> to synchronize their tasks. An <strong>ESP32</strong> served as the IoT gateway, collecting operational data (e.g., motor status, production rate, error logs) and transmitting it to a cloud server using the MQTT protocol.
+    </p>
+    <p>
+      The machine’s workflow involved multiple stages: material loading, packet positioning, filling, and sealing. Each stage was controlled by a dedicated stepper motor, ensuring precise and repeatable movements throughout the process.
+    </p>
+
+    <h2>Motor Control with RPI Pico and PIO</h2>
+    <p>
+      The Filling Machine relied on <strong>11 NEMA 34 stepper motors</strong>, each paired with a high-performance stepper driver supporting <strong>512 microstepping</strong>. This high level of microstepping allowed for smooth and precise movements, critical for accurate packet filling and positioning. The motors were controlled using the <strong>Programmable I/O (PIO)</strong> feature of the RPI Pico, which enabled low-level, high-speed control of the stepper motors.
+    </p>
+    <p>
+      To optimize performance, I programmed the PIO blocks in <strong>assembly language</strong>, creating a custom stepper control library. The PIO handled the generation of step and direction pulses for each motor, allowing the RPI Pico’s main cores to focus on higher-level tasks like synchronization and error handling. This approach minimized latency and ensured all 11 motors operated in parallel without timing conflicts.
+    </p>
+    <p>
+      The firmware was written in <strong>C++</strong> using a class-based approach, which I adopted to improve code modularity and maintainability. I developed classes for motor control, communication, and data logging, learning a great deal about object-oriented programming in C++ during this project. The class-based structure also made it easier to debug and extend the firmware as the project evolved.
+    </p>
+
+    <h2>IoT Integration with ESP32</h2>
+    <p>
+      The <strong>ESP32</strong> was integrated to enable cloud connectivity, allowing the plant managers to monitor the machine’s performance remotely. The ESP32 collected data from the RPI Picos via a UART interface and transmitted it to the cloud using the <strong>MQTT protocol</strong>. Key metrics included the number of packets filled, motor uptime, and any error conditions (e.g., motor stalling or material shortages).
+    </p>
+    <p>
+      The ESP32 firmware was developed using the <strong>Arduino framework</strong>, with a focus on reliability and low latency. A lightweight JSON format was used to structure the data, ensuring efficient transmission over Wi-Fi to the cloud server.
+    </p>
+
+    <h2>Hardware Design: PCB Development and Fabrication</h2>
+    <p>
+      I designed and fabricated a custom <strong>PCB</strong> to integrate all the electronic components of the Filling Machine. The PCB was designed using <strong>KiCAD</strong> and featured a 4-layer layout to handle the complex routing requirements of 11 stepper motor drivers, two RPI Picos, an ESP32, and power regulation circuits. The board included high-current traces for the motor drivers and thermal vias to manage heat dissipation.
+    </p>
+    <p>
+      The PCB fabrication process involved working with a local manufacturer to produce the boards. I oversaw the entire process, from Gerber file generation to final assembly, ensuring the boards met the required specifications. The final PCB supported the parallel operation of all components, providing a reliable foundation for the machine’s operation.
+    </p>
+    <img class="hero-img" src="../../assets/filling-machine-pcb.JPEG" alt="Filling Machine PCB" />
+
+    <h2>System Integration and Deployment</h2>
+    <p>
+      The Filling Machine was deployed in a manufacturing plant, where it successfully replaced a manual process that previously required 15 people. The system automated the entire packet-filling workflow, achieving a throughput of over 500 packets per hour. The use of 11 stepper motors ensured precise control at every stage, while the IoT integration provided valuable insights for optimizing production.
+    </p>
+    <p>
+      During deployment, the machine was tested extensively to ensure reliability under continuous operation. The class-based firmware design proved invaluable, as it allowed for quick adjustments and debugging in the field. The project was a significant learning experience, particularly in mastering C++ and low-level motor control with PIO.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Parallel control of 11 NEMA 34 stepper motors with 512 microstepping</li>
+      <li>Dual RPI Pico architecture for high-speed motor control</li>
+      <li>Custom stepper control library using PIO and assembly</li>
+      <li>Class-based C++ firmware for modularity and scalability</li>
+      <li>IoT integration with ESP32 for cloud connectivity via MQTT</li>
+      <li>Custom-designed and fabricated 4-layer PCB</li>
+      <li>Automated packet filling, replacing a 15-person manual process</li>
+    </ul>
+
+    <p>
+      This project at Esforge Pvt Ltd was a testament to my ability to design and implement complex embedded systems, from low-level motor control to IoT integration and hardware design. It also deepened my understanding of C++ and real-time systems, making it one of the most rewarding projects in my career.
+    </p>
   </article>
 
   <footer class="footer container">
