@@ -55,7 +55,7 @@
 
     <h2>Project Overview</h2>
     <p>
-      The L2 EV Charger was designed to deliver up to 7.4 kW of power at 230V AC (single-phase), suitable for residential and commercial charging applications. The charger adhered to the <strong>IEC 61851-1</strong> standard, which defines the communication protocol between the EV and the charging station using the Control Pilot (CP) and Proximity Pilot (PP) signals. The <strong>STM32F4 microcontroller</strong> managed all aspects of the charging process, including signal detection, state transitions, safety checks, and communication with the vehicle’s BMS over CANbus.
+      The L2 EV Charger was designed to deliver up to 7.4 kW of power at 230V AC (single-phase), suitable for residential and commercial charging applications. The charger adhered to the <strong>IEC 61851-1</strong> standard, which defines the communication protocol between the EV and the charging station using the Control Pilot (CP) and Proximity Pilot (PP) signals. The <strong>STM32H743ZI microcontroller</strong> managed all aspects of the charging process, including signal detection, state transitions, safety checks, and communication with the vehicle’s BMS over CANbus.
     </p>
     <p>
       The system incorporated safety features such as <strong>relays</strong> for controlling current flow, which were only activated in State B of the CP state machine, ensuring no power was delivered until the vehicle was properly connected and ready to charge. The charger also used operational amplifiers (op-amps) to generate the CP signal and a 12V power supply to power the control circuitry.
