@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>6 DOF Robot · Obaid Tanveer</title>
   <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: #FFC107; /* Yellow color matching typical theme */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -21,13 +32,12 @@
   </nav>
 
   <article class="project-page container glass">
-    <h1>6 DOF Serial Manipulator</h1>
+    <div class="title-row">
+      <h1>6 DOF Serial Manipulator</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/6dof-robot" target="_blank">View Code ↗</a>
+    </div>
     <p class="tags">STM32 · CANBUS · COPPELIASIM · SOLIDWORKS · ROBOTICS</p>
-    <img
-      class="hero-img"
-      src="../../images/robot.png"
-      alt="6 DOF Robot"
-    />
+    
     <p>
       This project was my Final Year Project at <strong>PIEAS</strong>, supervised by <strong>Dr. Nasir Rehman Jadoon</strong>.
       It involved the design and development of a <strong>6 Degree-of-Freedom (DOF) serial robotic manipulator</strong>
@@ -69,11 +79,7 @@
       embedded systems and industrial communication.
     </p>
 
-    <a
-      class="btn"
-      href="https://github.com/obaidtanveer/6dof-robot"
-      target="_blank"
-    >View Code ↗</a>
+    <img class="hero-img" src="assets/6dof-fyp.jpeg" alt="6 DOF Robot" />
   </article>
 
   <footer class="footer container">
