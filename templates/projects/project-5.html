@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCR ID Parser · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protein Bars Pressing Machine · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -18,27 +40,76 @@
       <li><a href="../skills.html">Skills</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
-
   </nav>
 
   <article class="project-page container glass">
-    <h1>OCR ID Parser</h1>
-    <p class="tags">PaddleOCR</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
-    />
+    <div class="title-row">
+      <h1>Protein Bars Pressing Machine</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/protein-bars-pressing-machine" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">ROBOTICS · RPI-PICO · ESP32</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      During my tenure at <strong>Esforge Pvt Ltd</strong>, I worked on the development of a <strong>Protein Bars Pressing Machine</strong>, where I was responsible for the complete embedded firmware development. This project showcased a blend of robotics, embedded systems, and IoT, enabling the automated production of protein bars with high efficiency and precision.
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The Protein Bars Pressing Machine was designed to automate the production of protein bars, capable of pressing and producing <strong>75 protein bars per minute</strong>. The machine operates by automatically filling slots or cavities with protein bar mixture, pressing them into shape, and then pushing the finished bars out—all within a minute. This high-speed operation required precise motor control, reliable communication between components, and a robust design to ensure durability and safety.
+    </p>
+    <img class="hero-img" src="../../assets/protein-press.jpeg" alt="Protein Bars Pressing Machine" />
+
+    <h2>System Architecture</h2>
+    <p>
+      The system utilized a dual-controller architecture with a <strong>Raspberry Pi Pico (RPI Pico)</strong> as the primary motor controller and an <strong>ESP32</strong> for data collection and cloud communication. The RPI Pico handled the control of <strong>NEMA 34 high-torque stepper motors</strong> using its Programmable I/O (PIO) capabilities, while the ESP32, programmed using the <strong>Arduino framework</strong>, managed Wi-Fi communication to send operational data to the cloud for monitoring and analytics.
+    </p>
+    <p>
+      Communication between the RPI Pico and ESP32 was facilitated through a custom <strong>UART driver</strong> I developed, ensuring reliable and efficient data exchange. This setup allowed for seamless coordination between motor control and data logging functionalities.
+    </p>
+
+    <h2>Motor Control and Firmware Development</h2>
+    <p>
+      The machine employed <strong>NEMA 34 stepper motors</strong> paired with specialized stepper drivers supporting up to <strong>512 microstepping</strong>. This high level of microstepping ensured precise and smooth motor movements, critical for the pressing and ejection processes. I developed a custom <strong>stepper control library</strong> using the RPI Pico's PIO, which allowed for fine-grained control over the motors' speed, direction, and position.
+    </p>
+    <p>
+      The firmware for the RPI Pico was written to handle real-time motor control, ensuring the machine could fill, press, and eject protein bars in a continuous cycle. The PIO-based library optimized the performance of the stepper motors, reducing latency and improving the overall efficiency of the machine.
+    </p>
+
+    <h2>IoT Integration and Cloud Communication</h2>
+    <p>
+      The ESP32 was integrated to collect operational data, such as production rate, motor status, and error logs, and transmit this data over Wi-Fi to a cloud server. Programmed using the Arduino framework, the ESP32 provided a user-friendly interface for cloud connectivity. This IoT integration allowed for remote monitoring and diagnostics, enabling Esforge Pvt Ltd to track the machine's performance in real-time and address any issues promptly.
+    </p>
+
+    <h2>Hardware Design: PCB and Control Box</h2>
+    <p>
+      In addition to firmware development, I designed the <strong>PCB</strong> for the machine, which integrated the motor drivers, power supplies, and communication modules into a single board. The PCB was designed to be compact yet robust, ensuring reliable operation under the machine's high-speed conditions.
+    </p>
+    <img class="hero-img" src="../../assets/protein-press-pcg.jpeg" alt="Back Side of the PCB for Protein Bars Pressing Machine" />
+    <p>
+      To house the electronics, I also designed a <strong>waterproof control box</strong> that contained the PCB, motor drivers, power supplies, and all necessary connections. The control box was engineered to protect the components from environmental factors, ensuring the machine's longevity and safety during operation.
+    </p>
+    <img class="hero-img" src="../../assets/protein-press-control-box.jpeg" alt="Control Box of the Protein Bars Pressing Machine" />
+
+    <h2>Deployment and Performance</h2>
+    <p>
+      During deployment, the machine was set up with all components integrated, as shown in the assembly image below. The control box was mounted securely, and the system was tested to ensure it met the production target of 75 protein bars per minute. The machine performed flawlessly, automating the entire process from filling to ejection, and the IoT features provided valuable insights into its operation.
+    </p>
+    <img class="hero-img" src="../../assets/protein-press-asm.jpeg" alt="Protein Bars Pressing Machine During Deployment with Control Box" />
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>High-speed production: 75 protein bars per minute</li>
+      <li>Precise motor control using NEMA 34 stepper motors with 512 microstepping</li>
+      <li>Custom stepper control library using RPI Pico's PIO</li>
+      <li>Custom UART learnership communication between RPI Pico and ESP32 via a custom UART driver</li>
+      <li>IoT integration with ESP32 for cloud connectivity and remote monitoring</li>
+      <li>Custom-designed PCB for integrated electronics</li>
+      <li>Waterproof control box for environmental protection</li>
+    </ul>
+
+    <p>
+      This project at Esforge Pvt Ltd was a comprehensive endeavor, combining embedded systems, robotics, IoT, and hardware design to create an efficient and reliable protein bars pressing machine. It demonstrated my ability to manage a complex system from firmware development to hardware design and deployment.
+    </p>
   </article>
 
   <footer class="footer container">
