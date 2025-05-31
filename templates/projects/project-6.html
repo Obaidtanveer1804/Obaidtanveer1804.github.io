@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCR ID Parser · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paratha Pressing Machine · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -18,27 +40,94 @@
       <li><a href="../skills.html">Skills</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
-
   </nav>
 
   <article class="project-page container glass">
-    <h1>OCR ID Parser</h1>
-    <p class="tags">PaddleOCR</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
-    />
+    <div class="title-row">
+      <h1>Paratha Pressing Machine</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/paratha-pressing-machine" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">ESP32 · SOLID-STATE-RELAYS · THERMOCOUPLES · FREERTOS</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      During my tenure at <strong>Esforge Pvt Ltd</strong>, I contributed to the development of a <strong>Paratha Pressing Machine</strong>, a sophisticated automated system designed to press and cook parathas with precision and efficiency. I was responsible for the embedded firmware development, PCB design, and PCB fabrication, ensuring a seamless integration of hardware and software to achieve optimal performance.
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The Paratha Pressing Machine was engineered to automate the process of pressing and cooking parathas, capable of handling <strong>4 parathas at a time</strong>. The machine utilized a heated plate, controlled with precision temperature sensing, to press and cook the parathas uniformly. The system incorporated advanced components like <strong>thermocouples</strong> for temperature monitoring, <strong>solid-state relays (SSRs)</strong> for heater control, and a <strong>NEMA 32 stepper motor with a gearhead</strong> for applying the necessary pressing force. The entire operation was managed using an <strong>ESP32 microcontroller</strong> running <strong>FreeRTOS</strong> to handle multiple tasks concurrently.
+    </p>
+    <img class="hero-img" src="../../assets/paratha-pressing-machine-asm.JPEG" alt="Paratha Pressing Machine Assembly" />
+
+    <h2>System Architecture</h2>
+    <p>
+      The core of the system was an <strong>ESP32 microcontroller</strong>, chosen for its robust processing capabilities and built-in Wi-Fi functionality. The ESP32 managed multiple tasks, including temperature control, motor operation, and system monitoring, using <strong>FreeRTOS</strong> to ensure real-time performance. The machine featured a heated pressing plate, with temperature regulated using <strong>K-type thermocouples</strong> interfaced via a MAX6675 module for accurate readings. Heating was controlled through <strong>solid-state relays (SSRs)</strong>, which provided precise and reliable switching of the heaters.
+    </p>
+    <p>
+      A <strong>NEMA 32 stepper motor with a gearhead</strong> was used to deliver the high torque required for pressing the parathas. The gearhead increased the motor's force output, ensuring consistent pressure across the parathas for uniform cooking. The stepper motor was driven by a dedicated driver, configured for microstepping to achieve smooth and precise movements.
+    </p>
+
+    <h2>Temperature Control and Heating System</h2>
+    <p>
+      The heating system was a critical component of the machine. The pressing plate was equipped with industrial-grade <strong>cartridge heaters</strong>, controlled via <strong>solid-state relays</strong>. The SSRs allowed for rapid switching, enabling precise temperature regulation. The temperature of the plate was continuously monitored using <strong>K-type thermocouples</strong>, which provided real-time feedback to the ESP32. A PID control algorithm, implemented in the firmware, maintained the plate temperature within a tight range (±2°C) to ensure consistent cooking results.
+    </p>
+    <p>
+      To enhance safety, the system included an over-temperature protection mechanism. If the plate temperature exceeded a predefined threshold, the ESP32 would automatically disable the heaters and trigger an alert, preventing potential damage to the machine or parathas.
+    </p>
+
+    <h2>Motor Control and Pressing Mechanism</h2>
+    <p>
+      The pressing mechanism relied on a <strong>NEMA 32 stepper motor with a gearhead</strong>, which provided the increased force necessary to press 4 parathas simultaneously. The gearhead amplified the motor's torque, ensuring sufficient pressure to flatten the dough balls into uniform parathas. The stepper motor was driven by a <strong>DM542 stepper driver</strong>, configured for 1/16 microstepping to achieve smooth and precise motion.
+    </p>
+    <p>
+      The motor was mounted on a linear actuator system, as seen in the hardware image, where a leadscrew mechanism (visible at the top center) translated the motor's rotational motion into linear movement. This allowed the pressing plate to move up and down with high precision. The firmware included a custom motion control algorithm to synchronize the pressing cycle with the heating process, ensuring each paratha was pressed and cooked for the optimal duration.
+    </p>
+
+    <h2>Firmware Development with FreeRTOS</h2>
+    <p>
+      The firmware for the ESP32 was developed using the <strong>Arduino framework</strong> with <strong>FreeRTOS</strong> to manage the system's multitasking requirements. FreeRTOS enabled the ESP32 to handle multiple tasks concurrently, including:
+    </p>
+    <ul>
+      <li>Temperature monitoring and PID control for the heating plate</li>
+      <li>Stepper motor control for the pressing mechanism</li>
+      <li>Data logging and system status monitoring</li>
+      <li>Error handling and safety checks</li>
+    </ul>
+    <p>
+      Each task was assigned a priority to ensure critical operations, such as temperature regulation, were executed without delay. The firmware also included a state machine to manage the machine's operational phases: dough placement, pressing, cooking, and ejection. This ensured a smooth and automated workflow, minimizing human intervention.
+    </p>
+
+    <h2>Hardware Design: PCB and Fabrication</h2>
+    <p>
+      I designed and fabricated a custom <strong>PCB</strong> to integrate all the electronic components of the Paratha Pressing Machine. The PCB housed the ESP32 module, MAX6675 thermocouple interface, SSR drivers, stepper motor driver connections, and power regulation circuits. The board was designed using <strong>KiCAD</strong>, with careful consideration for signal integrity and thermal management, given the high-power components involved.
+    </p>
+    <p>
+      The PCB featured a 4-layer design to accommodate the complex routing requirements and ensure proper grounding. High-current traces for the heaters and motor drivers were widened to handle the load, and thermal vias were added to dissipate heat from the SSRs. The fabrication process involved working with a local PCB manufacturer to produce the boards, followed by manual assembly and testing to ensure reliability.
+    </p>
+    <img class="hero-img" src="../../assets/paratha-pressing-machine-asm-2.JPEG" alt="Paratha Pressing Machine Assembly - Alternate View" />
+
+    <h2>System Integration and Deployment</h2>
+    <p>
+      The hardware image provided shows the integrated system during deployment. The setup includes the ESP32 module, stepper motor driver, SSRs, and thermocouples, all connected via a custom wiring harness. The green terminal blocks facilitated easy connections for the heaters, motor, and sensors, while the purple foam base provided insulation and stability for the PCB.
+    </p>
+    <p>
+      During deployment, the machine was tested extensively to ensure it could press and cook 4 parathas simultaneously with consistent results. The temperature control system maintained the plate at the optimal cooking temperature (around 180°C), and the stepper motor applied uniform pressure to achieve the desired paratha thickness. The entire process—from dough placement to cooked paratha ejection—was completed in under 2 minutes per batch.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Simultaneous pressing and cooking of 4 parathas at a time</li>
+      <li>Precise temperature control using K-type thermocouples and PID algorithm</li>
+      <li>High-torque pressing with NEMA 32 stepper motor and gearhead</li>
+      <li>Real-time multitasking with ESP32 and FreeRTOS</li>
+      <li>Solid-state relays for reliable heater control</li>
+      <li>Custom-designed and fabricated PCB for integrated electronics</li>
+      <li>Over-temperature protection for safety</li>
+    </ul>
+
+    <p>
+      This project at Esforge Pvt Ltd demonstrated my expertise in embedded systems, firmware development, and hardware design. The Paratha Pressing Machine successfully automated a traditionally labor-intensive process, delivering consistent quality and efficiency in paratha production.
+    </p>
   </article>
 
   <footer class="footer container">
