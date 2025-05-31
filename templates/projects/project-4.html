@@ -12,12 +12,19 @@
     .title-row {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end; /* Aligns the bottoms of the title and button */
+      align-items: baseline; /* Aligns items by their baseline */
       margin-bottom: 1rem;
     }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
     .btn {
-      padding: 0.5rem 1.2rem; /* Adjusted padding for proper alignment */
-      font-size: 1rem; /* Ensure text size aligns with title */
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
     }
   </style>
 </head>
