@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCR ID Parser · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenEVSE L2 EV Charger · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -18,27 +40,125 @@
       <li><a href="../skills.html">Skills</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
-
   </nav>
 
   <article class="project-page container glass">
-    <h1>OCR ID Parser</h1>
-    <p class="tags">PaddleOCR</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
-    />
+    <div class="title-row">
+      <h1>OpenEVSE L2 EV Charger</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/openevse-l2-charger" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">RPi · Whitebeet Boards · OpenEVSE · SLAC · Python</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      At <strong>Powersoft 19</strong>, I spearheaded the development of an <strong>OpenEVSE Level 2 (L2) EV Charger</strong>, a project that showcased my deep understanding of electric vehicle (EV) charging systems and the open-source OpenEVSE ecosystem. This was a classified project, so I’m limited in sharing specific images or sensitive details, but I can dive into the technical intricacies of how I implemented a fully functional L2 charger using <strong>Raspberry Pi 4</strong> and <strong>Sevenstax Whitebeet boards</strong>. My role involved everything from hardware integration to writing custom Python firmware, ensuring compliance with standards like <strong>IEC 61851-1</strong> and <strong>ISO 15118</strong>, and implementing advanced features like Signal Level Attenuation Characterization (SLAC) matching for robust communication between the charger (EVSE) and the vehicle (EV).
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The goal of this project was to build a Level 2 EV charger capable of delivering up to 7.4 kW at 230V AC (single-phase), adhering to international standards for safety and communication. OpenEVSE, an open-source EV Supply Equipment (EVSE) platform, was the foundation of this project, providing a flexible framework for customization. I used two <strong>Sevenstax Whitebeet boards</strong>—one configured as the EVSE (charger) and the other as the EV (vehicle)—to simulate and test the charging process. A <strong>Raspberry Pi 4</strong> served as the central controller, running custom Python firmware to manage the OpenEVSE system, handle communication protocols, and ensure safe operation.
+    </p>
+    <p>
+      This project was a deep dive into the intricacies of EV charging, from the low-level Control Pilot (CP) signal generation to high-level ISO 15118 communication, including SLAC matching for powerline communication (PLC). I’ll break down each component, my approach, and the technical challenges I overcame to make this charger a success.
+    </p>
+
+    <h2>System Architecture</h2>
+    <p>
+      The system architecture was designed for modularity and scalability, leveraging the strengths of OpenEVSE, Whitebeet boards, and the Raspberry Pi 4. The <strong>Whitebeet boards</strong> by Sevenstax are embedded ISO 15118 modules specifically designed for EV charging communication. I used the <strong>Whitebeet-EI</strong> (EVSE module) for the charger side and the <strong>Whitebeet-PI</strong> (EV module) to simulate the vehicle side. These boards support the ISO 15118 standard, which enables advanced features like Plug-and-Charge (PnC) authorization and powerline communication via SLAC.
+    </p>
+    <img class="hero-img" src="../../assets/whitebeet.png" alt="Sevenstax Whitebeet Board" />
+    <p><em>Note: This image is taken from Sevenstax.</em></p>
+    <p>
+      The Raspberry Pi 4 acted as the host controller, interfacing with both Whitebeet boards over Ethernet using the Host Control Interface (HCI). I wrote Python firmware to manage the OpenEVSE system, implementing the charging state machine, CP signal handling, and ISO 15118 communication protocols. The Pi 4’s quad-core Cortex-A72 processor and 4GB of RAM provided ample performance for real-time control and data processing.
+    </p>
+    <img class="hero-img" src="../../assets/rpi4.png" alt="Raspberry Pi 4" />
+    <p><em>Note: This image is taken from the Raspberry Pi site.</em></p>
+
+    <h2>OpenEVSE Integration and Firmware Development</h2>
+    <p>
+      OpenEVSE is a powerful open-source platform for EV charging, and I leveraged its flexibility to build a custom L2 charger. The OpenEVSE firmware typically runs on microcontrollers like the ESP8266, but I adapted it to run on the Raspberry Pi 4 using Python, interfacing with the Whitebeet boards for communication. This required a deep understanding of OpenEVSE’s architecture, including its <strong>RAPI (Remote API)</strong> protocol, which allows for dynamic control of charging parameters like current and state.
+    </p>
+    <p>
+      I wrote a custom Python script to control the OpenEVSE system, using the Whitebeet-EI board to generate the Control Pilot (CP) signal—a 1 kHz PWM signal that communicates the charger’s state to the vehicle. The CP signal follows the IEC 61851-1 standard, with voltage levels indicating different states: +12V for State A (not connected), +9V PWM for State B (connected, not charging), and +6V PWM for State C (charging). I used the Whitebeet board’s built-in CP control functions to set the duty cycle and monitor the signal, ensuring compliance with the standard.
+    </p>
+    <img class="hero-img" src="../../assets/CP-signal.png" alt="Control Pilot Signal" />
+    <p><em>Note: This image is taken from OpenEVSE.</em></p>
+    <p>
+      The firmware implemented a finite state machine (FSM) to manage the charging process, handling transitions between states based on the CP signal and vehicle responses. For example, when the vehicle connects, the CP voltage drops to +9V, signaling State B. The charger then sets the PWM duty cycle to advertise the available current (e.g., 50% duty cycle for 32A). If the vehicle requests charging (CP drops to +6V), the charger moves to State C, closing the power relays to start charging.
+    </p>
+
+    <h2>SLAC Matching and ISO 15118 Communication</h2>
+    <p>
+      One of the most advanced aspects of this project was implementing <strong>Signal Level Attenuation Characterization (SLAC)</strong> matching, a requirement for ISO 15118 communication over powerline communication (PLC). SLAC ensures reliable communication between the EVSE and EV by matching their PLC interfaces, a process handled by the Whitebeet boards. I used the Whitebeet-EI board on the EVSE side to initiate SLAC matching, setting the CP duty cycle to 5% to signal the EV (Whitebeet-PI) to respond with SLAC requests.
+    </p>
+    <p>
+      The SLAC process involved the EVSE broadcasting a series of messages to characterize the communication channel, ensuring a stable link for ISO 15118 data exchange. Once SLAC matching was successful, the Whitebeet boards established a network link, allowing for high-level communication. My Python firmware on the Raspberry Pi 4 managed this process, using the Whitebeet HCI to send commands like <code>slacStartMatching()</code> and monitor the matching status with <code>slacMatched()</code>.
+    </p>
+    <p>
+      With the PLC link established, I implemented the ISO 15118 protocol stack for handshaking and authorization. This included:
+    </p>
+    <ul>
+      <li><strong>Session Setup:</strong> Exchanging session parameters between the EVSE and EV, including protocol versions and session IDs.</li>
+      <li><strong>Authorization:</strong> Implementing Plug-and-Charge (PnC) using digital certificates to authenticate the vehicle, ensuring only authorized vehicles could charge.</li>
+      <li><strong>Charging Parameters:</strong> Negotiating charging parameters like maximum current, voltage, and energy transfer mode (AC in this case).</li>
+      <li><strong>Charging Loop:</strong> Continuously monitoring the charging process, adjusting the current based on the vehicle’s requests, and handling faults.</li>
+    </ul>
+    <p>
+      The ISO 15118 implementation allowed for smart charging features, such as dynamic current adjustment based on the vehicle’s battery state, which I retrieved via the Whitebeet-PI board simulating the EV’s BMS.
+    </p>
+
+    <h2>Hardware Integration: Whitebeet Boards and Raspberry Pi 4</h2>
+    <p>
+      The <strong>Whitebeet-EI</strong> (EVSE) and <strong>Whitebeet-PI</strong> (EV) boards were the backbone of the communication system. These boards are designed for ISO 15118 compliance, supporting both AC and DC charging with integrated PLC modems for SLAC and ISO 15118 communication. The Whitebeet-EI board handled CP signal generation and monitoring, while the Whitebeet-PI board simulated the vehicle’s responses, including CP state changes and PLC communication.
+    </p>
+    <p>
+      I connected both boards to the Raspberry Pi 4 via Ethernet, using the Pi’s GPIO pins to monitor additional signals like the Proximity Pilot (PP) for cable detection. The Pi 4 ran a custom Raspbian OS image, optimized for real-time control with Python 3.9. I installed dependencies like <code>python-libpcap</code> and <code>scapy</code> to handle low-level network communication, although I had to troubleshoot compatibility issues with Python 3.9 by creating a virtual environment.
+    </p>
+    <p>
+      The Whitebeet boards required careful configuration, including setting their MAC addresses for PLC communication. I used the MAC address printed on each board, subtracting 2 from the last octet for the Ethernet interface (e.g., a PLC MAC of <code>c4:93:00:22:22:24</code> became <code>c4:93:00:22:22:22</code> for Ethernet). This ensured reliable communication between the boards and the Pi.
+    </p>
+
+    <h2>Safety and Compliance</h2>
+    <p>
+      Safety was a top priority, and OpenEVSE’s design helped ensure compliance with standards like SAE J1772 and IEC 61851-1. Before supplying power, the system performed a series of checks:
+    </p>
+    <ul>
+      <li><strong>Ground Continuity Monitoring (GCM):</strong> Verified the ground connection using a 1 mA test current, halting charging if the ground was faulty.</li>
+      <li><strong>Residual Current Detection (RCD):</strong> Monitored for ground faults, tripping at 30 mA to protect against leakage currents.</li>
+      <li><strong>Relay Test:</strong> Ensured the power relays were functioning correctly before closing them in State C.</li>
+    </ul>
+    <p>
+      The charger used electromechanical relays rated for 40A at 230V AC, with a separate relay for ground fault protection. I also implemented software safety features in the Python firmware, such as monitoring the CP signal for unexpected state changes (e.g., a drop to 0V indicating a fault) and immediately opening the relays to halt charging.
+    </p>
+
+    <h2>Testing and Validation</h2>
+    <p>
+      Testing was a critical phase of the project, and I used the Whitebeet-PI board to simulate an EV, allowing me to test the entire charging workflow. I validated the following:
+    </p>
+    <ul>
+      <li><strong>CP Signal Accuracy:</strong> Used an oscilloscope to verify the CP signal’s amplitude (±12V, +9V, +6V), frequency (1 kHz), and duty cycle, ensuring compliance with IEC 61851-1.</li>
+      <li><strong>SLAC Matching:</strong> Confirmed successful SLAC matching between the Whitebeet boards, establishing a stable PLC link for ISO 15118 communication.</li>
+      <li><strong>Authorization:</strong> Tested the PnC authorization process, ensuring the EVSE correctly authenticated the simulated EV using digital certificates.</li>
+      <li><strong>Charging Performance:</strong> Simulated a 7.4 kW charging session, monitoring the current draw and adjusting it dynamically based on the EV’s requests.</li>
+      <li><strong>Fault Handling:</strong> Introduced fault conditions (e.g., ground fault, cable disconnection) to verify the charger entered State E/F and safely halted charging.</li>
+    </ul>
+    <p>
+      The system performed flawlessly, delivering a full charging cycle while adhering to all safety and communication standards. The Python firmware’s modularity made it easy to debug and iterate, and the Raspberry Pi 4’s performance ensured real-time control without bottlenecks.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Level 2 charging at 7.4 kW (230V AC, 32A) per IEC 61851-1 and SAE J1772.</li>
+      <li>Custom Python firmware on Raspberry Pi 4 for OpenEVSE control and ISO 15118 communication.</li>
+      <li>Whitebeet-EI (EVSE) and Whitebeet-PI (EV) boards for SLAC matching and PLC communication.</li>
+      <li>Control Pilot (CP) and Proximity Pilot (PP) signal handling for state management and cable detection.</li>
+      <li>Finite state machine for safe charging operation, with dynamic current adjustment via RAPI.</li>
+      <li>ISO 15118 implementation for handshaking, authorization (PnC), and smart charging.</li>
+      <li>Comprehensive safety features, including GCM, RCD, and relay testing.</li>
+    </ul>
+
+    <p>
+      This project at Powersoft 19 was a defining moment in my career, solidifying my expertise in EV charging systems and the OpenEVSE ecosystem. From mastering the low-level details of CP signal generation to implementing high-level ISO 15118 protocols, I gained a comprehensive understanding of EV charging technology. The use of Whitebeet boards and Raspberry Pi 4 allowed me to push the boundaries of what’s possible with OpenEVSE, delivering a charger that was both standards-compliant and highly customizable. This experience has made me a go-to expert for EV charging solutions, and I’m proud to have contributed to such a critical project.
+    </p>
   </article>
 
   <footer class="footer container">
