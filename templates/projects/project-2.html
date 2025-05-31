@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RL Drone Control · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L2 EV Charger · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -21,23 +43,112 @@
   </nav>
 
   <article class="project-page container glass">
-    <h1>Drone Control System</h1>
-    <p class="tags">ROS2 · PPO</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
-    />
+    <div class="title-row">
+      <h1>L2 EV Charger</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/l2-ev-charger" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">STM32 · ADC · CANbus · Relays · Op-Amp</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      I designed and developed a <strong>Level 2 (L2) Electric Vehicle (EV) Charger</strong> compliant with the <strong>IEC 61851-1</strong> standard, using an <strong>STM32 microcontroller</strong> as the core controller. This project involved implementing a robust state machine for safe and efficient charging, integrating <strong>Control Pilot (CP)</strong> and <strong>Proximity Pilot (PP)</strong> signal detection, and ensuring reliable communication with the vehicle’s Battery Management System (BMS) via <strong>CANbus</strong>. The charger was successfully tested on an electric vehicle, demonstrating full compliance with international safety and performance standards.
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The L2 EV Charger was designed to deliver up to 7.4 kW of power at 230V AC (single-phase), suitable for residential and commercial charging applications. The charger adhered to the <strong>IEC 61851-1</strong> standard, which defines the communication protocol between the EV and the charging station using the Control Pilot (CP) and Proximity Pilot (PP) signals. The <strong>STM32F4 microcontroller</strong> managed all aspects of the charging process, including signal detection, state transitions, safety checks, and communication with the vehicle’s BMS over CANbus.
+    </p>
+    <p>
+      The system incorporated safety features such as <strong>relays</strong> for controlling current flow, which were only activated in State B of the CP state machine, ensuring no power was delivered until the vehicle was properly connected and ready to charge. The charger also used operational amplifiers (op-amps) to generate the CP signal and a 12V power supply to power the control circuitry.
+    </p>
+    <img class="hero-img" src="../../assets/ev-connector.png" alt="EV Charger Connector" />
+
+    <h2>System Architecture</h2>
+    <p>
+      The L2 EV Charger architecture was built around the <strong>STM32F4 microcontroller</strong>, which provided the processing power and peripherals needed for real-time control. The STM32 used its <strong>Analog-to-Digital Converters (ADCs)</strong> to read the Control Pilot (CP) signal voltage levels and detect the Proximity Pilot (PP) resistance, which indicated the presence and current rating of the charging cable. The CP signal was generated using an op-amp circuit to produce a 1 kHz PWM signal with voltage levels of ±12V (unloaded) and +9V/+6V (loaded), as per the IEC 61851-1 standard.
+    </p>
+    <p>
+      The charger communicated with the vehicle’s BMS via <strong>CANbus</strong>, using the <strong>ISO 11898</strong> protocol to retrieve battery data such as state of charge (SoC), state of health (SoH), and maximum charging current. Two <strong>electromechanical relays</strong> were used to control the AC power flow to the vehicle, with a third relay for ground fault protection, ensuring safety in case of a fault condition.
+    </p>
+
+    <h2>Control Pilot (CP) and Proximity Pilot (PP) Implementation</h2>
+    <p>
+      The <strong>Control Pilot (CP)</strong> signal was the cornerstone of the charger’s communication with the EV, implemented per IEC 61851-1. The CP circuit used an <strong>op-amp</strong> (e.g., LM358) to generate a 1 kHz PWM signal with a 12V peak-to-peak amplitude, which was then modulated to communicate the charger’s state and available current. The STM32’s ADC sampled the CP signal at 10 kHz to detect voltage levels, determining the EV’s state:
+    </p>
+    <ul>
+      <li><strong>State A (Not Connected):</strong> +12V DC (no PWM), indicating no vehicle connected.</li>
+      <li><strong>State B (Connected, Not Charging):</strong> +9V PWM, indicating the vehicle is connected but not ready to charge.</li>
+      <li><strong>State C (Charging):</strong> +6V PWM, indicating the vehicle is charging with ventilation not required.</li>
+      <li><strong>State D (Charging with Ventilation):</strong> +3V PWM (not implemented in this project).</li>
+      <li><strong>State E/F (Error):</strong> 0V or -12V, indicating a fault condition (e.g., ground fault or disconnection).</li>
+    </ul>
+    <p>
+      The <strong>Proximity Pilot (PP)</strong> signal was used to detect the presence of the charging cable and its current rating. A resistor network in the cable (per SAE J1772) altered the PP signal voltage, which was read by the STM32’s ADC. For example, a 220Ω resistor indicated a 32A cable, while a 1.5kΩ resistor indicated a 13A cable. This ensured the charger never exceeded the cable’s rated current.
+    </p>
+
+    <h2>State Machine Implementation</h2>
+    <p>
+      I implemented a finite state machine (FSM) on the STM32 to manage the charging process and ensure safe state transitions, adhering to IEC 61851-1. The FSM was written in C and included the following states and transitions:
+    </p>
+    <ul>
+      <li><strong>Idle (State A):</strong> The charger outputs a +12V DC signal on the CP line, waiting for a vehicle connection. Relays remain open.</li>
+      <li><strong>Vehicle Connected (State B):</strong> Upon detecting a vehicle (CP voltage drops to +9V), the charger starts a 1 kHz PWM signal with a duty cycle corresponding to the maximum available current (e.g., 50% duty for 32A). Relays remain open until the vehicle requests charging.</li>
+      <li><strong>Charging (State C):</strong> When the vehicle requests charging (CP voltage drops to +6V), the STM32 closes the power relays to start current flow, continuously monitoring the CP signal for changes.</li>
+      <li><strong>Error Handling (State E/F):</strong> If the CP voltage indicates a fault (e.g., 0V or -12V), the charger opens the relays, halts charging, and signals an error via a status LED.</li>
+      <li><strong>Shutdown:</strong> Upon disconnection (CP returns to +12V), the charger opens the relays and returns to the Idle state.</li>
+    </ul>
+    <p>
+      The state machine included safety checks at every transition, such as verifying the PP signal, checking for ground faults via a residual current device (RCD), and ensuring the vehicle’s BMS was ready to charge via CANbus.
+    </p>
+
+    <h2>CANbus Communication with BMS</h2>
+    <p>
+      The charger communicated with the vehicle’s Battery Management System (BMS) over <strong>CANbus</strong> at 500 kbps, using the STM32’s built-in CAN controller. The BMS provided critical data, including:
+    </p>
+    <ul>
+      <li>State of Charge (SoC) and State of Health (SoH).</li>
+      <li>Maximum allowable charging current and voltage.</li>
+      <li>Fault conditions (e.g., overvoltage, overtemperature).</li>
+    </ul>
+    <p>
+      The charger sent periodic status messages to the BMS, including the CP state, available current, and charger fault status. The CAN messages followed a custom protocol with 11-bit identifiers, ensuring compatibility with the vehicle’s BMS. The STM32 implemented a CAN filter to prioritize BMS messages and reduce interrupt overhead.
+    </p>
+
+    <h2>Power and Safety Circuitry</h2>
+    <p>
+      The charger used two <strong>electromechanical relays</strong> to control the AC power flow (Line and Neutral) to the vehicle, rated for 40A at 230V AC. A third relay was used for ground fault protection, interfaced with a residual current device (RCD) to detect leakage currents above 30 mA. The relays were only closed in State B (vehicle connected) and State C (charging), ensuring no power was delivered until the EV was ready.
+    </p>
+    <p>
+      The control circuitry was powered by a <strong>12V DC supply</strong>, derived from a switch-mode power supply (SMPS) with galvanic isolation for safety. The CP signal generation circuit used an op-amp to produce the required ±12V PWM signal, with a voltage divider and diode clamping to limit the voltage to +9V/+6V when loaded by the vehicle.
+    </p>
+
+    <h2>Testing and Validation</h2>
+    <p>
+      The L2 EV Charger was rigorously tested on an electric vehicle to ensure compliance with IEC 61851-1 and SAE J1772 standards. The testing process included:
+    </p>
+    <ul>
+      <li><strong>CP Signal Validation:</strong> Verified the PWM signal amplitude, frequency, and duty cycle using an oscilloscope, ensuring correct state transitions (A → B → C).</li>
+      <li><strong>PP Detection:</strong> Tested with different charging cables (13A, 32A) to confirm accurate current limit detection.</li>
+      <li><strong>Charging Performance:</strong> Charged the EV at 7.4 kW, monitoring the SoC via CANbus and verifying stable operation over a 4-hour cycle.</li>
+      <li><strong>Safety Tests:</strong> Simulated fault conditions (e.g., ground fault, cable disconnection) to confirm the charger entered State E/F and opened the relays.</li>
+    </ul>
+    <p>
+      The charger successfully charged the EV without any issues, delivering a full charge while maintaining all safety protocols. The state machine ensured robust operation, with no unexpected state transitions during testing.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Level 2 charging at 7.4 kW (230V AC, 32A) per IEC 61851-1.</li>
+      <li>Control Pilot (CP) signal generation and detection using op-amps and STM32 ADCs.</li>
+      <li>Proximity Pilot (PP) detection for cable current rating.</li>
+      <li>Finite state machine for safe and compliant charging operation.</li>
+      <li>CANbus communication with the vehicle’s BMS for real-time data exchange.</li>
+      <li>Safety relays and RCD for overcurrent and ground fault protection.</li>
+      <li>12V isolated power supply for control circuitry.</li>
+    </ul>
+
+    <p>
+      This project demonstrated my deep understanding of EV charging protocols, embedded systems design, and safety-critical applications. The successful implementation and testing of the L2 EV Charger on an actual electric vehicle underscored my ability to deliver a standards-compliant, reliable charging solution.
+    </p>
   </article>
 
   <footer class="footer container">
