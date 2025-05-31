@@ -181,11 +181,10 @@ body {
   transition: background 0.35s;
 }
 .card-image {
-  width: calc(100% - 24px); /* image slightly smaller than card width */
-  margin: 12px; /* top, left, right padding effect */
-  margin-bottom: 0; /* no bottom margin so text is close */
-  border-radius: 12px; /* smooth corners */
+  width: 100%;
   display: block;
+  border-radius: 12px;
+  margin-bottom: 12px;
 }
 
 .card h3 {
