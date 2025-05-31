@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart Grid Forecasting · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Battery Management System (BMS) · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -21,23 +43,88 @@
   </nav>
 
   <article class="project-page container glass">
-    <h1>Smart Grid Demand Forecasting</h1>
-    <p class="tags">LSTM · PyTorch · AWS Lambda</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="Smart grid"
-    />
+    <div class="title-row">
+      <h1>Battery Management System (BMS)</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/bms-project" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">STM32 · isoSPI · LTC6804 · DC1941D · Eth · .NET · C#</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      During my tenure at <strong>Powersoft 19</strong>, I designed and developed a <strong>Battery Management System (BMS)</strong> for monitoring and controlling battery cells in a classified application. This project involved the integration of the <strong>LTC6804</strong> battery cell monitor IC with an <strong>STM32 microcontroller</strong>, utilizing the <strong>DC1941D</strong> isoSPI-to-SPI converter module from Analog Devices. I also developed a desktop application using <strong>.NET</strong> and <strong>C#</strong> to provide a user interface for data visualization and control.
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The Battery Management System was designed to monitor and manage a stack of battery cells, ensuring safe operation by tracking key parameters such as voltage, temperature, state of charge (SoC), and state of health (SoH). The system used the <strong>LTC6804</strong> IC to interface directly with the battery cells, communicating over <strong>isoSPI</strong> via the <strong>DC1941D</strong> module to an STM32 microcontroller. The STM32 processed the data and transmitted it over <strong>CANbus</strong> to other nodes in the system, while a desktop application provided real-time monitoring and control capabilities.
+    </p>
+
+    <h2>System Architecture</h2>
+    <p>
+      The BMS architecture centered around the <strong>LTC6804</strong>, a high-precision battery monitoring IC capable of measuring up to 12 cells in series with a total measurement error of less than 1.2 mV. The LTC6804 communicated over <strong>isoSPI</strong>, a differential communication protocol that ensures robust data transmission in noisy environments. The <strong>DC1941D</strong> module converted the isoSPI signals to standard SPI, which was then interfaced with an <strong>STM32F4 microcontroller</strong>.
+    </p>
+    <p>
+      The STM32 handled data acquisition, processing, and communication. It used <strong>SPI</strong> to retrieve cell voltages and temperatures from the LTC6804, and <strong>UART</strong> for receiving control commands (e.g., setting charge/discharge limits). The processed data was transmitted over <strong>CANbus</strong> using a predefined message format, allowing any node on the network to access the BMS data. A second STM32 node was configured to receive and log this data for redundancy and system-level integration.
+    </p>
+    <img class="hero-img" src="../../assets/dc1941d.png" alt="DC1941D isoSPI-to-SPI Converter Module" />
+    <p><em>Note: I have taken this image from Analog Devices.</em></p>
+
+    <h2>Data Acquisition and Processing</h2>
+    <p>
+      The <strong>LTC6804</strong> was configured to perform continuous monitoring of the battery stack, measuring cell voltages with 16-bit resolution and temperatures via external thermistors. The STM32 firmware implemented a polling mechanism to retrieve data from the LTC6804 at a rate of 10 Hz, ensuring real-time monitoring. The raw data was filtered using a moving average algorithm to reduce noise, and the SoC was calculated using a coulomb-counting method combined with a lookup table for improved accuracy.
+    </p>
+    <p>
+      Safety features included overvoltage, undervoltage, and overtemperature detection, with configurable thresholds set via UART commands. If any parameter exceeded the defined limits, the STM32 triggered a fault condition, halting charge/discharge operations and sending an alert over CANbus.
+    </p>
+
+    <h2>Communication and Control</h2>
+    <p>
+      The STM32 used <strong>CANbus</strong> to transmit BMS data to other nodes in the system. The CAN messages followed a custom protocol, with each message containing a unique identifier, cell data (voltage, temperature, SoC), and fault status. This allowed for seamless integration with other system components, such as a master controller or a data logger.
+    </p>
+    <p>
+      Control commands were sent to the STM32 via <strong>UART</strong> from an external device. These commands included setting charge/discharge limits, enabling/disabling balancing, and requesting diagnostic data. The firmware included a command parser to interpret and execute these instructions, with error checking to ensure reliable operation.
+    </p>
+
+    <h2>Desktop Application Development</h2>
+    <p>
+      To provide a user-friendly interface, I developed a desktop application using <strong>.NET Framework</strong> and <strong>C#</strong>. The application communicated with the STM32 over <strong>Ethernet</strong> using a TCP/IP socket, receiving BMS data in real-time. The GUI was built with <strong>WPF</strong> (Windows Presentation Foundation) and featured:
+    </p>
+    <ul>
+      <li>Real-time graphs of cell voltages, temperatures, and SoC using a charting library (e.g., LiveCharts).</li>
+      <li>Individual cell data display with color-coded indicators for fault conditions.</li>
+      <li>Controls to set charge/discharge limits and enable/disable cell balancing.</li>
+      <li>A diagnostic panel for viewing system status and fault logs.</li>
+    </ul>
+    <p>
+      The application implemented a multi-threaded architecture to handle data streaming and UI updates concurrently, ensuring a responsive user experience. Data was parsed and stored in a local SQLite database for historical analysis, with export functionality to CSV for further processing.
+    </p>
+
+    <h2>Workflow</h2>
+    <p>
+      The development of the BMS followed a structured workflow to ensure reliability and performance:
+    </p>
+    <ol>
+      <li><strong>Hardware Setup:</strong> Connected the battery cells to the LTC6804 IC, interfaced with the DC1941D module, and connected the module to the STM32 via SPI.</li>
+      <li><strong>Firmware Development:</strong> Wrote STM32 firmware to handle SPI communication with the LTC6804, UART for control, and CANbus for data transmission. Implemented data processing algorithms (filtering, SoC calculation) and safety features.</li>
+      <li><strong>Communication Testing:</strong> Validated CANbus communication with a secondary STM32 node, ensuring data integrity and proper message formatting.</li>
+      <li><strong>Desktop Application Development:</strong> Built the .NET application with WPF, integrating real-time data streaming over Ethernet, graphical visualization, and control features.</li>
+      <li><strong>System Integration:</strong> Integrated the hardware and software components, testing the BMS under various operating conditions (e.g., high load, fault scenarios).</li>
+      <li><strong>Deployment and Validation:</strong> Deployed the system in a controlled environment at Powersoft 19, validating its performance against design specifications.</li>
+    </ol>
+
+    <h2>Skills Involved</h2>
+    <ul>
+      <li><strong>Embedded Systems:</strong> Programming the STM32 microcontroller for SPI, UART, and CANbus communication.</li>
+      <li><strong>Battery Management:</strong> Configuring and interfacing with the LTC6804 IC, implementing SoC and safety algorithms.</li>
+      <li><strong>Communication Protocols:</strong> Using isoSPI (via DC1941D), SPI, UART, CANbus, and Ethernet for robust data transfer.</li>
+      <li><strong>Firmware Development:</strong> Writing efficient C code for the STM32, with a focus on real-time processing and fault handling.</li>
+      <li><strong>Software Development:</strong> Developing a .NET desktop application with C# and WPF, including multi-threading, data visualization, and database integration.</li>
+      <li><strong>System Integration:</strong> Combining hardware and software components to create a cohesive BMS solution.</li>
+      <li><strong>Debugging and Testing:</strong> Using tools like oscilloscopes, logic analyzers, and CANbus sniffers to validate system performance.</li>
+    </ul>
+
+    <p>
+      This project at Powersoft 19 was a significant undertaking that enhanced my expertise in embedded systems, battery management, and software development. Despite the classified nature of the project, it demonstrated my ability to design and implement a complex, safety-critical system with robust hardware-software integration.
+    </p>
   </article>
 
   <footer class="footer container">
