@@ -180,6 +180,18 @@ body {
   justify-content: flex-end;
   transition: background 0.35s;
 }
+.card-image {
+  width: 100%;
+  padding: 12px; /* Same padding for top, left, right */
+  padding-bottom: 0; /* No padding at bottom so you can control spacing separately */
+  box-sizing: border-box; /* Ensures padding doesn't overflow */
+  border-radius: 10px; /* Optional for aesthetic */
+}
+
+.card h3 {
+  margin-top: 16px; /* This adds space between image and title */
+}
+
 .card:hover .card__info {
   background: rgba(0, 0, 0, 0.4);
 }
