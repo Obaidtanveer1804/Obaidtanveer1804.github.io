@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCR ID Parser · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6 DOF Robot · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
 </head>
 <body>
   <div class="bg"></div>
@@ -22,23 +21,59 @@
   </nav>
 
   <article class="project-page container glass">
-    <h1>OCR ID Parser</h1>
-    <p class="tags">PaddleOCR</p>
+    <h1>6 DOF Serial Manipulator</h1>
+    <p class="tags">STM32 · CANBUS · COPPELIASIM · SOLIDWORKS · ROBOTICS</p>
     <img
       class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
+      src="../../images/robot.png"
+      alt="6 DOF Robot"
     />
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      This project was my Final Year Project at <strong>PIEAS</strong>, supervised by <strong>Dr. Nasir Rehman Jadoon</strong>.
+      It involved the design and development of a <strong>6 Degree-of-Freedom (DOF) serial robotic manipulator</strong>
+      using embedded systems, kinematic modeling, and industrial communication protocols.
     </p>
+
+    <h2>System Architecture</h2>
+    <p>
+      We implemented a <strong>Master-Slave architecture</strong> where one STM32F103C8T6 (Bluepill) acted as the master
+      controller, communicating over the <strong>CANBUS protocol (via MCP2515 transceivers)</strong> with six STM32 Bluepills as slaves.
+      Each slave handled control of a single joint/motor in the robot.
+    </p>
+
+    <h2>Motor Control</h2>
+    <p>
+      We initially used <strong>L298N motor drivers</strong> for control, but later upgraded to more efficient <strong>IBT-2 (BTS7960)</strong> drivers.
+      Each motor was equipped with a <strong>500 PPR rotary encoder</strong> to enable precise position feedback and closed-loop control.
+    </p>
+
+    <h2>Mechanical Design & Simulation</h2>
+    <p>
+      The complete robot was modeled in <strong>SolidWorks</strong> with accurate mechanical constraints and exported for simulation in
+      <strong>CoppeliaSim (formerly V-REP)</strong>. We conducted extensive simulation of various pick-and-place operations and
+      workspace analysis.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Inverse and Forward Kinematics implemented for 6 DOF robotic arm</li>
+      <li>CANBUS communication using MCP2515 modules</li>
+      <li>Real-time multitasking and control loops with STM32 bare-metal programming</li>
+      <li>PID-based DC motor control with encoder feedback</li>
+      <li>Mechanical precision and durability via custom SolidWorks modeling</li>
+      <li>Simulation and path planning in CoppeliaSim</li>
+    </ul>
+
+    <p>
+      This project reflects an end-to-end robotic system design journey — from mechanical and control design to
+      embedded systems and industrial communication.
+    </p>
+
     <a
       class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
+      href="https://github.com/obaidtanveer/6dof-robot"
       target="_blank"
-      >View Code ↗</a
-    >
+    >View Code ↗</a>
   </article>
 
   <footer class="footer container">
