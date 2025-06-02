@@ -89,6 +89,20 @@ body {
   font-weight: 700;
   font-size: 1.2rem;
   color: #D9E6F2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-social {
+  color: var(--clr-accent); /* Yellow by default */
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+  transition: color 0.25s, box-shadow 0.25s, text-shadow 0.25s;
+}
+.nav-social:hover {
+  color: var(--clr-accent-dark); /* Darker yellow on hover */
+  text-shadow: 0 0 15px rgba(244, 162, 97, 0.9); /* Glow effect on hover */
+  box-shadow: 0 0 10px rgba(244, 162, 97, 0.5);
 }
 .nav__links {
   display: flex;
@@ -329,7 +343,7 @@ body {
   flex: 0 0 400px;
   background: var(--glass-bg);
   backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(217, 230, 242, 0.1);
+  border: 1px solid #4A4063;
   border-radius: var(--radius-med);
   box-shadow: var(--shadow);
   padding: 1rem 1.5rem;

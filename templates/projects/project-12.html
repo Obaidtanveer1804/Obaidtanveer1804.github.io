@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCR ID Parser · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Website (This website) · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -18,27 +40,90 @@
       <li><a href="../skills.html">Skills</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
-
   </nav>
 
   <article class="project-page container glass">
-    <h1>OCR ID Parser</h1>
-    <p class="tags">PaddleOCR</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
-    />
+    <div class="title-row">
+      <h1>Portfolio Website (This website)</h1>
+      <a class="btn" href="https://github.com/Obaidtanveer1804/portfolio-website" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">HTML · CSS · JS · GitHub</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      I created this <strong>Portfolio Website</strong> as a personal project to showcase my skills, projects, and journey as an Electrical Engineer and Embedded Firmware Engineer. This website, which you’re exploring right now, is a dynamic and responsive platform designed to highlight my work in embedded systems, robotics, and EV charging solutions. Built from the ground up, it’s an open site, freely accessible and usable by anyone interested in learning from or contributing to my projects. I’ve included screenshots to give you a glimpse of its design and functionality, reflecting my growth in web development and design.
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The Portfolio Website serves as a digital resume and project gallery, featuring sections for my projects, experience, education, skills, and contact information. I developed it using <strong>HTML</strong> for structure, <strong>CSS</strong> for styling with a glassmorphism effect, and <strong>JavaScript</strong> for interactivity, such as the tilt effect on project cards. Hosted on <strong>GitHub Pages</strong>, it’s a live representation of my technical abilities and a testament to my self-directed learning in web development. The site is designed to be mobile-friendly and visually appealing, with a focus on showcasing my embedded systems projects effectively.
+    </p>
+    <p>
+      This project was a labor of love, evolving over time as I added new features and refined its design. It’s open to the public, and I encourage others to use it as a reference or fork it for their own portfolios, reflecting my commitment to sharing knowledge.
+    </p>
+
+    <h2>Development Process</h2>
+    <p>
+      I started this website with a basic HTML structure, gradually adding CSS to create a modern look with a glassmorphism background and smooth transitions. I used the Inter font from Google Fonts for readability and Font Awesome for icons, enhancing the user experience. JavaScript was integrated to add the Vanilla Tilt.js library, giving project cards a 3D tilt effect on hover, which adds an engaging touch.
+    </p>
+    <p>
+      The development involved several key steps:
+    </p>
+    <ul>
+      <li><strong>Planning:</strong> Sketched the layout, deciding on a single-page design with a navigation bar, hero section, and project grid.</li>
+      <li><strong>Coding:</strong> Wrote semantic HTML, styled with CSS variables for consistency, and added JavaScript for dynamic behavior.</li>
+      <li><strong>Testing:</strong> Tested responsiveness across devices (desktop, tablet, mobile) using browser developer tools, ensuring compatibility.</li>
+      <li><strong>Deployment:</strong> Pushed the code to a GitHub repository and enabled GitHub Pages for hosting, learning the deployment process along the way.</li>
+    </ul>
+    <p>
+      I iterated on the design based on feedback, adding a footer with a dynamic year update and optimizing load times by using CDN-hosted libraries.
+    </p>
+
+    <h2>Screenshots</h2>
+    <p>
+      Here are a couple of screenshots showcasing the website’s design and functionality:
+    </p>
+    <img class="hero-img" src="../../assets/pfws-1.png" alt="Portfolio Website Main Page Screenshot" />
+    <p>
+      This screenshot shows the main page, featuring the hero section and project grid, highlighting the glassmorphism effect and tilt animation on the project cards.
+    </p>
+    <img class="hero-img" src="../../assets/pfws-2.png" alt="Portfolio Website Experience Page Screenshot" />
+    <p>
+      This screenshot captures the experience page, showcasing the responsive layout and navigation bar, providing a view of my professional background.
+    </p>
+    <p>
+      These images reflect the website’s clean design and user-friendly interface, which I crafted to make my portfolio accessible and engaging.
+    </p>
+
+    <h2>What I Learned</h2>
+    <p>
+      Building this website was a significant learning experience that expanded my skill set beyond embedded systems. Here’s what I gained:
+    </p>
+    <ul>
+      <li><strong>Web Development Basics:</strong> Mastered HTML, CSS, and JavaScript, understanding how to structure, style, and add interactivity to a site.</li>
+      <li><strong>Responsive Design:</strong> Learned to use CSS media queries and flexible layouts to ensure the site works on all screen sizes.</li>
+      <li><strong>Version Control:</strong> Gained hands-on experience with Git and GitHub, including commits, branches, and deployment via GitHub Pages.</li>
+      <li><strong>Performance Optimization:</strong> Discovered the importance of minimizing load times by leveraging CDNs for libraries like Font Awesome and Vanilla Tilt.js.</li>
+      <li><strong>User Experience (UX):</strong> Explored UX principles, focusing on intuitive navigation and visual appeal to engage visitors.</li>
+      <li><strong>Problem-Solving:</strong> Troubleshot issues like CSS conflicts and JavaScript errors, improving my debugging skills.</li>
+    </ul>
+    <p>
+      This project taught me the value of cross-disciplinary skills, blending my engineering background with web development to create a professional online presence. I also learned to embrace open-source principles, making the site available for others to learn from or adapt.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Responsive single-page design using HTML, CSS, and JavaScript.</li>
+      <li>Glassmorphism effect and tilt animation for an interactive user interface.</li>
+      <li>Inter font and Font Awesome icons for a polished look.</li>
+      <li>Vanilla Tilt.js for 3D hover effects on project cards.</li>
+      <li>GitHub Pages hosting for easy deployment and updates.</li>
+      <li>Dynamic footer with a current year update via JavaScript.</li>
+      <li>Open-source availability for public use and contribution.</li>
+    </ul>
+
+    <p>
+      This Portfolio Website project, completed as of June 02, 2025, is more than just a showcase—it’s a reflection of my growth as an engineer and developer. By making it an open site, I hope to inspire others and build a community around my work. The skills I’ve gained in web development complement my embedded systems expertise, opening new avenues for future projects. I’m proud of this creation and excited to continue refining it as my career evolves!
+    </p>
   </article>
 
   <footer class="footer container">

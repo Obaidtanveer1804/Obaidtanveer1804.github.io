@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCR ID Parser · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Home Device ESP32 · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -18,27 +40,85 @@
       <li><a href="../skills.html">Skills</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
-
   </nav>
 
   <article class="project-page container glass">
-    <h1>OCR ID Parser</h1>
-    <p class="tags">PaddleOCR</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
-    />
+    <div class="title-row">
+      <h1>Smart Home Device ESP32</h1>
+      <a class="btn" href="https://github.com/Obaidtanveer1804/smart-home-esp32" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">ESP32 · Arduino · PlatformIO · IoT · Relay</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      I developed a <strong>Smart Home Device</strong> using an <strong>ESP32</strong> microcontroller, leveraging the Arduino framework and PlatformIO for a robust home automation solution. This project integrates a 4-channel relay module to control household appliances, connects to the <strong>Arduino IoT Cloud</strong> for remote monitoring, and links with <strong>Google Home</strong> for voice control. I also added temperature reading functionality using a sensor, enhancing the device’s utility for smart home environments.
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The Smart Home Device aims to automate and monitor home appliances efficiently. I used the ESP32 for its Wi-Fi capabilities and dual-core processing power, programmed with the Arduino framework within the PlatformIO IDE for seamless development. The 4-channel relay module allows control of up to four devices, such as lights or fans, while the Arduino IoT Cloud provides a dashboard for real-time status updates. Integration with Google Home enables voice commands like “Turn on the living room light,” making it user-friendly. Additionally, I incorporated a DHT11 sensor to monitor temperature, adding environmental awareness to the system.
+    </p>
+    <p>
+      This project showcases my ability to blend hardware and IoT technologies, creating a practical solution for modern homes. The code and design are documented for future enhancements.
+    </p>
+
+    <h2>Hardware and Setup</h2>
+    <p>
+      The setup revolves around the ESP32, which interfaces with a 4-channel relay module to switch devices on or off via GPIO pins (e.g., GPIO 13, 12, 14, 27). I connected a DHT11 temperature sensor to GPIO 4 for reading ambient temperature and humidity. Power is supplied via a 5V adapter, with the relay module handling the high-voltage switching (up to 250V AC). The circuit was designed with proper isolation to ensure safety, using optocouplers within the relay module.
+    </p>
+    <img class="hero-img" src="../../assets/real-ss.jpeg" alt="Smart Home Device Circuit" />
+    <p>
+      This circuit diagram illustrates the connections between the ESP32, relay module, and DHT11 sensor, ensuring a stable and reliable setup.
+    </p>
+
+    <h2>Software and Integration</h2>
+    <p>
+      I developed the firmware using the Arduino framework in PlatformIO, which simplified the coding process with its extensive library support. The ESP32 connects to the Arduino IoT Cloud via Wi-Fi, where I set up variables to control the relay channels and display temperature readings. Google Home integration was achieved using the Google Home app, linking the device through the Arduino IoT Cloud’s “Thing” configuration.
+    </p>
+    <img class="hero-img" src="../../assets/iot-cloud.jpeg" alt="Arduino IoT Cloud Dashboard" />
+    <p>
+      This screenshot shows the Arduino IoT Cloud dashboard, where I can toggle relays and view temperature data remotely.
+    </p>
+    <img class="hero-img" src="../../assets/google-home.jpeg" alt="Google Home Integration" />
+    <p>
+      This image captures the Google Home app, demonstrating voice control of the smart home devices.
+    </p>
+    <img class="hero-img" src="../../assets/relay.png" alt="4-Channel Relay Module" />
+    <p>
+      This photo highlights the 4-channel relay module, showing its compact design and connection points for controlling multiple appliances.
+    </p>
+
+    <h2>Temperature Reading Functionality</h2>
+    <p>
+      I added temperature monitoring using the DHT11 sensor, which provides readings every 2 seconds. The data is processed on the ESP32 and sent to the Arduino IoT Cloud, where it’s displayed alongside relay statuses. I implemented a simple threshold alert: if the temperature exceeds 30°C, a notification is pushed to the cloud, and a specific relay (e.g., a fan) can be triggered automatically.
+    </p>
+
+    <h2>Testing and Validation</h2>
+    <p>
+      I tested the system extensively to ensure reliability:
+    </p>
+    <ul>
+      <li><strong>Relay Control:</strong> Verified all four channels could switch a 220V lamp on and off via the cloud and voice commands, with no latency.</li>
+      <li><strong>Temperature Accuracy:</strong> Compared DHT11 readings with a commercial thermometer, achieving ±1°C accuracy.</li>
+      <li><strong>Connectivity:</strong> Confirmed stable Wi-Fi connection and cloud sync over 24 hours, with automatic reconnection after power loss.</li>
+      <li><strong>Voice Integration:</strong> Tested Google Home commands like “Turn on bedroom light,” ensuring correct relay activation.</li>
+    </ul>
+    <p>
+      The device performed flawlessly, providing a seamless smart home experience. I used it at home for a week, controlling lights and monitoring temperature, which validated its practical utility.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>ESP32 with Arduino framework and PlatformIO for development.</li>
+      <li>4-channel relay module for controlling up to four appliances.</li>
+      <li>Arduino IoT Cloud integration for remote monitoring and control.</li>
+      <li>Google Home compatibility for voice-activated control.</li>
+      <li>DHT11 sensor for temperature and humidity readings with alerts.</li>
+      <li>Safe circuit design with optocoupler isolation.</li>
+    </ul>
+
+    <p>
+      This Smart Home Device project, completed as of June 02, 2025, demonstrates my proficiency in IoT development and hardware integration. From designing the circuit to enabling voice control, I enjoyed exploring the intersection of embedded systems and smart technology. It’s a functional prototype I continue to refine, with plans to add more sensors and automation features.
+    </p>
   </article>
 
   <footer class="footer container">

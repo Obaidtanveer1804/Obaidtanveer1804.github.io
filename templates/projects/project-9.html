@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OCR ID Parser · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smartwatch ESP32 · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
 </head>
 <body>
   <div class="bg"></div>
@@ -18,27 +40,167 @@
       <li><a href="../skills.html">Skills</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
-
   </nav>
 
   <article class="project-page container glass">
-    <h1>OCR ID Parser</h1>
-    <p class="tags">PaddleOCR</p>
-    <img
-      class="hero-img"
-      src="https://source.unsplash.com/1200x600?electricity"
-      alt="RL Drone Control"
-    />
+    <div class="title-row">
+      <h1>Smartwatch ESP32</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/smartwatch-esp32" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">FreeRTOS · ESP32 · C++ · Accelerometer · OLED</p>
+    
     <p>
-      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
-      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
+      I designed and developed a fully functional <strong>Smartwatch</strong> using the <strong>ESP32</strong> microcontroller, showcasing my expertise in embedded systems, real-time operating systems, and wearable technology. This project was a personal endeavor to create a smartwatch that could track fitness metrics like steps and heart rate, display notifications, and manage battery life efficiently. Powered by <strong>FreeRTOS</strong>, the smartwatch leveraged the ESP32’s dual-core architecture to handle multiple tasks concurrently, ensuring smooth operation. I integrated an accelerometer for step counting, a heart rate sensor for health monitoring, and a low-power OLED display for user interaction, making this a comprehensive and practical wearable device.
     </p>
-    <a
-      class="btn"
-      href="https://github.com/Obaid Tanveer/smart-grid"
-      target="_blank"
-      >View Code ↗</a
-    >
+
+    <h2>Project Overview</h2>
+    <p>
+      The Smartwatch ESP32 project aimed to build a wearable device with core fitness tracking features and smart functionalities. I chose the <strong>ESP32-WROOM-32</strong> module for its dual-core processor, built-in Wi-Fi/Bluetooth, and low power capabilities, making it ideal for a wearable application. The smartwatch included a <strong>step counter</strong> using the MPU-6050 accelerometer, a <strong>heart rate calculator</strong> with the MAX30102 sensor, a <strong>0.96-inch OLED display</strong> for showing data, and a push button for user interaction. I also implemented power management to extend battery life, using a 150 mAh LiPo battery with a TP4056 charging module.
+    </p>
+    <p>
+      FreeRTOS was the backbone of the system, allowing me to run multiple tasks—like sensor data collection, data processing, and display updates—in parallel. I wrote the firmware in C++ using the ESP-IDF framework, ensuring efficient memory usage and real-time performance. This project pushed my skills in embedded programming, hardware integration, and RTOS-based multitasking to new heights.
+    </p>
+
+    <h2>System Architecture</h2>
+    <p>
+      The smartwatch’s architecture was designed for efficiency and scalability. The ESP32 acted as the central controller, managing all peripherals and tasks. The MPU-6050 accelerometer, connected via I2C, provided motion data for step counting. The MAX30102 sensor, also on I2C, measured heart rate and SpO2 using photoplethysmography (PPG). A 0.96-inch OLED display (SSD1306 driver) was used for the UI, interfaced via I2C as well. A single push button allowed users to switch between display modes (e.g., steps, heart rate, time).
+    </p>
+    <p>
+      Power was supplied by a 150 mAh LiPo battery, charged via a TP4056 module with overcharge protection. The ESP32’s ultra-low-power (ULP) co-processor was used to monitor sensors in deep sleep mode, waking the main cores only when necessary to save power. FreeRTOS managed the multitasking, with separate tasks for sensor reading, data processing, display updates, and user input handling.
+    </p>
+
+    <h2>Schematic Design</h2>
+    <p>
+      The hardware design was critical to the smartwatch’s success, and I followed a well-documented schematic from an open-source project, adapting it to my specific needs. Below are the two main schematics I used:
+    </p>
+    <h3>Main Circuit Schematic</h3>
+    <img class="hero-img" src="../../assets/schematic.png" alt="Smartwatch Main Schematic" />
+    <p>
+      This schematic illustrates the core connections of the smartwatch. The ESP32-WROOM-32 module is at the center, interfacing with the MPU-6050 and MAX30102 sensors over the I2C bus (SDA and SCL pins on GPIO 21 and 22). The 0.96-inch OLED display is also connected to the same I2C bus, sharing the lines with pull-up resistors (4.7kΩ) to ensure stable communication. The push button is connected to GPIO 0 with a 10kΩ pull-up resistor for debouncing, and the TP4056 charging module interfaces with the 150 mAh LiPo battery, providing 5V input via a USB-C connector. A 3.3V regulator (AMS1117) steps down the battery voltage for the ESP32 and sensors, with decoupling capacitors (10µF and 0.1µF) to reduce noise.
+    </p>
+    <h3>Power Management Schematic</h3>
+    <img class="hero-img" src="../../assets/schematic2.png" alt="Smartwatch Power Management Schematic" />
+    <p>
+      This schematic focuses on the power management circuit. The TP4056 module manages battery charging, with protection against overcharging and over-discharging. A slide switch allows the user to power the device on or off, connected between the battery and the 3.3V regulator. I added a Schottky diode (1N5819) to prevent reverse current flow during charging, and a status LED indicates charging progress (green for full, red for charging). The ESP32’s EN pin is tied to a 10kΩ pull-up resistor to ensure proper booting, and a 470µF capacitor on the 3.3V rail stabilizes the voltage during high-current operations like Wi-Fi usage.
+    </p>
+    <p><em>Note: I followed this schematic from an open-source project.</em></p>
+
+    <h2>FreeRTOS Integration</h2>
+    <p>
+      I chose <strong>FreeRTOS</strong> to manage the smartwatch’s operations, leveraging its real-time scheduling to ensure smooth multitasking. FreeRTOS allowed me to create separate tasks for each major function, running on the ESP32’s dual cores. For example, the step counting task ran on Core 0, while the heart rate task ran on Core 1, minimizing latency and ensuring responsiveness.
+    </p>
+    <img class="hero-img" src="../../assets/freertos.png" alt="FreeRTOS" />
+    <p><em>Note: This image is taken from Google.</em></p>
+    <p>
+      I created the following tasks:
+    </p>
+    <ul>
+      <li><strong>Sensor Task:</strong> Reads accelerometer and heart rate data every 100 ms, using a semaphore to signal data readiness.</li>
+      <li><strong>Step Counter Task:</strong> Processes accelerometer data to detect steps, using a pedometer algorithm (more on this later).</li>
+      <li><strong>Heart Rate Task:</strong> Processes MAX30102 data to calculate heart rate, applying a noise filter for accuracy.</li>
+      <li><strong>Display Task:</strong> Updates the OLED display every 500 ms with the latest data, using a queue to receive updates from other tasks.</li>
+      <li><strong>Button Task:</strong> Monitors the push button for user input, debouncing the signal and switching display modes.</li>
+    </ul>
+    <p>
+      FreeRTOS’s task priorities ensured that critical tasks (e.g., sensor reading) ran without interruption, while lower-priority tasks (e.g., display updates) used idle CPU cycles. I also used FreeRTOS queues and semaphores for inter-task communication, ensuring data consistency and avoiding race conditions.
+    </p>
+
+    <h2>Step Counter Implementation</h2>
+    <p>
+      The step counter was implemented using the MPU-6050 accelerometer, which provides 3-axis acceleration data. I developed a pedometer algorithm to detect steps based on acceleration peaks. Here’s how it worked:
+    </p>
+    <ul>
+      <li>Sampled the accelerometer at 50 Hz to capture motion data.</li>
+      <li>Calculated the magnitude of acceleration using the formula: <code>mag = sqrt(ax^2 + ay^2 + az^2)</code>.</li>
+      <li>Applied a high-pass filter to remove gravity and low-frequency noise, isolating dynamic acceleration due to walking.</li>
+      <li>Detected peaks in the filtered signal, using a threshold (calibrated at 1.5g) to identify steps.</li>
+      <li>Added a debounce mechanism to avoid double-counting steps within a 300 ms window.</li>
+    </ul>
+    <p>
+      I calibrated the algorithm by walking 100 steps and comparing the count, achieving an accuracy of 95%. The step count was stored in the ESP32’s RTC memory, persisting through deep sleep to maintain the count across power cycles.
+    </p>
+
+    <h2>Heart Rate Calculator</h2>
+    <p>
+      The heart rate calculator used the MAX30102 sensor, which measures blood flow via infrared (IR) and red LEDs. I implemented a PPG algorithm to calculate heart rate:
+    </p>
+    <ul>
+      <li>Sampled the IR signal at 100 Hz, collecting 5 seconds of data for each measurement.</li>
+      <li>Applied a bandpass filter (0.5–4 Hz) to isolate the heart rate signal, removing noise from motion artifacts.</li>
+      <li>Detected peaks in the filtered signal to identify heartbeats, calculating the average time between peaks.</li>
+      <li>Converted the beat-to-beat interval into beats per minute (BPM) using: <code>BPM = 60 / interval</code>.</li>
+    </ul>
+    <p>
+      I tested the heart rate monitor against a commercial device, achieving an accuracy of ±5 BPM under stable conditions. The sensor was sensitive to motion, so I added a warning on the display if excessive movement was detected via the accelerometer.
+    </p>
+
+    <h2>Display and User Interface</h2>
+    <p>
+      The 0.96-inch OLED display (128x64 pixels, SSD1306 driver) provided a clean interface for the user. I used the Adafruit GFX library to render text and graphics, showing the following modes:
+    </p>
+    <ul>
+      <li><strong>Step Count Mode:</strong> Displays the total steps for the day and a small progress bar toward a 10,000-step goal.</li>
+      <li><strong>Heart Rate Mode:</strong> Shows the current heart rate in BPM, with a warning if the reading is unreliable.</li>
+      <li><strong>Time Mode:</strong> Displays the current time, synced via Wi-Fi using NTP (Network Time Protocol).</li>
+    </ul>
+    <p>
+      A push button allowed users to cycle through modes. I implemented debouncing in software, using a 50 ms delay to filter out noise from the button press. The display updated every 500 ms to balance responsiveness and power consumption.
+    </p>
+
+    <h2>Power Management</h2>
+    <p>
+      Power efficiency was critical for a wearable device. The ESP32’s deep sleep mode reduced power consumption to 10 µA, waking up every 100 ms to check sensors via the ULP co-processor. I also implemented dynamic power management:
+    </p>
+    <ul>
+      <li>Turned off the OLED display after 10 seconds of inactivity, detected via the accelerometer.</li>
+      <li>Reduced the CPU frequency to 80 MHz during normal operation, scaling to 240 MHz only for Wi-Fi tasks.</li>
+      <li>Disabled Wi-Fi and Bluetooth when not in use (e.g., after time sync).</li>
+    </ul>
+    <p>
+      With these optimizations, the 150 mAh battery lasted approximately 48 hours on a single charge, with the TP4056 module ensuring safe charging via a USB-C port.
+    </p>
+
+    <h2>Additional Features</h2>
+    <p>
+      Beyond the core functionality, I added several features to enhance the smartwatch’s utility:
+    </p>
+    <ul>
+      <li><strong>Time Synchronization:</strong> Used the ESP32’s Wi-Fi to connect to an NTP server every 24 hours, ensuring accurate timekeeping.</li>
+      <li><strong>Notifications:</strong> Implemented basic Bluetooth Low Energy (BLE) notifications, allowing the smartwatch to display incoming call or message alerts from a paired smartphone.</li>
+      <li><strong>Activity Alerts:</strong> Added a sedentary reminder, vibrating a small motor (connected via GPIO) if no steps were detected for 1 hour.</li>
+      <li><strong>Data Logging:</strong> Stored daily step counts and average heart rate in the ESP32’s flash memory using the Preferences library, accessible via a “History” display mode.</li>
+    </ul>
+
+    <h2>Testing and Validation</h2>
+    <p>
+      I rigorously tested the smartwatch to ensure reliability and accuracy:
+    </p>
+    <ul>
+      <li><strong>Step Counter:</strong> Walked 1,000 steps and compared the count to a pedometer app, achieving 96% accuracy after calibration.</li>
+      <li><strong>Heart Rate:</strong> Tested against a fitness band, confirming accuracy within ±5 BPM under stable conditions.</li>
+      <li><strong>Battery Life:</strong> Ran the device continuously, measuring a 48-hour runtime with normal usage (Wi-Fi sync once daily, display on for 2 hours total).</li>
+      <li><strong>User Interaction:</strong> Validated the button responsiveness and mode switching, ensuring no missed inputs over 100 presses.</li>
+      <li><strong>RTOS Stability:</strong> Ran the system for 72 hours, confirming no task deadlocks or memory leaks, thanks to FreeRTOS’s robust scheduling.</li>
+    </ul>
+    <p>
+      The smartwatch performed exceptionally, proving its reliability as a daily wearable. I wore it for a week, tracking my steps and heart rate during workouts, and even received compliments on its sleek design (despite being a prototype).
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>ESP32-WROOM-32 with dual-core processor for efficient multitasking.</li>
+      <li>FreeRTOS for real-time task scheduling and resource management.</li>
+      <li>MPU-6050 accelerometer for accurate step counting with a custom pedometer algorithm.</li>
+      <li>MAX30102 sensor for heart rate and SpO2 measurement using PPG.</li>
+      <li>0.96-inch OLED display for a responsive and low-power UI.</li>
+      <li>Power management with deep sleep, achieving 48-hour battery life on a 150 mAh LiPo.</li>
+      <li>Wi-Fi-based NTP time sync and BLE notifications for smart features.</li>
+      <li>Data logging and activity alerts for enhanced user experience.</li>
+    </ul>
+
+    <p>
+      This Smartwatch ESP32 project was a testament to my ability to design and build a complex embedded system from scratch. From integrating sensors to optimizing power consumption, I tackled every challenge with precision, learning the intricacies of FreeRTOS, ESP32 programming, and wearable technology along the way. This project not only honed my technical skills but also fueled my passion for creating practical, user-focused devices that can make a real impact.
+    </p>
   </article>
 
   <footer class="footer container">
