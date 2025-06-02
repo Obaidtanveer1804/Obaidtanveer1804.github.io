@@ -5,15 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Obaid Tanveer · Portfolio</title>
   <!-- Inter font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet"/>
   <!-- Font Awesome for icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
   <!-- your main stylesheet (up one level) -->
   <link rel="stylesheet" href="../styles.css"/>
 </head>
@@ -49,23 +43,23 @@
 
   <main id="projects" class="projects container">
     <h2 class="section-title">Featured Work</h2>
-    <div class="grid-8">
+    <div class="grid-8" id="project-grid">
       <a class="card tilt" href="templates/projects/project-1.html">
-        <img src="assets/dc1941d.png" alt="Battery Management System (BMS)" class="card-image">
+        <img src="assets/dc1941d.PNG" alt="Battery Management System (BMS)" class="card-image">
         <div class="card__info">
           <h3>Battery Management System (BMS)</h3>
           <span>STM32 · isoSPI · LTC6804 · DC1941D · Eth · .NET · C#</span>
         </div>
       </a>
       <a class="card tilt" href="templates/projects/project-2.html">
-        <img src="assets/ev-connector.png" alt="L2 EV Charger" class="card-image">
+        <img src="assets/ev-connector-tn.png" alt="L2 EV Charger" class="card-image">
         <div class="card__info">
           <h3>L2 EV Charger</h3>
           <span>STM32 · ADC · CANbus · Relays · Op-Amp</span>
         </div>
       </a>
       <a class="card tilt" href="templates/projects/project-3.html">
-        <img src="assets/whitebeet.png" alt="freeV2G" class="card-image">
+        <img src="assets/whitebeet-2.png" alt="freeV2G" class="card-image">
         <div class="card__info">
           <h3>freeV2G</h3>
           <span>RPi · Whitebeet Boards · OpenEVSE · V2G · Python</span>
@@ -136,9 +130,7 @@
 
   <!-- CDN tilt.js -->
   <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
-  <!-- year update -->
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <!-- Custom script -->
+  <script src="../script.js"></script>
 </body>
 </html>

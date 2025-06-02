@@ -3,13 +3,13 @@ styles-trio.css — Complete stylesheet with Three-Color Combo Theme
 =================================================================== */
 /* in styles.css, at the top or bottom */
 html {
-  /* forces the scrollbar track to always be there, even on short pages */
   overflow-y: scroll;
 }
 
 /* THEME VARIABLES */
 :root {
   --clr-bg: #1E1A3C; /* Dark Purple */
+  --clr-blue-bg: #2A4066; /* Blue for hover effect */
   --glass-bg: rgba(30, 26, 60, 0.8); /* Semi-transparent Purple */
   --clr-accent: #F4A261; /* Orange */
   --clr-accent-dark: #E76F51; /* Darker Orange */
@@ -35,6 +35,7 @@ body {
   color: #D9E6F2; /* Light Blue for text */
   line-height: 1.5;
   overflow-x: hidden;
+  transition: background 0.5s ease;
 }
 
 /* BACKGROUND BLOBS */
@@ -46,6 +47,7 @@ body {
     radial-gradient(circle at 20% 30%, #264653 0%, #1E1A3C 45%) no-repeat,
     radial-gradient(circle at 80% 70%, #F4A261 0%, #2A2F4F 40%) no-repeat;
   filter: blur(80px) saturate(150%);
+  transition: background 0.5s ease;
 }
 
 /* GLOBAL CONTAINER */
@@ -94,14 +96,14 @@ body {
   gap: 0.5rem;
 }
 .nav-social {
-  color: var(--clr-accent); /* Yellow by default */
+  color: var(--clr-accent);
   font-size: 1.2rem;
   margin-left: 0.5rem;
   transition: color 0.25s, box-shadow 0.25s, text-shadow 0.25s;
 }
 .nav-social:hover {
-  color: var(--clr-accent-dark); /* Darker yellow on hover */
-  text-shadow: 0 0 15px rgba(244, 162, 97, 0.9); /* Glow effect on hover */
+  color: var(--clr-accent-dark);
+  text-shadow: 0 0 15px rgba(244, 162, 97, 0.9);
   box-shadow: 0 0 10px rgba(244, 162, 97, 0.5);
 }
 .nav__links {
@@ -113,7 +115,7 @@ body {
 }
 .nav__links a {
   text-decoration: none;
-  color: #A3BFFA; /* Light Blue for links */
+  color: #A3BFFA;
   font-weight: 500;
   transition: color 0.25s, text-shadow 0.25s;
 }
@@ -148,6 +150,7 @@ body {
 /* PROJECT GRID */
 .projects {
   padding-bottom: 4rem;
+  position: relative;
 }
 .section-title {
   font-size: 2rem;
@@ -159,6 +162,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.5rem;
+  position: relative;
 }
 .grid-16 {
   display: grid;
@@ -172,6 +176,11 @@ body {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   background: rgba(217, 230, 242, 0.05);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+  box-shadow: var(--shadow), 0 0 15px rgba(244, 162, 97, 0.9); /* Glow effect */
 }
 .card::before {
   content: "";
@@ -192,19 +201,23 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  transition: background 0.35s;
+  transition: background 0.35s ease;
 }
 .card-image {
   width: 100%;
   display: block;
   border-radius: 12px;
   margin-bottom: 12px;
+  opacity: 0.6; /* Thumbnail 30% less opaque when not hovered */
+  transition: opacity 0.3s ease;
 }
-
+.card:hover .card-image {
+  opacity: 1; /* Full opacity on hover */
+}
 .card h3 {
-  margin-top: 16px; /* This adds space between image and title */
+  margin-top: 16px;
+  margin-bottom: 0;
 }
-
 .card:hover .card__info {
   background: rgba(0, 0, 0, 0.4);
 }
@@ -247,10 +260,6 @@ body {
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  data-tilt;
-  data-tilt-max="10";
-  data-tilt-speed="400";
-  data-tilt-perspective="500";
 }
 .skill-logo i {
   font-size: 2.5rem;
@@ -401,7 +410,7 @@ body {
 .contact-form .direct {
   margin-top: 0.8rem;
   font-size: 0.9rem;
-  color: #8A7BA6; /* Medium Purple */
+  color: #8A7BA6;
 }
 
 /* PROJECT PAGE */
