@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCARA Robot with ROS2 · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <nav class="nav glass container">
+    <span class="logo">Obaid Tanveer</span>
+    <ul class="nav__links">
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../index.html#projects" class="active">Projects</a></li>
+      <li><a href="../experience.html">Experience</a></li>
+      <li><a href="../education.html">Education</a></li>
+      <li><a href="../skills.html">Skills</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <article class="project-page container glass">
+    <div class="title-row">
+      <h1>SCARA Robot with ROS2</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/scara-robot-ros2" target="_blank">View Code ↗</a>
+    </div>
+    <p class="tags">ROBOTICS · ROS2 · STM32 · CoppeliaSim · Python</p>
+    
+    <p>
+      As part of my advanced robotics work at <strong>Esforge Pvt Ltd</strong>, I led the development of a <strong>SCARA Robot</strong> integrated with <strong>ROS2</strong>, showcasing my expertise in robotic operating systems, motion planning, and embedded systems. This project demonstrated my ability to design, simulate, and deploy a high-precision robotic arm for industrial automation tasks.
+    </p>
+
+    <h2>Project Overview</h2>
+    <p>
+      The <strong>SCARA (Selective Compliance Assembly Robot Arm)</strong> was developed to perform precise pick-and-place operations for industrial automation, capable of achieving a repeatability of <strong>±0.1 mm</strong>. The robot was controlled using <strong>ROS2</strong>, enabling modular, scalable, and real-time robotic control. The system was designed to handle tasks such as assembly, material handling, and precision placement, with seamless integration of hardware and software components.
+    </p>
+    <img class="hero-img" src="../../assets/ros-2.png" alt="SCARA Robot with ROS2" />
+
+    <h2>System Architecture</h2>
+    <p>
+      The SCARA robot utilized a <strong>STM32</strong> microcontroller as the primary controller for low-level motor control and sensor interfacing, interfaced with a <strong>Raspberry Pi</strong> running <strong>ROS2</strong> for high-level control and communication. The STM32 handled real-time tasks such as motor control and encoder feedback, while the Raspberry Pi managed <strong>ROS2</strong> nodes for motion planning, trajectory generation, and communication with external systems.
+    </p>
+    <p>
+      The system leveraged <strong>ROS2</strong>’s publish-subscribe model for efficient communication between nodes, ensuring low-latency coordination between the robot’s joints, sensors, and control algorithms. I developed custom <strong>ROS2</strong> packages to handle the robot’s kinematics and dynamics, enabling smooth and accurate operation.
+    </p>
+
+    <h2>ROS2 Implementation</h2>
+    <p>
+      I designed and implemented a comprehensive <strong>ROS2</strong> architecture for the SCARA robot, utilizing <strong>Python</strong> and <strong>C++</strong> for node development. Key <strong>ROS2</strong> components included:
+    </p>
+    <ul>
+      <li><strong style="color: var(--clr-accent)">MoveIt</strong>: Configured for motion planning, generating collision-free trajectories for the SCARA robot’s 4 degrees of freedom (DOF).</li>
+      <li><strong style="color: var(--clr-accent)">RViz</strong>: Used for real-time visualization of the robot’s state, joint positions, and planned trajectories.</li>
+      <li><strong style="color: var(--clr-accent)">Gazebo</strong> and <strong style="color: var(--clr-accent)">CoppeliaSim</strong>: Employed for simulation, allowing testing and optimization of control algorithms before hardware deployment.</li>
+      <li>Custom <strong style="color: var(--clr-accent)">ROS2</strong> nodes for interfacing with the <strong style="color: var(--clr-accent)">STM32</strong> via <strong style="color: var(--clr-accent)">UART</strong>, ensuring reliable data exchange for motor commands and sensor feedback.</li>
+    </ul>
+    <p>
+      The <strong>ROS2</strong> system was optimized for real-time performance, achieving a control loop frequency of <strong>100 Hz</strong>, critical for precise robotic operations.
+    </p>
+
+    <h2>Motor Control and Firmware Development</h2>
+    <p>
+      The SCARA robot was equipped with <strong>NEMA 17</strong> stepper motors for its joints, driven by <strong style="color: var(--clr-accent)">DRV8825</strong> drivers supporting up to <strong>1/32 microstepping</strong>. I developed firmware for the <strong>STM32</strong> to control the motors, implementing closed-loop control using <strong style="color: var(--clr-accent)">AS5600</strong> magnetic encoders for precise joint positioning. The firmware included <strong style="color: var(--clr-accent)">PID</strong> control algorithms to minimize positional errors and ensure smooth motion.
+    </p>
+    <p>
+      I also created a custom <strong style="color: var(--clr-accent)">C++</strong> library for the STM32 to handle inverse kinematics calculations, translating <strong>ROS2</strong> trajectory commands into joint-specific motor movements.
+    </p>
+
+    <h2>Simulation and Testing</h2>
+    <p>
+      Extensive simulations were conducted using <strong style="color: var(--clr-accent)">CoppeliaSim</strong> to validate the robot’s kinematics and control algorithms. I modeled the SCARA robot in <strong>CoppeliaSim</strong>, integrating it with <strong>ROS2</strong> to test motion planning and obstacle avoidance. This simulation-driven approach reduced development time and ensured robust performance before hardware deployment.
+    </p>
+    <img class="hero-img" src="../../assets/scara-ros2-sim.png" alt="SCARA Robot Simulation in CoppeliaSim" />
+
+    <h2>Hardware Integration</h2>
+    <p>
+      I designed a custom <strong>PCB</strong> to integrate the <strong>STM32</strong>, motor drivers, and encoder interfaces, ensuring a compact and reliable control system. The PCB supported high-speed communication with the Raspberry Pi via <strong style="color: var(--clr-accent)">UART</strong> and included power management for stable operation under varying loads.
+    </p>
+    <p>
+      The robot’s mechanical design, created using <strong style="color: var(--clr-accent)">SolidWorks</strong>, was optimized for rigidity and precision, with custom end-effectors for pick-and-place tasks. I collaborated with mechanical engineers to align the hardware design with <strong>ROS2</strong> control requirements.
+    </p>
+    <img class="hero-img" src="../../assets/scara-ros2-pcb.png" alt="PCB for SCARA Robot with ROS2" />
+
+    <h2>Deployment and Performance</h2>
+    <p>
+      The SCARA robot was deployed in a controlled environment, achieving a cycle time of <strong>1.5 seconds</strong> for pick-and-place operations. The <strong>ROS2</strong> system enabled real-time monitoring and dynamic trajectory adjustments, ensuring adaptability to varying task requirements. The robot maintained a repeatability of <strong>±0.1 mm</strong>, meeting industrial standards for precision.
+    </p>
+    <img class="hero-img" src="../../assets/scara-ros2-deploy.png" alt="SCARA Robot Deployment" />
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>High-precision SCARA robot with ±0.1 mm repeatability</li>
+      <li><strong style="color: var(--clr-accent)">ROS2</strong> architecture for modular and scalable robotic control</li>
+      <li>Custom <strong style="color: var(--clr-accent)">STM32</strong> firmware with <strong style="color: var(--clr-accent)">PID</strong> control and inverse kinematics</li>
+      <li>Integration with <strong style="color: var(--clr-accent)">MoveIt</strong> and <strong style="color: var(--clr-accent)">RViz</strong> for motion planning and visualization</li>
+      <li>Simulation in <strong style="color: var(--clr-accent)">CoppeliaSim</strong> for algorithm validation</li>
+      <li>Custom <strong>PCB</strong> design for reliable hardware integration</li>
+      <li>Real-time control at 100 Hz for smooth and accurate operation</li>
+    </ul>
+
+    <p>
+      This project at Esforge Pvt Ltd highlighted my expertise in <strong>ROS2</strong>, embedded systems, and robotics, demonstrating my ability to lead the development of a sophisticated robotic system from concept to deployment. It solidified my proficiency in integrating advanced software frameworks with hardware for high-performance industrial automation.
+    </p>
+  </article>
+
+  <footer class="footer container">
+    © <span id="year"></span> Obaid Tanveer
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
