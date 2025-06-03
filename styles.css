@@ -86,10 +86,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 60px; /* Fixed height for consistency */
 }
 .logo {
   font-weight: 700;
   font-size: 1.2rem;
+  line-height: 1; /* Normalize line-height */
   color: #D9E6F2;
   display: flex;
   align-items: center;
@@ -99,6 +101,7 @@ body {
   color: var(--clr-accent);
   font-size: 1.2rem;
   margin-left: 0.5rem;
+  line-height: 1; /* Normalize line-height */
   transition: color 0.25s, box-shadow 0.25s, text-shadow 0.25s;
 }
 .nav-social:hover {
@@ -117,6 +120,8 @@ body {
   text-decoration: none;
   color: #A3BFFA;
   font-weight: 500;
+  font-size: 1rem; /* Explicit font-size */
+  line-height: 1; /* Normalize line-height */
   transition: color 0.25s, text-shadow 0.25s;
 }
 .nav__links a:hover,
@@ -129,6 +134,7 @@ body {
 .hero {
   text-align: center;
   padding: 5rem 0 4rem;
+  margin-top: 0; /* Prevent layout shift after navbar */
 }
 .headline {
   font-size: clamp(1.8rem, 4vw, 3rem);
@@ -145,6 +151,11 @@ body {
   font-size: 1.1rem;
   max-width: 55ch;
   color: #A3BFFA;
+}
+
+/* MAIN SECTION */
+main.container {
+  margin-top: 0; /* Ensure consistency with .hero */
 }
 
 /* PROJECT GRID */
@@ -208,7 +219,7 @@ body {
   display: block;
   border-radius: 12px;
   margin-bottom: 12px;
-  opacity: 0.6; /* Thumbnail 30% less opaque when not hovered */
+  opacity: 0.7; /* Thumbnail 30% less opaque when not hovered */
   transition: opacity 0.3s ease;
 }
 .card:hover .card-image {
@@ -479,5 +490,11 @@ body {
   }
   .skills-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  .nav.container {
+    height: 60px; /* Maintain height in responsive mode */
+  }
+  .nav__links {
+    gap: 1rem; /* Slightly reduce gap for smaller screens */
   }
 }
