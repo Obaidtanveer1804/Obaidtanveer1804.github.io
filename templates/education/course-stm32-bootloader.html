@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STM32 Bootloader · Obaid Tanveer</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+  <link rel="stylesheet" href="../../styles.css"/>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <nav class="nav glass container">
+    <span class="logo">
+      Obaid Tanveer
+      <a href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" class="nav-social"><i class="fab fa-linkedin"></i></a>
+      <a href="https://github.com/Obaidtanveer1804/" target="_blank" class="nav-social"><i class="fab fa-github"></i></a>
+      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"><i class="fas fa-envelope"></i></a>
+    </span>
+    <ul class="nav__links">
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../experience.html">Experience</a></li>
+      <li><a href="../education.html" class="active">Education</a></li>
+      <li><a href="../skills.html">Skills</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <section class="project-page">
+      <h1><span class="highlight">STM32</span> Bootloader</h1>
+      <div class="tags">YouTube</div>
+      <p><strong>Course Details:</strong> YouTube</p>
+      <p><strong>Duration:</strong> 2 weeks (2022)</p>
+      <p><strong>Overview:</strong> This course focused on creating a custom bootloader for <span class="highlight">STM32</span> microcontrollers, essential for over-the-air firmware updates. It covered memory management, <span class="highlight">UART</span> communication, and seamless application transitions.</p>
+      <p><strong>Key Learnings:</strong>
+        <ul>
+          <li>Understood bootloader roles and firmware interaction.</li>
+          <li>Mastered <span class="highlight">STM32</span> memory mapping and vector table relocation.</li>
+          <li>Implemented <span class="highlight">UART</span> for firmware binary reception.</li>
+          <li>Developed <span class="highlight">CRC</span> checks for data integrity.</li>
+          <li>Explored <span class="highlight">STM32</span> system memory bootloader invocation.</li>
+          <li>Modified linker scripts for memory allocation.</li>
+        </ul>
+      </p>
+      <p><strong>Projects:</strong> Developed a <span class="highlight">UART</span>-based bootloader for <span class="highlight">STM32F4</span>, including flash management, <span class="highlight">CRC32</span> checks, and a <span class="highlight">Python</span> script for firmware updates.</p>
+      <p><strong>Challenges:</strong> Resolved vector table relocation issues with <span class="highlight">SCB->VTOR</span> and ensured reliable <span class="highlight">UART</span> communication with handshaking.</p>
+      <p><strong>Course Link:</strong> <a href="https://www.youtube.com/playlist?list=PLn_9Y0q6iP2o9m9F8eI6z_7L_h7dV2L8" target="_blank"><span class="highlight">STM32</span> Bootloader Tutorial by <span class="highlight">Controllers Tech</span></a></p>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    © <span id="year"></span> Obaid Tanveer
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
+  <script src="../../script.js"></script>
+</body>
+</html>

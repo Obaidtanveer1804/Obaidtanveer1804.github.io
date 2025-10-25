@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Signal Wave Generation · Muhammad Sheraz</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Home Device ESP32 · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
-    /* Keep styling consistent with your other project pages */
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    .btn { padding:.5rem 1.2rem; font-size:1rem; line-height:1; display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap; }
-    figure { margin:1rem 0; text-align:center; }
-    figure img { width:100%; max-width:100%; border-radius:.6rem; display:block; margin-inline:auto; }
-    figure figcaption { font-size:.9rem; opacity:.85; margin-top:.35rem; }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1.1rem; }
-    @media (min-width: 900px) { .two-col { grid-template-columns:1fr 1fr; } }
-    .list-tight li { margin-bottom:.35rem; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.25); }
-    .metric { display:inline-block; padding:.3rem .55rem; border-radius:.35rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.35); margin:.15rem .25rem .15rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); padding:.05rem .4rem; border-radius:.35rem; }
-    pre { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); padding:1rem; border-radius:.6rem; overflow:auto; }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    .tags { opacity:.85; margin-top:.25rem; }
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
   </style>
 </head>
 <body>
   <div class="bg"></div>
-
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -42,103 +44,86 @@
 
   <article class="project-page container glass">
     <div class="title-row">
-      <h1>Signal Wave Generation</h1>
+      <h1>Smart Home Device ESP32</h1>
+      <a class="btn" href="https://github.com/Obaidtanveer1804/smart-home-esp32" target="_blank">View Code ↗</a>
     </div>
-    <p class="tags">Op-Amp 741 · Comparator + Integrator · Function Generation · Square · Triangle · Sawtooth</p>
-
+    <p class="tags">ESP32 · Arduino · PlatformIO · IoT · Relay</p>
+    
     <p>
-      Designed and simulated op-amp based generators for <strong>square</strong>, <strong>triangular</strong>, and <strong>sawtooth</strong>
-      waveforms around the classic <strong>µA741</strong>, covering working principles, design equations, and scope results.
-      Circuits and results summarized from my CEP report (figures &amp; plots on pp. 3–11). :contentReference[oaicite:1]{index=1}
+      I developed a <strong>Smart Home Device</strong> using an <strong>ESP32</strong> microcontroller, leveraging the Arduino framework and PlatformIO for a robust home automation solution. This project integrates a 4-channel relay module to control household appliances, connects to the <strong>Arduino IoT Cloud</strong> for remote monitoring, and links with <strong>Google Home</strong> for voice control. I also added temperature reading functionality using a sensor, enhancing the device’s utility for smart home environments.
     </p>
 
-    <div class="callout">
-      <strong>Highlights:</strong>
-      <span class="metric">Op-amp 741</span>
-      <span class="metric">±15 V rails</span>
-      <span class="metric">0.1 kHz target</span>
-      <span class="metric">Comparator + Integrator</span>
-      <span class="metric">Adjustable duty (sawtooth)</span>
-    </div>
-
-    <h2>Overview</h2>
+    <h2>Project Overview</h2>
     <p>
-      Signals are generated using op-amp topologies: a <strong>relaxation oscillator</strong> for square, a
-      <strong>comparator + integrator loop</strong> for triangle, and a <strong>biased integrator</strong> for sawtooth (duty skew via DC offset).
-      Applications include control, test &amp; measurement, audio synthesis, and comms. :contentReference[oaicite:2]{index=2}
+      The Smart Home Device aims to automate and monitor home appliances efficiently. I used the ESP32 for its Wi-Fi capabilities and dual-core processing power, programmed with the Arduino framework within the PlatformIO IDE for seamless development. The 4-channel relay module allows control of up to four devices, such as lights or fans, while the Arduino IoT Cloud provides a dashboard for real-time status updates. Integration with Google Home enables voice commands like “Turn on the living room light,” making it user-friendly. Additionally, I incorporated a DHT11 sensor to monitor temperature, adding environmental awareness to the system.
+    </p>
+    <p>
+      This project showcases my ability to blend hardware and IoT technologies, creating a practical solution for modern homes. The code and design are documented for future enhancements.
     </p>
 
-    <h2>Square Wave Generator</h2>
-    <p><em>Relaxation oscillator with RC timing and positive feedback (page 3).</em> :contentReference[oaicite:3]{index=3}</p>
-    <ul class="list-tight">
-      <li><strong>Key idea:</strong> capacitor charges/discharges between ±V<sub>f</sub>; op-amp toggles at thresholds.</li>
-      <li><strong>Period:</strong> <code>T = 2RC ln((1+β)/(1−β))</code>, with <code>β = R2/(R1+R2)</code>; for <code>R1=R2</code>, <code>T ≈ 2RC ln 3</code>. :contentReference[oaicite:4]{index=4}</li>
-      <li><strong>Design pick:</strong> <code>f≈0.1 kHz</code>, <code>C=0.1 µF</code>, <code>R1=R2=20 kΩ</code> → <code>R≈45 kΩ</code>. :contentReference[oaicite:5]{index=5}</li>
-    </ul>
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/waves/square-schematic.jpg" alt="Square wave generator schematic"/>
-        <figcaption>Square-wave op-amp oscillator schematic (p.4). :contentReference[oaicite:6]{index=6}</figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/waves/square-wave.jpg" alt="Square wave output scope"/>
-        <figcaption>Simulated square-wave output (p.4). :contentReference[oaicite:7]{index=7}</figcaption>
-      </figure>
-    </div>
-
-    <h2>Triangular Wave Generator</h2>
-    <p><em>Comparator drives an integrator; the ramp flips when the comparator switches (page 6).</em> :contentReference[oaicite:8]{index=8}</p>
-    <ul class="list-tight">
-      <li><strong>Peak-to-peak:</strong> <code>V<sub>o(pp)</sub> = 2·(R2/R1)·V<sub>sat</sub></code>. With ±15 V rails, assume <code>V<sub>sat</sub>≈12 V</code>. :contentReference[oaicite:9]{index=9}</li>
-      <li><strong>Frequency:</strong> <code>f = R1 / (4 R C R2)</code>. :contentReference[oaicite:10]{index=10}</li>
-      <li><strong>Design pick:</strong> target <code>f≈0.1 kHz</code>, choose <code>R2=10 kΩ</code>, <code>C=0.1 µF</code> → <code>R≈117 kΩ</code>, <code>R1≈47 kΩ</code>. :contentReference[oaicite:11]{index=11}</li>
-    </ul>
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/waves/tri-schematic.jpg" alt="Triangular wave generator schematic"/>
-        <figcaption>Triangle generator (comparator + integrator) schematic. </figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/waves/tri-wave.jpg" alt="Triangular wave output scope"/>
-        <figcaption>Simulated triangular output. </figcaption>
-      </figure>
-    </div>
-
-    <h2>Sawtooth Wave Generator</h2>
+    <h2>Hardware and Setup</h2>
     <p>
-      <em>Triangle generator with a DC offset injected to the integrator to skew rise vs. fall times (pages 9–10).</em>
-      Duty cycles vary as the bias moves toward ±V via a potentiometer (select <code>R3≈200 kΩ</code> pot). :contentReference[oaicite:14]{index=14}
+      The setup revolves around the ESP32, which interfaces with a 4-channel relay module to switch devices on or off via GPIO pins (e.g., GPIO 13, 12, 14, 27). I connected a DHT11 temperature sensor to GPIO 4 for reading ambient temperature and humidity. Power is supplied via a 5V adapter, with the relay module handling the high-voltage switching (up to 250V AC). The circuit was designed with proper isolation to ensure safety, using optocouplers within the relay module.
     </p>
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/waves/sawtooth-schematic.jpg" alt="Sawtooth wave generator schematic"/>
-        <figcaption>Sawtooth via biased integrator. </figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/waves/sawtooth-wave.jpg" alt="Sawtooth wave output scope"/>
-        <figcaption>Simulated sawtooth output. </figcaption>
-      </figure>
-    </div>
+    <img class="hero-img" src="../../assets/real-ss.jpeg" alt="Smart Home Device Circuit" />
+    <p>
+      This circuit diagram illustrates the connections between the ESP32, relay module, and DHT11 sensor, ensuring a stable and reliable setup.
+    </p>
 
-    <h2>Applications</h2>
-    <ul class="list-tight">
-      <li><strong>Control systems:</strong> motor speed/position driving &amp; PWM references. :contentReference[oaicite:17]{index=17}</li>
-      <li><strong>Test &amp; measurement:</strong> reference waveforms for frequency/phase response. :contentReference[oaicite:18]{index=18}</li>
-      <li><strong>Oscillators &amp; audio synthesis:</strong> function generators, synth voices, filter shaping. :contentReference[oaicite:19]{index=19}</li>
+    <h2>Software and Integration</h2>
+    <p>
+      I developed the firmware using the Arduino framework in PlatformIO, which simplified the coding process with its extensive library support. The ESP32 connects to the Arduino IoT Cloud via Wi-Fi, where I set up variables to control the relay channels and display temperature readings. Google Home integration was achieved using the Google Home app, linking the device through the Arduino IoT Cloud’s “Thing” configuration.
+    </p>
+    <img class="hero-img" src="../../assets/iot-cloud.jpeg" alt="Arduino IoT Cloud Dashboard" />
+    <p>
+      This screenshot shows the Arduino IoT Cloud dashboard, where I can toggle relays and view temperature data remotely.
+    </p>
+    <img class="hero-img" src="../../assets/google-home.jpeg" alt="Google Home Integration" />
+    <p>
+      This image captures the Google Home app, demonstrating voice control of the smart home devices.
+    </p>
+    <img class="hero-img" src="../../assets/relay.png" alt="4-Channel Relay Module" />
+    <p>
+      This photo highlights the 4-channel relay module, showing its compact design and connection points for controlling multiple appliances.
+    </p>
+
+    <h2>Temperature Reading Functionality</h2>
+    <p>
+      I added temperature monitoring using the DHT11 sensor, which provides readings every 2 seconds. The data is processed on the ESP32 and sent to the Arduino IoT Cloud, where it’s displayed alongside relay statuses. I implemented a simple threshold alert: if the temperature exceeds 30°C, a notification is pushed to the cloud, and a specific relay (e.g., a fan) can be triggered automatically.
+    </p>
+
+    <h2>Testing and Validation</h2>
+    <p>
+      I tested the system extensively to ensure reliability:
+    </p>
+    <ul>
+      <li><strong>Relay Control:</strong> Verified all four channels could switch a 220V lamp on and off via the cloud and voice commands, with no latency.</li>
+      <li><strong>Temperature Accuracy:</strong> Compared DHT11 readings with a commercial thermometer, achieving ±1°C accuracy.</li>
+      <li><strong>Connectivity:</strong> Confirmed stable Wi-Fi connection and cloud sync over 24 hours, with automatic reconnection after power loss.</li>
+      <li><strong>Voice Integration:</strong> Tested Google Home commands like “Turn on bedroom light,” ensuring correct relay activation.</li>
+    </ul>
+    <p>
+      The device performed flawlessly, providing a seamless smart home experience. I used it at home for a week, controlling lights and monitoring temperature, which validated its practical utility.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>ESP32 with Arduino framework and PlatformIO for development.</li>
+      <li>4-channel relay module for controlling up to four appliances.</li>
+      <li>Arduino IoT Cloud integration for remote monitoring and control.</li>
+      <li>Google Home compatibility for voice-activated control.</li>
+      <li>DHT11 sensor for temperature and humidity readings with alerts.</li>
+      <li>Safe circuit design with optocoupler isolation.</li>
     </ul>
 
-    <h2>Conclusion</h2>
     <p>
-      Simple 741-based topologies reliably produce square, triangle, and sawtooth waves near 0.1 kHz with
-      predictable amplitude and duty characteristics—useful across labs, controls, and audio. :contentReference[oaicite:20]{index=20}
+      This Smart Home Device project, completed as of June 02, 2025, demonstrates my proficiency in IoT development and hardware integration. From designing the circuit to enabling voice control, I enjoyed exploring the intersection of embedded systems and smart technology. It’s a functional prototype I continue to refine, with plans to add more sensors and automation features.
     </p>
   </article>
 
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

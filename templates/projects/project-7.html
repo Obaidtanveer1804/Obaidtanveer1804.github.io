@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MediExtract (OCR) · Oncology Document Understanding · Muhammad Sheraz</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filling Machine · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    figure { margin:1rem 0; }
-    figure img { width:100%; border-radius:.6rem; display:block; margin-inline:auto; }
-    figure figcaption { font-size:.9rem; opacity:.85; margin-top:.35rem; }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1.1rem; }
-    @media (min-width: 900px) { .two-col { grid-template-columns:1fr 1fr; } }
-    .list-tight li { margin-bottom:.35rem; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.3); }
-    .metric { display:inline-block; padding:.3rem .55rem; border-radius:.35rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.3); margin:.15rem .25rem .15rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); padding:.05rem .4rem; border-radius:.35rem; }
-
-    /* NEW: center smaller images (when their intrinsic width is less than container) */
-    figure.center { display:flex; flex-direction:column; align-items:center; }
-    figure.center img { width:auto; max-width:100%; height:auto; }
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
   </style>
 </head>
 <body>
   <div class="bg"></div>
-
-  <!-- NAV -->
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -40,142 +42,85 @@
     </ul>
   </nav>
 
-  <!-- CONTENT -->
   <article class="project-page container glass">
     <div class="title-row">
-      <h1>MediExtract (OCR) — Oncology Document Understanding</h1>
-      <!-- Optional: <a class="btn" href="YOUR_DEMO_LINK" target="_blank">View Demo ↗</a> -->
+      <h1>Filling Machine</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/filling-machine" target="_blank">View Code ↗</a>
     </div>
-
-    <p class="tags">Healthcare OCR · Document Classification · PaddleOCR · Vision LLM · Table Detection · MXBAI/ClinicalBERT · Python</p>
-
+    <p class="tags">RPI-PICO · ESP32 · STEPPER-MOTORS · C++</p>
+    
     <p>
-      <strong>MediExtract</strong> is an end-to-end OCR and information extraction system for oncology workflows. It ingests raw clinical files
-      (PDFs/scans), classifies each into <em>Lab</em>, <em>Radiology</em>, <em>Pathology</em>, or <em>Other</em>, extracts high-accuracy text and tables,
-      enriches them with <strong>metadata</strong> (e.g., procedure type, dates), and exports <strong>structured outputs</strong> for search and analytics.
-      The pipeline combines <strong>PaddleOCR</strong> for robust text recognition, <strong>vision LLMs</strong> for layout/structure reasoning, and <strong>table detectors</strong>
-      (e.g., TATR/YOLO) tuned for clinical reports.
+      During my tenure at <strong>Esforge Pvt Ltd</strong>, I led the development of a <strong>Filling Machine</strong> designed to automate packet filling in a manufacturing plant. This project replaced a manual process that required 15 people, achieving full automation through advanced embedded systems, precise motor control, and IoT integration. I was responsible for the embedded firmware development, PCB design, and PCB fabrication.
     </p>
 
-    <!-- 1) OVERVIEW -->
-    <figure>
-      <img src="../../assets/cholesterol/OCR/overview.jpg" alt="MediExtract overview pipeline"/>
-      <figcaption>Overview: Input → Classification → Text Extraction → Table Extraction → Metadata → Structured JSON/DB.</figcaption>
-    </figure>
+    <h2>Project Overview</h2>
+    <p>
+      The Filling Machine was engineered to automate the filling of packets in a manufacturing plant, streamlining a labor-intensive process. The system utilized <strong>11 NEMA 34 stepper motors</strong> to control various stages of the filling process, including material dispensing, packet positioning, and sealing. Two <strong>RPI Picos</strong> were employed to manage the parallel control of these motors, while an <strong>ESP32</strong> handled data transmission to the cloud over Wi-Fi for real-time monitoring and analytics.
+    </p>
 
-    <!-- 2) PROBLEM & GOALS -->
-    <h2>1) Problem & Goals</h2>
-    <div class="callout">
-      <p><strong>Goal:</strong> Convert heterogeneous oncology documents (multiple templates, noisy scans, borderless tables) into <em>searchable, analyzable</em> structured data — with low latency and high accuracy.</p>
-    </div>
-    <ul class="list-tight">
-      <li>Detect document type early to apply <strong>type-specific rules</strong> (Lab vs Radiology vs Pathology).</li>
-      <li>Achieve high OCR fidelity on noisy scans using <strong>PaddleOCR</strong> with tuned thresholds and preprocessing.</li>
-      <li>Extract <strong>tables</strong> reliably (bordered/borderless) while preserving row/column structure.</li>
-      <li>Emit <strong>structured JSON</strong> with metadata (procedure, date, confidence, extraction time).</li>
+    <h2>System Architecture</h2>
+    <p>
+      The system architecture was designed for scalability and precision. Two <strong>RPI Picos</strong> were used as the primary controllers, each managing a subset of the 11 stepper motors to ensure parallel operation without latency. The RPI Picos communicated with each other via a custom <strong>I2C protocol</strong> to synchronize their tasks. An <strong>ESP32</strong> served as the IoT gateway, collecting operational data (e.g., motor status, production rate, error logs) and transmitting it to a cloud server using the MQTT protocol.
+    </p>
+    <p>
+      The machine’s workflow involved multiple stages: material loading, packet positioning, filling, and sealing. Each stage was controlled by a dedicated stepper motor, ensuring precise and repeatable movements throughout the process.
+    </p>
+
+    <h2>Motor Control with RPI Pico and PIO</h2>
+    <p>
+      The Filling Machine relied on <strong>11 NEMA 34 stepper motors</strong>, each paired with a high-performance stepper driver supporting <strong>512 microstepping</strong>. This high level of microstepping allowed for smooth and precise movements, critical for accurate packet filling and positioning. The motors were controlled using the <strong>Programmable I/O (PIO)</strong> feature of the RPI Pico, which enabled low-level, high-speed control of the stepper motors.
+    </p>
+    <p>
+      To optimize performance, I programmed the PIO blocks in <strong>assembly language</strong>, creating a custom stepper control library. The PIO handled the generation of step and direction pulses for each motor, allowing the RPI Pico’s main cores to focus on higher-level tasks like synchronization and error handling. This approach minimized latency and ensured all 11 motors operated in parallel without timing conflicts.
+    </p>
+    <p>
+      The firmware was written in <strong>C++</strong> using a class-based approach, which I adopted to improve code modularity and maintainability. I developed classes for motor control, communication, and data logging, learning a great deal about object-oriented programming in C++ during this project. The class-based structure also made it easier to debug and extend the firmware as the project evolved.
+    </p>
+
+    <h2>IoT Integration with ESP32</h2>
+    <p>
+      The <strong>ESP32</strong> was integrated to enable cloud connectivity, allowing the plant managers to monitor the machine’s performance remotely. The ESP32 collected data from the RPI Picos via a UART interface and transmitted it to the cloud using the <strong>MQTT protocol</strong>. Key metrics included the number of packets filled, motor uptime, and any error conditions (e.g., motor stalling or material shortages).
+    </p>
+    <p>
+      The ESP32 firmware was developed using the <strong>Arduino framework</strong>, with a focus on reliability and low latency. A lightweight JSON format was used to structure the data, ensuring efficient transmission over Wi-Fi to the cloud server.
+    </p>
+
+    <h2>Hardware Design: PCB Development and Fabrication</h2>
+    <p>
+      I designed and fabricated a custom <strong>PCB</strong> to integrate all the electronic components of the Filling Machine. The PCB was designed using <strong>KiCAD</strong> and featured a 4-layer layout to handle the complex routing requirements of 11 stepper motor drivers, two RPI Picos, an ESP32, and power regulation circuits. The board included high-current traces for the motor drivers and thermal vias to manage heat dissipation.
+    </p>
+    <p>
+      The PCB fabrication process involved working with a local manufacturer to produce the boards. I oversaw the entire process, from Gerber file generation to final assembly, ensuring the boards met the required specifications. The final PCB supported the parallel operation of all components, providing a reliable foundation for the machine’s operation.
+    </p>
+    <img class="hero-img" src="../../assets/filling-machine-pcb.JPEG" alt="Filling Machine PCB" />
+
+    <h2>System Integration and Deployment</h2>
+    <p>
+      The Filling Machine was deployed in a manufacturing plant, where it successfully replaced a manual process that previously required 15 people. The system automated the entire packet-filling workflow, achieving a throughput of over 500 packets per hour. The use of 11 stepper motors ensured precise control at every stage, while the IoT integration provided valuable insights for optimizing production.
+    </p>
+    <p>
+      During deployment, the machine was tested extensively to ensure reliability under continuous operation. The class-based firmware design proved invaluable, as it allowed for quick adjustments and debugging in the field. The project was a significant learning experience, particularly in mastering C++ and low-level motor control with PIO.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Parallel control of 11 NEMA 34 stepper motors with 512 microstepping</li>
+      <li>Dual RPI Pico architecture for high-speed motor control</li>
+      <li>Custom stepper control library using PIO and assembly</li>
+      <li>Class-based C++ firmware for modularity and scalability</li>
+      <li>IoT integration with ESP32 for cloud connectivity via MQTT</li>
+      <li>Custom-designed and fabricated 4-layer PCB</li>
+      <li>Automated packet filling, replacing a 15-person manual process</li>
     </ul>
 
-    <!-- 3) CLASSIFICATION -->
-    <h2>2) Document Classification</h2>
     <p>
-      We used a <strong>three-stage labeling workflow</strong> (filename regex → folder mapper → submodule mapper) to bootstrap labels and cover edge cases.
-      For modeling, we evaluated <span class="metric">mxbai-embed-large-v1</span> (encoder + softmax), <span class="metric">ClinicalBERT</span> (HF Trainer), and an LLM baseline (Llama 3.1-8B).
-      After rebalancing classes and expanding training data, the retrained MXBAI model improved accuracy and delivered far <strong>lower latency</strong>
-      (≈<span class="metric">43×</span> faster than Llama; ≈<span class="metric">381×</span> faster than Qwen) — ideal for routing large batches.
-    </p>
-
-   
-      <!-- ADD class="center" to center this smaller image -->
-      <figure class="center">
-        <img src="../../assets/cholesterol/OCR/classification.jpg" alt="Classification pipeline and models"/>
-        <figcaption>Classification pipeline: embeddings → classifier; label bootstrapping via filename/folder/submodule passes; improved accuracy and speed after retraining.</figcaption>
-      </figure>
-    
-
-    <!-- 4) OCR + STRUCTURE -->
-    <h2>3) Text Extraction (OCR + Structure)</h2>
-    <p>
-      The <strong>text extraction workflow</strong> converts PDF → images → <strong>PaddleOCR</strong> text → <em>vision model</em> structure → final structured text.
-      For ambiguous layouts, we re-feed text+image+structure through a vision LLM to resolve columns/headers. This approach outperformed a prior LLM-only pipeline
-      (>90% accuracy on an internal 20-document eval). For heavy-token workloads, <span class="metric">vLLM</span> achieved ~75 tok/s; <span class="metric">Ollama</span> ~65 tok/s with stable JSON.
-    </p>
-
-    <figure>
-      <img src="../../assets/cholesterol/OCR/text-extraction.jpg" alt="Text extraction workflow with PaddleOCR and vision model"/>
-      <figcaption>OCR + structure reasoning: PaddleOCR for recognition; vision LLM aligns layout to produce structured text.</figcaption>
-    </figure>
-
-    <!-- 5) TABLES -->
-    <h2>4) Table Detection & Extraction</h2>
-    <p>
-      Clinical tables vary widely (bordered, borderless, merged rows/cols). We evaluated both <em>table-first</em> and <em>text-first</em> strategies, and adopted a
-      <strong>Llama–Paddle fusion</strong>: PaddleOCR maximizes recognition accuracy; the vision model preserves structure. For detection, we tested
-      <span class="metric">Microsoft Table Transformer (TATR)</span> (DETR-R18, PubTables-1M), <span class="metric">YOLOv8s</span> variants, and integrated libraries
-      such as <span class="metric">img2table</span>, <span class="metric">Tabula</span>, <span class="metric">Camelot</span>, and <span class="metric">pdfplumber</span>. Fine-tuning on a 2,000-image set
-      (irregular structure, merged rows/columns, borderless scans) yielded table accuracy up to <strong>97–98%</strong> on sampled sets.
-    </p>
-
-    
-      <!-- ADD class="center" to center this smaller image -->
-      <figure class="center">
-        <img src="../../assets/cholesterol/OCR/table-extr.jpg" alt="Table detection models and results"/>
-        <figcaption>Table stack: TATR/YOLOv8s with post-processing; robust on borderless and slightly blurry scans (97–98% sampled accuracy).</figcaption>
-      </figure>
-    
-
-    <!-- 6) METADATA -->
-    <h2>5) Metadata Extraction</h2>
-    <p>
-      We compared three strategies for metadata: <em>text → LLM</em> (accurate but adds latency for another model load),
-      <em>text → vision LLM</em> (fast & accurate, reusing extracted text), and <em>image → vision LLM</em> (simpler but less accurate).
-      Final outputs include document type, procedure classification, procedure date, and extraction timing, emitted as a concise JSON record.
-    </p>
-
-    <figure>
-      <img src="../../assets/cholesterol/OCR/metadata-extraction.jpg" alt="Metadata extraction and JSON schema"/>
-      <figcaption>Metadata pipeline and schema: document type, procedure classification/date, confidence, and extraction time.</figcaption>
-    </figure>
-
-    <pre class="kbd">{
-  "classification": { "documentType": "Radiology", "confidence": 100.0 },
-  "proceduresList": {
-    "Procedure Classification": "Vascular Lower Extremities DVT Study",
-    "Procedure Date": "2022-11-02"
-  },
-  "extractionTime": 8.66
-}</pre>
-    <p class="list-tight">This JSON is persisted to a document store/DB and indexed for retrieval and analytics.</p>
-
-    <!-- 7) PERFORMANCE -->
-    <h2>6) Performance & Optimizations</h2>
-    <ul class="list-tight">
-      <li><strong>PaddleOCR tuning</strong> (e.g., SVTR_LCNet recognizer, threshold tweaks) improved recognition from ~<span class="metric">80.0%</span> to ~<span class="metric">84.2%</span>.</li>
-      <li><strong>Latency:</strong> a 627-page batch dropped from <span class="metric">4h 10m</span> → <span class="metric">3h 22m</span> (~<span class="metric">19%</span> faster) with batching/caching.</li>
-      <li><strong>Classifier speed:</strong> MXBAI ≈<span class="metric">43×</span> faster than Llama; ≈<span class="metric">381×</span> faster than Qwen (routing stage).</li>
-      <li><strong>Throughput:</strong> vLLM ~<span class="metric">75</span> tok/s; Ollama ~<span class="metric">65</span> tok/s (parallel requests, stable JSON).</li>
-    </ul>
-
-    <!-- 8) QA & EDGE CASES -->
-    <h2>7) Edge Cases & QA</h2>
-    <p>
-      Blurry scans, skew, inconsistent headers, and borderless tables were addressed via <strong>few-shot prompts</strong>, model selection trials,
-      and data augmentation. A QA loop (50+ docs/iteration) tuned thresholds and improved labeling quality to reduce drift.
-    </p>
-
-    <!-- 9) INTEGRATION -->
-    <h2>8) Where This Fits</h2>
-    <p>
-      MediExtract powers oncology data pipelines and can plug into claims review (e.g., SmartEOB), registries, or RAG systems that require
-      clean, structured evidence from PDFs. The output JSON and table schemas are <strong>tool-agnostic</strong> for downstream ML and analytics.
+      This project at Esforge Pvt Ltd was a testament to my ability to design and implement complex embedded systems, from low-level motor control to IoT integration and hardware design. It also deepened my understanding of C++ and real-time systems, making it one of the most rewarding projects in my career.
     </p>
   </article>
 
-  <!-- FOOTER -->
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

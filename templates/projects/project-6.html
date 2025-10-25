@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Four-Legged Crab Robot · CAD & CoppeliaSim (V-REP) · Muhammad Sheraz</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paratha Pressing Machine · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    .tags { margin-bottom:.6rem; }
-    figure { margin:1rem 0; }
-    figure img { width:100%; border-radius:.6rem; display:block; margin-inline:auto; }
-    figure figcaption { font-size:.9rem; opacity:.85; margin-top:.35rem; }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1.1rem; }
-    @media (min-width: 950px) { .two-col { grid-template-columns:1fr 1fr; } }
-    .list-tight li { margin-bottom:.35rem; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.3); }
-    .metric { display:inline-block; padding:.28rem .5rem; border-radius:.35rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.3); margin:.1rem .25rem .1rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); padding:.05rem .4rem; border-radius:.35rem; }
-    .specs { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.6rem; margin:.6rem 0 1rem; }
-    .specs div { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); padding:.5rem .7rem; border-radius:.45rem; }
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
   </style>
 </head>
 <body>
   <div class="bg"></div>
-
-  <!-- NAV -->
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -39,139 +42,97 @@
     </ul>
   </nav>
 
-  <!-- CONTENT -->
   <article class="project-page container glass">
     <div class="title-row">
-      <h1>Four-Legged Crab Robot — SolidWorks CAD & CoppeliaSim/V-REP Simulation</h1>
-      <!-- Optional: demo/video -->
-      <!-- <a class="btn" href="LINK_TO_DEMO" target="_blank">Watch Demo ↗</a> -->
+      <h1>Paratha Pressing Machine</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/paratha-pressing-machine" target="_blank">View Code ↗</a>
     </div>
-    <p class="tags">Quadruped · Sideways Crab Gait · SolidWorks · CoppeliaSim/V-REP · Inverse Kinematics · 3D Printing</p>
-
+    <p class="tags">ESP32 · SOLID-STATE-RELAYS · THERMOCOUPLES · FREERTOS</p>
+    
     <p>
-      This project is a biomimetic <strong>four-legged crab robot</strong> designed in <strong>SolidWorks</strong> and fully simulated in
-      <strong>CoppeliaSim (V-REP)</strong>. The robot emphasizes a stable <em>sideways gait</em> (crab-style translation) with
-      compliant, lightweight legs. The workflow covered CAD, mass/inertia estimation, kinematic modeling, controller tuning,
-      contact/terrain experiments, and 3D-printed leg prototypes.
+      During my tenure at <strong>Esforge Pvt Ltd</strong>, I contributed to the development of a <strong>Paratha Pressing Machine</strong>, a sophisticated automated system designed to press and cook parathas with precision and efficiency. I was responsible for the embedded firmware development, PCB design, and PCB fabrication, ensuring a seamless integration of hardware and software to achieve optimal performance.
     </p>
 
-    <figure>
-      <img src="../../assets/cholesterol/crab/center.jpg" alt="Front render of crab robot (SolidWorks)"/>
-      <figcaption>Front perspective render from SolidWorks showing the compact body and four articulated legs.</figcaption>
-    </figure>
-
-    <h2>1) Goals & Design Constraints</h2>
-    <div class="callout>
-      <p><strong>Goal:</strong> achieve <em>lateral/sideways</em> locomotion with good stability, low weight, and printable legs, while keeping the control stack simple for real-time execution.</p>
-    </div>
-    <div class="specs">
-      <div><strong>Mass (sim):</strong> ~1.2–1.6 kg (tunable)</div>
-      <div><strong>Degrees of Freedom:</strong> 3 per leg (hip yaw, hip pitch, knee)</div>
-      <div><strong>Leg material:</strong> PLA/ABS prototype</div>
-      <div><strong>Control rate:</strong> 50–100 Hz (scripted)</div>
-      <div><strong>Gaits:</strong> Lateral crawl (static), lateral trot (dynamic)</div>
-      <div><strong>Terrain:</strong> flat → mild slope/steps</div>
-    </div>
-
-    <h2>2) Mechanical Design (SolidWorks)</h2>
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/crab/complete.jpg" alt="Complete crab robot CAD"/>
-        <figcaption>Top view of the complete assembly: central body + four 3-DOF legs. Brackets expose two mounting faces for easy servo integration.</figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/crab/leg-des.png" alt="Leg link and foot CAD"/>
-        <figcaption>Leg design: lightweight, hollowed sections reduce mass/inertia while preserving stiffness near joints and the foot tip.</figcaption>
-      </figure>
-    </div>
-
-    <h3>Key CAD Notes</h3>
-    <ul class="list-tight">
-      <li><strong>Mass properties:</strong> extracted from SolidWorks (per-link). Exported to CoppeliaSim to match dynamics.</li>
-      <li><strong>Joint limits:</strong> designed to avoid self-collision at extreme poses; yaw at shoulder adds natural lateral reach.</li>
-      <li><strong>Cable routing:</strong> internal grooves for actuator wires; foot slot for replaceable pads/claws.</li>
-      <li><strong>Manufacturability:</strong> all parts printable on a 220×220 mm bed; minimal supports on hip parts.</li>
-    </ul>
-
-    <h2>3) Kinematics & Actuation</h2>
+    <h2>Project Overview</h2>
     <p>
-      Each leg uses a <strong>3-link planar chain</strong> with an extra <em>hip-yaw</em> DOF for sideways reach.
-      We implemented both <span class="metric">analytical IK</span> (for fast stepping) and <span class="metric">numerical damped-least-squares</span>
-      (for obstacle tests). A simple <span class="metric">PD controller</span> regulates joint angles; gravity compensation
-      and foot-contact detection improve stability during stance.
+      The Paratha Pressing Machine was engineered to automate the process of pressing and cooking parathas, capable of handling <strong>4 parathas at a time</strong>. The machine utilized a heated plate, controlled with precision temperature sensing, to press and cook the parathas uniformly. The system incorporated advanced components like <strong>thermocouples</strong> for temperature monitoring, <strong>solid-state relays (SSRs)</strong> for heater control, and a <strong>NEMA 32 stepper motor with a gearhead</strong> for applying the necessary pressing force. The entire operation was managed using an <strong>ESP32 microcontroller</strong> running <strong>FreeRTOS</strong> to handle multiple tasks concurrently.
     </p>
-    <pre class="kbd">p_cmd → IK(q*) → PD: τ = Kp(q*−q) + Kd(−q̇)</pre>
+    <img class="hero-img" src="../../assets/paratha-pressing-machine-asm.JPEG" alt="Paratha Pressing Machine Assembly" />
 
-    <h2>4) Simulation (CoppeliaSim / V-REP)</h2>
+    <h2>System Architecture</h2>
     <p>
-      The SolidWorks assembly was exported (STL/OBJ + URDF-like joint tree) and re-parameterized in CoppeliaSim:
+      The core of the system was an <strong>ESP32 microcontroller</strong>, chosen for its robust processing capabilities and built-in Wi-Fi functionality. The ESP32 managed multiple tasks, including temperature control, motor operation, and system monitoring, using <strong>FreeRTOS</strong> to ensure real-time performance. The machine featured a heated pressing plate, with temperature regulated using <strong>K-type thermocouples</strong> interfaced via a MAX6675 module for accurate readings. Heating was controlled through <strong>solid-state relays (SSRs)</strong>, which provided precise and reliable switching of the heaters.
     </p>
-    <ul class="list-tight">
-      <li><strong>Mass/inertia</strong> per link from CAD; friction, restitution, and foot contact patches tuned for realistic stance.</li>
-      <li><strong>Controllers:</strong> Lua or remote Python script; 50–100 Hz loop with synchronous stepping.</li>
-      <li><strong>Scenes:</strong> flat plane, low-friction patch, 2–3 cm step, and ±5° ramp for stability tests.</li>
-      <li><strong>Foot contact:</strong> ray/force threshold triggers stance ↔ swing transitions.</li>
-    </ul>
-
-    <figure>
-      <img src="../../assets/cholesterol/crab/simulation.jpg" alt="CoppeliaSim/V-REP simulation screenshot"/>
-      <figcaption>Robot imported and driven in V-REP/CoppeliaSim for locomotion tests (import, physics, and Lua control). <!-- Source: simulation figure in the uploaded report, see page 12. --> </figcaption>
-    </figure>
-
-    <h2>5) Gait Planner (Lateral “Crab” Motion)</h2>
     <p>
-      The robot moves primarily <em>sideways</em>. We implemented two patterns:
+      A <strong>NEMA 32 stepper motor with a gearhead</strong> was used to deliver the high torque required for pressing the parathas. The gearhead increased the motor's force output, ensuring consistent pressure across the parathas for uniform cooking. The stepper motor was driven by a dedicated driver, configured for microstepping to achieve smooth and precise movements.
     </p>
-    <ul class="list-tight">
-      <li><strong>Static lateral crawl:</strong> one leg swings while the other three keep the support polygon wide. CoM projection is kept inside polygon → very stable.</li>
-      <li><strong>Lateral trot:</strong> diagonal pair swing together for higher speed; requires tighter PD gains and short stance re-centering.</li>
+
+    <h2>Temperature Control and Heating System</h2>
+    <p>
+      The heating system was a critical component of the machine. The pressing plate was equipped with industrial-grade <strong>cartridge heaters</strong>, controlled via <strong>solid-state relays</strong>. The SSRs allowed for rapid switching, enabling precise temperature regulation. The temperature of the plate was continuously monitored using <strong>K-type thermocouples</strong>, which provided real-time feedback to the ESP32. A PID control algorithm, implemented in the firmware, maintained the plate temperature within a tight range (±2°C) to ensure consistent cooking results.
+    </p>
+    <p>
+      To enhance safety, the system included an over-temperature protection mechanism. If the plate temperature exceeded a predefined threshold, the ESP32 would automatically disable the heaters and trigger an alert, preventing potential damage to the machine or parathas.
+    </p>
+
+    <h2>Motor Control and Pressing Mechanism</h2>
+    <p>
+      The pressing mechanism relied on a <strong>NEMA 32 stepper motor with a gearhead</strong>, which provided the increased force necessary to press 4 parathas simultaneously. The gearhead amplified the motor's torque, ensuring sufficient pressure to flatten the dough balls into uniform parathas. The stepper motor was driven by a <strong>DM542 stepper driver</strong>, configured for 1/16 microstepping to achieve smooth and precise motion.
+    </p>
+    <p>
+      The motor was mounted on a linear actuator system, as seen in the hardware image, where a leadscrew mechanism (visible at the top center) translated the motor's rotational motion into linear movement. This allowed the pressing plate to move up and down with high precision. The firmware included a custom motion control algorithm to synchronize the pressing cycle with the heating process, ensuring each paratha was pressed and cooked for the optimal duration.
+    </p>
+
+    <h2>Firmware Development with FreeRTOS</h2>
+    <p>
+      The firmware for the ESP32 was developed using the <strong>Arduino framework</strong> with <strong>FreeRTOS</strong> to manage the system's multitasking requirements. FreeRTOS enabled the ESP32 to handle multiple tasks concurrently, including:
+    </p>
+    <ul>
+      <li>Temperature monitoring and PID control for the heating plate</li>
+      <li>Stepper motor control for the pressing mechanism</li>
+      <li>Data logging and system status monitoring</li>
+      <li>Error handling and safety checks</li>
     </ul>
-    <pre class="kbd">phase = { LF:0, RF:π, LB:π, RB:0 }   // crawl
-x_foot(t) = x0 + A * sawtooth(phase + ωt)
-z_foot(t) = z_clear during swing</pre>
+    <p>
+      Each task was assigned a priority to ensure critical operations, such as temperature regulation, were executed without delay. The firmware also included a state machine to manage the machine's operational phases: dough placement, pressing, cooking, and ejection. This ensured a smooth and automated workflow, minimizing human intervention.
+    </p>
 
-    <h2>6) Prototyping</h2>
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/crab/leg-3d.png" alt="3D-printed legs prototype"/>
-        <figcaption>3D-printed leg prototypes (early & refined). Slot cutouts reduce mass; fork head interfaces with the knee bracket.</figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/crab/leg-des.png" alt="Leg CAD close-up"/>
-        <figcaption>Close-up of the leg CAD showing fork head, hinge bore, and tapered beam for stiffness where loads are highest.</figcaption>
-      </figure>
-    </div>
+    <h2>Hardware Design: PCB and Fabrication</h2>
+    <p>
+      I designed and fabricated a custom <strong>PCB</strong> to integrate all the electronic components of the Paratha Pressing Machine. The PCB housed the ESP32 module, MAX6675 thermocouple interface, SSR drivers, stepper motor driver connections, and power regulation circuits. The board was designed using <strong>KiCAD</strong>, with careful consideration for signal integrity and thermal management, given the high-power components involved.
+    </p>
+    <p>
+      The PCB featured a 4-layer design to accommodate the complex routing requirements and ensure proper grounding. High-current traces for the heaters and motor drivers were widened to handle the load, and thermal vias were added to dissipate heat from the SSRs. The fabrication process involved working with a local PCB manufacturer to produce the boards, followed by manual assembly and testing to ensure reliability.
+    </p>
+    <img class="hero-img" src="../../assets/paratha-pressing-machine-asm-2.JPEG" alt="Paratha Pressing Machine Assembly - Alternate View" />
 
-    <h2>7) Results & Metrics (Simulation)</h2>
-    <ul class="list-tight">
-      <li><strong>Sideways speed:</strong> ~0.12–0.18 m/s (trot), ~0.06–0.09 m/s (crawl), depending on step length and stance timing.</li>
-      <li><strong>Stability margin:</strong> minimum CoM–support-polygon distance &gt; 1.5 cm in crawl; near-zero at peak trot swing (acceptable with PD damping).</li>
-      <li><strong>Energy:</strong> lower knee torque when swing trajectory includes a slight lift-hold to clear terrain and reduce impact.</li>
-      <li><strong>Terrain:</strong> clears 20–25 mm obstacles with 35–40 mm foot clearance; traverses ±5° ramps in crawl mode.</li>
+    <h2>System Integration and Deployment</h2>
+    <p>
+      The hardware image provided shows the integrated system during deployment. The setup includes the ESP32 module, stepper motor driver, SSRs, and thermocouples, all connected via a custom wiring harness. The green terminal blocks facilitated easy connections for the heaters, motor, and sensors, while the purple foam base provided insulation and stability for the PCB.
+    </p>
+    <p>
+      During deployment, the machine was tested extensively to ensure it could press and cook 4 parathas simultaneously with consistent results. The temperature control system maintained the plate at the optimal cooking temperature (around 180°C), and the stepper motor applied uniform pressure to achieve the desired paratha thickness. The entire process—from dough placement to cooked paratha ejection—was completed in under 2 minutes per batch.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Simultaneous pressing and cooking of 4 parathas at a time</li>
+      <li>Precise temperature control using K-type thermocouples and PID algorithm</li>
+      <li>High-torque pressing with NEMA 32 stepper motor and gearhead</li>
+      <li>Real-time multitasking with ESP32 and FreeRTOS</li>
+      <li>Solid-state relays for reliable heater control</li>
+      <li>Custom-designed and fabricated PCB for integrated electronics</li>
+      <li>Over-temperature protection for safety</li>
     </ul>
 
-    <h2>8) Challenges & Fixes</h2>
-    <ul class="list-tight">
-      <li><strong>Self-collision at max stride</strong> → added hip-yaw limit and reduced knee hyper-extension.</li>
-      <li><strong>Foot slip on low-μ surfaces</strong> → increased normal force during stance and used vertical preload in PD.</li>
-      <li><strong>Printed leg flex</strong> → changed infill from 15% to 35% near hinge; added fillets at stress concentrators.</li>
-      <li><strong>Controller chatter</strong> → introduced velocity damping (Kd↑) and small deadband around set-point.</li>
-    </ul>
-
-
-    <!-- OPTIONAL: add a short video/gif later
-    <figure>
-      <video controls src="../../assets/crab/crab-demo.mp4" style="width:100%; border-radius:.6rem;"></video>
-      <figcaption>Sideways crawl and trot in CoppeliaSim.</figcaption>
-    </figure> -->
+    <p>
+      This project at Esforge Pvt Ltd demonstrated my expertise in embedded systems, firmware development, and hardware design. The Paratha Pressing Machine successfully automated a traditionally labor-intensive process, delivering consistent quality and efficiency in paratha production.
+    </p>
   </article>
 
-  <!-- FOOTER -->
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>HPI Agent · History of Present Illness · Muhammad Sheraz</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>freeV2G · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    .btn { padding:.5rem 1.2rem; font-size:1rem; line-height:1; display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.3); }
-    .metric { display:inline-block; padding:.3rem .55rem; border-radius:.35rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.3); margin:.15rem .25rem .15rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    .list-tight li { margin-bottom:.35rem; }
-    figure { margin:1.1rem 0; }
-    figure img { width:100%; border-radius:.6rem; }
-    figure figcaption { font-size:.9rem; opacity:.85; margin-top:.35rem; }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1rem; }
-    @media (min-width: 900px) { .two-col { grid-template-columns: 1fr 1fr; } }
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
   </style>
 </head>
 <body>
   <div class="bg"></div>
-
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -37,117 +44,120 @@
 
   <article class="project-page container glass">
     <div class="title-row">
-      <h1>HPI Agent — History of Present Illness</h1>
-      <!-- Optional: add a repo/demo link -->
-      <!-- <a class="btn" href="YOUR_DEMO_OR_REPO_LINK" target="_blank">View Demo ↗</a> -->
+      <h1>freeV2G</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/freev2g" target="_blank">View Code ↗</a>
     </div>
-    <p class="tags">Clinical NLP · LLM Multi-Agent · SOAP Notes · OLDCARTS · Python · MongoDB</p>
+    <p class="tags">RPi · Whitebeet Boards · OpenEVSE · V2G · Python</p>
+    
+    <p>
+      At <strong>Powersoft 19</strong>, I led the development of a <strong>freeV2G</strong> system, a classified project that showcased my expertise in Vehicle-to-Grid (V2G) technology and EV charging. This project built upon the open-source <strong>OpenEVSE</strong> platform, integrating it with <strong>Sevenstax Whitebeet boards</strong> and a <strong>Raspberry Pi 4</strong> to create a bidirectional charging solution. As a classified effort, I can’t share specific images or sensitive details, but I’ll walk you through the technical journey in a way that highlights my deep understanding of V2G, OpenEVSE, and the hardware-software synergy I mastered. This project allowed EVs to not only charge from the grid but also send power back, a game-changer for energy management!
+    </p>
+
+    <h2>Project Overview</h2>
+    <p>
+      The <strong>freeV2G</strong> system was designed as a Level 2 (L2) EV charger with bidirectional capabilities, supporting up to 7.4 kW at 230V AC (single-phase) for charging and the same capacity for discharging back to the grid. Built on the <strong>OpenEVSE</strong> framework—an open-source EV Supply Equipment (EVSE) platform—I customized it to enable V2G functionality, aligning with standards like <strong>IEC 61851-1</strong> and <strong>ISO 15118-2</strong>. I used two <strong>Sevenstax Whitebeet boards</strong>—one as the EVSE (charger) and one as the EV (vehicle)—and a <strong>Raspberry Pi 4</strong> as the central controller, running custom Python firmware. This setup allowed me to implement advanced features like Signal Level Attenuation Characterization (SLAC) matching, handshaking, authorization, and bidirectional power flow control.
+    </p>
+    <p>
+      Think of this as a two-way street for energy: the EV can charge when the grid has excess power (e.g., during off-peak hours) and discharge when the grid needs support (e.g., peak demand or renewable energy integration). My role was to tie all these pieces together, ensuring safety, compliance, and seamless communication.
+    </p>
+
+    <h2>System Architecture</h2>
+    <p>
+      The architecture was a blend of hardware and software designed for bidirectional operation. The <strong>Whitebeet-EI</strong> (EVSE module) and <strong>Whitebeet-PI</strong> (EV module) from Sevenstax were the communication powerhouses, supporting ISO 15118-2 for V2G. These boards handle powerline communication (PLC) and the Control Pilot (CP) signal, making them perfect for this project. The <strong>Raspberry Pi 4</strong> served as the brain, running my custom Python firmware to orchestrate the OpenEVSE system and manage V2G operations.
+    </p>
+    <img class="hero-img" src="../../assets/whitebeet.png" alt="Sevenstax Whitebeet Board" />
+    <p><em>Note: This image is taken from Sevenstax.</em></p>
+    <p>
+      I connected the Whitebeet boards to the Pi 4 via Ethernet using the Host Control Interface (HCI). The Pi 4’s quad-core processor handled the heavy lifting, processing data from the Whitebeet boards and controlling the bidirectional power flow through relays and inverters (not detailed due to classification). The OpenEVSE framework provided the base for CP signal generation and state management, which I extended with V2G logic.
+    </p>
+    <img class="hero-img" src="../../assets/rpi-4.png" alt="Raspberry Pi 4" />
+    <p><em>Note: This image is taken from the Raspberry Pi site.</em></p>
+
+    <h2>OpenEVSE Integration and V2G Firmware Development</h2>
+    <p>
+      The <strong>OpenEVSE</strong> platform was my starting point, originally designed for unidirectional charging. I adapted its firmware to run on the Raspberry Pi 4 using Python, integrating it with the Whitebeet boards for V2G capabilities. OpenEVSE’s <strong>RAPI (Remote API)</strong> protocol was key—it let me dynamically control charging parameters like current and state, which I extended to handle discharging parameters too.
+    </p>
+    <p>
+      My Python firmware managed the CP signal, a 1 kHz PWM signal per IEC 61851-1, with states like +12V (State A, not connected), +9V PWM (State B, connected), and +6V PWM (State C, charging or discharging). For V2G, I added a new state (State D) to indicate bidirectional operation, using the Whitebeet-EI board to adjust the CP duty cycle and signal the EV’s intent to discharge. The firmware also interfaced with the Whitebeet boards to enable ISO 15118-2 communication, which is crucial for V2G.
+    </p>
+    <img class="hero-img" src="../../assets/cp-signal.jpg" alt="Control Pilot Signal" />
+    <p><em>Note: This image is taken from OpenEVSE.</em></p>
+    <p>
+      I designed a state machine to handle the complex transitions of V2G. For example, when the EV connects (State B), the system negotiates charging or discharging based on grid demand signals received via ISO 15118. If discharging is requested, the firmware adjusts the relays and inverter to reverse power flow, all while ensuring safety checks are met.
+    </p>
+
+    <h2>SLAC Matching and ISO 15118-2 Communication</h2>
+    <p>
+      The heart of V2G communication lies in <strong>Signal Level Attenuation Characterization (SLAC)</strong> matching, which I implemented using the Whitebeet boards. SLAC establishes a reliable PLC link between the EVSE and EV, a must for ISO 15118-2. I used the Whitebeet-EI to initiate SLAC by setting the CP duty cycle to 5%, prompting the Whitebeet-PI (EV) to respond with SLAC requests. My Python script monitored this process, using commands like <code>slacStartMatching()</code> and checking <code>slacMatched()</code> to confirm a stable link.
+    </p>
+    <p>
+      Once matched, the ISO 15118-2 protocol kicked in, enabling a handshake and authorization process. This included:
+    </p>
+    <ul>
+      <li><strong>Session Setup:</strong> Exchanging protocol versions, session IDs, and V2G capabilities (e.g., maximum discharge power).</li>
+      <li><strong>Authorization:</strong> Using Plug-and-Charge (PnC) with digital certificates to authenticate the EV for both charging and discharging.</li>
+      <li><strong>Energy Transfer:</strong> Negotiating parameters for bidirectional power flow, such as current limits and energy direction (grid-to-vehicle or vehicle-to-grid).</li>
+      <li><strong>Monitoring:</strong> Continuously adjusting power based on grid demand or EV battery state, retrieved via the Whitebeet-PI.</li>
+    </ul>
+    <p>
+      This setup allowed the EV to act as a mobile energy storage unit, feeding power back to the grid when needed—a concept I fully grasped and implemented with precision.
+    </p>
+
+    <h2>Hardware Integration: Whitebeet Boards and Raspberry Pi 4</h2>
+    <p>
+      The <strong>Whitebeet-EI</strong> and <strong>Whitebeet-PI</strong> boards were perfect for this V2G project. The Whitebeet-EI managed the EVSE side, generating the CP signal and handling PLC communication, while the Whitebeet-PI simulated the EV, responding to CP changes and sending V2G data. Both boards support ISO 15118-2, with built-in modems for SLAC and high-speed Ethernet for HCI communication with the Pi 4.
+    </p>
+    <p>
+      I configured the Raspberry Pi 4 with Raspbian OS, optimizing it for real-time control. The Pi’s GPIO pins monitored the Proximity Pilot (PP) for cable detection, and I used Ethernet to connect the Whitebeet boards. Setting up the boards involved configuring their MAC addresses—e.g., adjusting the Ethernet MAC by subtracting 2 from the PLC MAC’s last octet (e.g., <code>c4:93:00:22:22:24</code> to <code>c4:93:00:22:22:22</code>)—which took some trial and error but ensured reliable communication.
+    </p>
+
+    <h2>Safety and Compliance</h2>
+    <p>
+      Safety was non-negotiable, especially with bidirectional power flow. The OpenEVSE framework helped me implement standards like SAE J1772 and IEC 61851-1, with added V2G safety checks:
+    </p>
+    <ul>
+      <li><strong>Ground Continuity Monitoring (GCM):</strong> Tested the ground connection with a 1 mA current, halting operation if faulty.</li>
+      <li><strong>Residual Current Detection (RCD):</strong> Detected leakage currents above 30 mA, tripping the system to prevent hazards.</li>
+      <li><strong>Bidirectional Relay Control:</strong> Used relays to switch between charging and discharging modes, with a test phase before activation.</li>
+    </ul>
+    <p>
+      My Python firmware included real-time monitoring, opening relays if the CP signal indicated a fault (e.g., 0V) or if the grid signaled an emergency stop.
+    </p>
+
+    <h2>Testing and Validation</h2>
+    <p>
+      I tested the freeV2G system extensively, using the Whitebeet-PI to simulate an EV. Key tests included:
+    </p>
+    <ul>
+      <li><strong>CP Signal Validation:</strong> Verified the CP signal’s amplitude and states with an oscilloscope, ensuring V2G transitions worked.</li>
+      <li><strong>SLAC Matching:</strong> Confirmed a stable PLC link between Whitebeet boards, critical for ISO 15118-2.</li>
+      <li><strong>V2G Operation:</strong> Simulated bidirectional power flow, charging the EV to 80% SoC and then discharging 2 kW back to the grid.</li>
+      <li><strong>Authorization:</strong> Tested PnC authentication, ensuring only authorized EVs could participate in V2G.</li>
+      <li><strong>Fault Handling:</strong> Introduced faults (e.g., ground fault) to verify safe shutdowns.</li>
+    </ul>
+    <p>
+      The system passed all tests, proving its reliability for both charging and discharging, a testament to my understanding of V2G and OpenEVSE.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Level 2 bidirectional charging/discharging at 7.4 kW (230V AC, 32A).</li>
+      <li>Custom Python firmware on Raspberry Pi 4, extending OpenEVSE for V2G.</li>
+      <li>Whitebeet-EI and Whitebeet-PI boards for ISO 15118-2 and SLAC communication.</li>
+      <li>Control Pilot (CP) and Proximity Pilot (PP) handling for state management.</li>
+      <li>State machine for safe bidirectional operation, with dynamic power adjustment.</li>
+      <li>ISO 15118-2 for handshaking, authorization, and V2G energy transfer.</li>
+      <li>Comprehensive safety features, including GCM, RCD, and relay testing.</li>
+    </ul>
 
     <p>
-      <strong>HPI Agent</strong> automates the <em>Subjective</em> portion of clinical notes by turning a patient’s
-      <strong>Chief Complaint</strong> into a complete, accurate, and concise <strong>History of Present Illness (HPI)</strong>.  
-      The agent conducts a guided conversation (OLDCARTS), captures other histories (medical, family, social, drug, surgical) and a brief
-      review of systems (ROS), and returns a well-structured HPI paragraph set that drops directly into a SOAP note.
+      This classified project at Powersoft 19 was a pinnacle of my career, cementing my status as an EV charging and V2G expert. Mastering OpenEVSE, integrating Whitebeet boards, and developing custom firmware on Raspberry Pi 4 gave me a holistic view of bidirectional charging systems. It’s exciting to know I helped pave the way for smarter energy grids, and I’m eager to apply this knowledge to future innovations!
     </p>
-
-    <h2>1) Problem & Goals</h2>
-    <p class="callout">
-      <strong>Goal:</strong> Reduce provider documentation time while improving completeness.  
-      Given a Chief Complaint (e.g., “ear pain”), ask the right follow-ups, gather context from prior notes, and generate a structured HPI with pertinent positives/negatives and a brief ROS.
-    </p>
-
-    <h2>2) Functional Requirements</h2>
-    <ul class="list-tight">
-      <li>Accept a chief complaint and optional prior-note summary.</li>
-      <li>Drive an adaptive question flow based on <strong>OLDCARTS</strong> and complaint-specific guidelines.</li>
-      <li>Capture and normalize other histories (PMH, PSH, FHx, SHx, meds/allergies) when relevant.</li>
-      <li>Produce HPI + mini-ROS in a constrained schema (headings, short paragraphs, bullet negatives).</li>
-      <li>Persist conversation state and outputs for reuse and auditing.</li>
-    </ul>
-
-    <h2>3) Architecture</h2>
-    <figure>
-      <img src="../../assets/cholesterol/HPI-archi.jpg" alt="HPI Agent architecture: multi-agent flow, data stores, and outputs"/>
-      <figcaption>
-        <strong>Architecture:</strong> Questioning Agent → Compliance Agent → Note Generator, backed by a guideline/prompt store and MongoDB for state & prior-note summaries. Output is a structured HPI + ROS ready for EHR/SOAP.
-      </figcaption>
-    </figure>
-
-    <h2>4) Approach & Components</h2>
-    <div class="two-col">
-      <div>
-        <h3>4.1 Questioning Agent</h3>
-        <ul class="list-tight">
-          <li>Guided by OLDCARTS and complaint-specific prompts (ENT, CV, Resp, GI, Neuro, etc.).</li>
-          <li>Asks focused follow-ups, avoids redundancy, keeps patient-friendly phrasing.</li>
-          <li>Extracts normalized fields (onset, duration, severity scale, aggravating/relieving factors).</li>
-        </ul>
-
-        <h3>4.2 Compliance Agent</h3>
-        <ul class="list-tight">
-          <li>Checks relevance & sufficiency; flags missing OLDCARTS details and key rule-outs.</li>
-          <li>Prevents drift (off-topic chatter) and reinspects length/clarity before generation.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>4.3 Note Generator</h3>
-        <ul class="list-tight">
-          <li>Deterministic schema: short HPI paragraphs + mini-ROS with positives/negatives.</li>
-          <li>De-identification pass, number normalization (e.g., pain 0-10), tense/style consistency.</li>
-        </ul>
-
-        <h3>4.4 Record-Keeping</h3>
-        <ul class="list-tight">
-          <li>MongoDB stores conversation turns, structured fields, and prior-note summaries.</li>
-          <li>Enables quick follow-up visits and provider review with change tracking.</li>
-        </ul>
-      </div>
-    </div>
-
-    <h2>5) Data & Prompting</h2>
-    <ul class="list-tight">
-      <li><strong>Guidelines:</strong> complaint/system-specific prompt snippets (e.g., red flags for chest pain, ENT differentials for otalgia).</li>
-      <li><strong>Few-shot library:</strong> curated mini-examples per complaint to anchor tone/format.</li>
-      <li><strong>Constraints:</strong> JSON slot schema during interaction; natural prose only at final render.</li>
-      <li><strong>Safety:</strong> block PHI echo, limit medical advice beyond documentation intent.</li>
-    </ul>
-
-    <h2>6) Output Schema (HPI + ROS)</h2>
-    <ul class="list-tight">
-      <li><span class="metric">Chief Complaint</span> concise statement (patient words when available).</li>
-      <li><span class="metric">HPI</span> 2–4 paragraphs covering OLDCARTS & context (baseline, prior episodes).</li>
-      <li><span class="metric">Pertinent Positives/Negatives</span> inline; objective vitals deferred to “O”.</li>
-      <li><span class="metric">Mini-ROS</span> bullet positives/negatives in the most relevant systems.</li>
-    </ul>
-
-    <h2>7) Evaluation</h2>
-    <ul class="list-tight">
-      <li><strong>Expert review loop:</strong> rubric on completeness, accuracy, coherence, brevity.</li>
-      <li><strong>Automated checks:</strong> OLDCARTS coverage %, red-flag capture %, style conformance.</li>
-      <li><strong>User feedback:</strong> in-app thumbs/notes to improve examples and prompts.</li>
-    </ul>
-
-    <h2>8) Example (Ear Pain)</h2>
-    <div class="callout">
-      <p><strong>Chief Complaint:</strong> “Left ear pain for three days.”</p>
-      <p><strong>HPI (excerpt):</strong> Patient reports constant, dull left otalgia for 3 days, onset gradual, worsened by chewing; relief minimal with OTC acetaminophen. Denies fever, otorrhea, hearing loss, recent swimming, or recent air travel. Prior similar episode 1 year ago, resolved with eardrops.</p>
-      <p><strong>Mini-ROS:</strong> ENT: +otalgia; −fever, −otorrhea, −hearing loss. Resp: −cough, −SOB. Neuro: −headache, −vertigo.</p>
-    </div>
-
-    <h2>9) Engineering Notes</h2>
-    <ul class="list-tight">
-      <li>Functional boundaries and message-passing keep agents modular and replaceable.</li>
-      <li>Config-driven prompts enable quick expansion to new complaints/specialties.</li>
-      <li>Strict output schema reduces post-edit time and improves EHR paste-ins.</li>
-      <li>Telemetry (latency, token usage, coverage %) supports cost/quality tuning.</li>
-    </ul>
-
-    
   </article>
 
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-  <script src="../../script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,32 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>6-DOF Serial Manipulator · Muhammad Sheraz</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6 DOF Robot · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
-    /* Page-local tweaks that match your theme */
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    .btn { padding:.5rem 1.2rem; font-size:1rem; line-height:1; display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap; }
-    figure { margin: 1rem 0; text-align:center; }
-    figure img { width:100%; max-width:100%; border-radius:.6rem; display:block; margin-inline:auto; }
-    figure figcaption { font-size:.9rem; opacity:.85; margin-top:.35rem; }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1.1rem; }
-    @media (min-width: 900px) { .two-col { grid-template-columns:1fr 1fr; } }
-    .list-tight li { margin-bottom:.35rem; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.25); }
-    .metric { display:inline-block; padding:.3rem .55rem; border-radius:.35rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.35); margin:.15rem .25rem .15rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); padding:.05rem .4rem; border-radius:.35rem; }
+    .project-page p strong {
+      color: var(--clr-accent); /* Restored to match the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
   </style>
 </head>
 <body>
   <div class="bg"></div>
-
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -39,123 +44,58 @@
 
   <article class="project-page container glass">
     <div class="title-row">
-      <h1>6-DOF Serial Manipulator — From CAD to Working Robot</h1>
+      <h1>6 DOF Serial Manipulator</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/6dof-robot" target="_blank">View Code ↗</a>
     </div>
-    <p class="tags">SolidWorks · CoppeliaSim/V-REP · STM32 (Bluepill) · CAN bus · IBT-2 Drivers · Encoders · MATLAB Kinematics</p>
-
+    <p class="tags">STM32 · CANBUS · COPPELIASIM · SOLIDWORKS · ROBOTICS</p>
+    
     <p>
-      A complete, end-to-end build of a <strong>six-degree-of-freedom serial manipulator</strong>: CAD modeling, DH-based kinematics (MATLAB), master–slave embedded control over <strong>CAN bus</strong>, real-time motor control with <strong>IBT-2</strong> drivers + encoders, simulation in <strong>CoppeliaSim</strong>, and a working <strong>pick-and-place</strong> demo presented at the PIEAS Open House. Key architecture, kinematics, and hardware blocks mirror the design documented in our BS thesis (June 2024).
+      This project was my Final Year Project at <strong>PIEAS</strong>, supervised by <strong>Dr. Nasir Rehman Jadoon</strong>.
+      It involved the design and development of a <strong>6 Degree-of-Freedom (DOF) serial robotic manipulator</strong>
+      using embedded systems, kinematic modeling, and industrial communication protocols.
     </p>
 
-    <div class="callout">
-      <strong>Specs at a glance:</strong>
-      <span class="metric">6 DoF</span>
-      <span class="metric">Master + 6 Slaves</span>
-      <span class="metric">CAN bus</span>
-      <span class="metric">Encoders (500 PPR)</span>
-      <span class="metric">PID + Trapezoidal/Cubic Profiles</span>
-      <span class="metric">CoppeliaSim validation</span>
-    </div>
-
-    <!-- 1) CAD MODEL -->
-    <h2>1) CAD Model (SolidWorks)</h2>
+    <h2>System Architecture</h2>
     <p>
-      The robot was modeled in <strong>SolidWorks</strong> with realistic joint limits and mass/inertia approximations. This phase defined link lengths, joint clearances, and the mounting for the gripper and linear base, enabling early collision checking and workspace visualization.
-    </p>
-    <figure>
-      <img src="../../assets/cholesterol/fyp/cad-model.jpg" alt="SolidWorks CAD model of the 6-DOF arm with linear base"/>
-      <figcaption>SolidWorks assembly of the arm and base used to derive DH parameters and run workspace studies.</figcaption>
-    </figure>
-
-    <!-- 2) KINEMATICS -->
-    <h2>2) Kinematic Modeling (DH → FK/IK)</h2>
-    <p>
-      We derived <strong>Denavit–Hartenberg parameters</strong> for the link chain and implemented <strong>Forward (FK)</strong> and <strong>Inverse (IK)</strong> kinematics in MATLAB. FK was validated by matching the end-effector pose in simulation; IK solutions were checked by re-forwarding angles back to the target pose.
-    </p>
-    <figure>
-      <img src="../../assets/cholesterol/fyp/link-coordinate.jpg" alt="Link coordinate / DH assignment diagram"/>
-      <figcaption>Link coordinate frames and DH assignment used to produce the homogeneous transforms.</figcaption>
-    </figure>
-
-    <!-- 3) CONTROL ARCHITECTURE -->
-    <h2>3) Embedded Control Architecture</h2>
-    <p>
-      The system uses a <strong>Master–Slave</strong> topology over <strong>CAN bus</strong>: one STM32F103C8T6 master computes IK, converts joint angles to encoder counts, and publishes commands; six STM32F103C8T6 slaves (one per joint) close the local loop using encoder feedback and <strong>PID</strong> with motion profiles (trapezoidal velocity, cubic polynomial time-slicing).
-    </p>
-    <figure>
-      <img src="../../assets/cholesterol/fyp/hardware-block.jpg" alt="Master–Slave CAN bus block diagram with drivers and motors"/>
-      <figcaption>Master–Slave CAN architecture: master publishes setpoints; slaves drive IBT-2 H-bridges with encoder feedback.</figcaption>
-    </figure>
-
-    <!-- 4) HARDWARE BUILD -->
-    <h2>4) Hardware Build</h2>
-    <p>
-      Electronics were integrated on modular boards: <strong>IBT-2 (BTS7960)</strong> H-bridge drivers, <strong>MCP2551</strong> CAN transceivers, optical/mechanical limit switches, and isolated supplies. Each slave reads its encoder and executes PID at a fixed control period; the master runs IK and trajectory generation.
+      We implemented a <strong>Master-Slave architecture</strong> where one STM32F103C8T6 (Bluepill) acted as the master
+      controller, communicating over the <strong>CANBUS protocol (via MCP2515 transceivers)</strong> with six STM32 Bluepills as slaves.
+      Each slave handled control of a single joint/motor in the robot.
     </p>
 
-    <!-- two-column hardware gallery -->
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/fyp-6dof.png" alt="Assembled 6-DOF robot hardware on bench"/>
-        <figcaption>Complete hardware: assembled arm, linear base, gripper, and electronics.</figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/fyp/hardware.jpg" alt="Controller, drivers and wiring on breadboards during bring-up"/>
-        <figcaption>Electronics bring-up: master + six slaves, IBT-2 drivers, encoders, and CAN wiring.</figcaption>
-      </figure>
-    </div>
-
-    <!-- 5) SIMULATION -->
-    <h2>5) Simulation in CoppeliaSim/V-REP</h2>
+    <h2>Motor Control</h2>
     <p>
-      We validated FK/IK numerically and then reproduced the arm in <strong>CoppeliaSim</strong>: given a pose from MATLAB FK, the simulated tooltip reached the exact coordinates; given angles from the simulator, MATLAB IK returned the same joint set. We also ran workspace sweeps and collision checks before hardware motion.
+      We initially used <strong>L298N motor drivers</strong> for control, but later upgraded to more efficient <strong>IBT-2 (BTS7960)</strong> drivers.
+      Each motor was equipped with a <strong>500 PPR rotary encoder</strong> to enable precise position feedback and closed-loop control.
     </p>
-    <figure>
-      <img src="../../assets/cholesterol/fyp/simulation.jpg" alt="CoppeliaSim scene of the arm performing a placement task"/>
-      <figcaption>CoppeliaSim scene used to verify FK/IK numerically and dry-run pick-and-place trajectories.</figcaption>
-    </figure>
 
-    <!-- 6) MOTION PROFILES & CONTROL -->
-    <h2>6) Motion Profiles & Motor Control</h2>
-    <ul class="list-tight">
-      <li><strong>Trapezoidal velocity</strong> for smooth accel/constant/decel without overshoot; jerk minimized versus step commands.</li>
-      <li><strong>Cubic polynomial + time slicing</strong> to respect joint limits and synchronize arrivals across axes.</li>
-      <li><strong>PID</strong> on each slave, tuned per joint inertia/friction; encoders (500 PPR) ensure precise counts per revolution.</li>
-      <li><strong>Limit switches</strong> (optical U-shaped, mechanical on prismatic axis) guard motion bounds and enable homing.</li>
+    <h2>Mechanical Design & Simulation</h2>
+    <p>
+      The complete robot was modeled in <strong>SolidWorks</strong> with accurate mechanical constraints and exported for simulation in
+      <strong>CoppeliaSim (formerly V-REP)</strong>. We conducted extensive simulation of various pick-and-place operations and
+      workspace analysis.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Inverse and Forward Kinematics implemented for 6 DOF robotic arm</li>
+      <li>CANBUS communication using MCP2515 modules</li>
+      <li>Real-time multitasking and control loops with STM32 bare-metal programming</li>
+      <li>PID-based DC motor control with encoder feedback</li>
+      <li>Mechanical precision and durability via custom SolidWorks modeling</li>
+      <li>Simulation and path planning in CoppeliaSim</li>
     </ul>
 
-    <!-- 7) PRACTICAL DEMO -->
-    <h2>7) Practical Experiment — Pick & Place</h2>
     <p>
-      For the bench demo, the master generated a synchronized trajectory: <em>home → approach → grasp → lift → place → retreat</em>. Slaves executed the profile with PID and encoder feedback; limit switches enforced safe envelopes. We verified repeatability over multiple cycles, then increased speed while maintaining stability and current limits on the IBT-2 bridges. (Validated first in CoppeliaSim, then on hardware.)
+      This project reflects an end-to-end robotic system design journey — from mechanical and control design to
+      embedded systems and industrial communication.
     </p>
 
-    <!-- 8) OPEN HOUSE -->
-    <h2>8) Open House @ PIEAS</h2>
-    <p>
-      The working prototype and simulation results were exhibited at the PIEAS Open House, showcasing end-to-end engineering: CAD → kinematics → control → simulation → hardware. Visitors could observe trajectory planning on the laptop (MATLAB/CoppeliaSim) and watch the robot perform pick-and-place on the table rig.
-    </p>
-
-    <!-- APPENDIX: WHAT'S IN THE REPO -->
-    <h2>What’s in the Code Repo?</h2>
-    <ul class="list-tight">
-      <li><strong>Master</strong> (STM32F103): IK solver, trajectory generator, CAN publisher.</li>
-      <li><strong>Slaves ×6</strong> (STM32F103): PID position loops, encoder capture (EXTI/timers), PWM to IBT-2, homing.</li>
-      <li><strong>Utilities</strong>: DH parameter file, MATLAB FK/IK scripts, CoppeliaSim scene for validation.</li>
-    </ul>
-
-    <!-- Optional: quick install/run hint -->
-    <p class="callout">
-      Build toolchain: <span class="kbd">STM32CubeMX</span> → <span class="kbd">Keil µVision</span>; simulation in <span class="kbd">CoppeliaSim</span>; kinematics notebooks in <span class="kbd">MATLAB</span>.
-    </p>
-
+    <img class="hero-img" src="../../assets/fyp-6dof.jpeg" alt="6 DOF Robot" />
   </article>
 
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -3,35 +3,13 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RFID Based Security System · Muhammad Sheraz</title>
+  <title>OCR ID Parser · Obaid Tanveer</title>
   <link rel="stylesheet" href="../../styles.css"/>
-  <style>
-    /* Keep styling consistent with your other project pages */
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    .btn { padding:.5rem 1.2rem; font-size:1rem; line-height:1; display:inline-flex; align-items:center; gap:.4rem; white-space:nowrap; }
-    figure { margin:1rem 0; text-align:center; }
-    figure img { width:100%; max-width:100%; border-radius:.6rem; display:block; margin-inline:auto; }
-    figure figcaption { font-size:.9rem; opacity:.85; margin-top:.35rem; }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1.1rem; }
-    @media (min-width: 900px) { .two-col { grid-template-columns:1fr 1fr; } }
-    .list-tight li { margin-bottom:.35rem; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.25); }
-    .metric { display:inline-block; padding:.3rem .55rem; border-radius:.35rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.35); margin:.15rem .25rem .15rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); padding:.05rem .4rem; border-radius:.35rem; }
-    pre { background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); padding:1rem; border-radius:.6rem; overflow:auto; }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    table { width:100%; border-collapse:collapse; overflow:hidden; border-radius:.6rem; }
-    th, td { border:1px solid rgba(255,255,255,.15); padding:.55rem .6rem; text-align:left; }
-    .tags { opacity:.85; margin-top:.25rem; }
-  </style>
 </head>
 <body>
   <div class="bg"></div>
-
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -40,225 +18,32 @@
       <li><a href="../skills.html">Skills</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
+
   </nav>
 
   <article class="project-page container glass">
-    <div class="title-row">
-      <h1>RFID Based Security System</h1>
-    </div>
-    <p class="tags">Arduino UNO · MFRC522 (13.56 MHz) · 16×2 LCD (I²C) · Servo Lock · LEDs + Buzzer · Breadboard Prototype</p>
-
+    <h1>OCR ID Parser</h1>
+    <p class="tags">PaddleOCR</p>
+    <img
+      class="hero-img"
+      src="https://source.unsplash.com/1200x600?electricity"
+      alt="RL Drone Control"
+    />
     <p>
-      A keyless entry prototype that authenticates users with an <strong>RFID card/tag</strong> and actuates a
-      <strong>servo-driven door lock</strong>. The system displays status on a <strong>16×2 LCD (I²C)</strong>, uses clear visual/audio
-      feedback (LEDs &amp; buzzer), and demonstrates a practical access-control workflow for homes, labs, or offices.
-      (Summarized from the Communication Systems CEP report.) :contentReference[oaicite:1]{index=1}
+      Deep-learning LSTM network predicting 24-hour electricity load (±2% MAPE).
+      Nightly retrains via GitHub Actions & zero-downtime AWS Lambda deployments.
     </p>
-
-    <div class="callout">
-      <strong>Highlights:</strong>
-      <span class="metric">MFRC522 @ 13.56 MHz</span>
-      <span class="metric">Arduino UNO (ATmega328P)</span>
-      <span class="metric">I²C LCD 16×2</span>
-      <span class="metric">Servo lock actuation</span>
-      <span class="metric">LED/Buzzer alerts</span>
-    </div>
-
-    <h2>Team &amp; Context</h2>
-    <p>
-      <strong>Course:</strong> Communication Systems (CEP) — Fall 2022 • <strong>Instructor:</strong> Dr. Waqas Ahmed •
-      <strong>Lab Engineer:</strong> Ma’am Anzalna Nurejo • <strong>Group 01</strong>. Team members:
-      <strong>Muhammad Sheraz</strong> (Electronics), <strong>Muhammad Huzaifa Zahid</strong> (Electronics),
-      <strong>Muhammad Talha</strong> (Power). :contentReference[oaicite:2]{index=2}
-    </p>
-
-    <h2>Objective</h2>
-    <p>
-      Design and study a <strong>door-lock mechanism</strong> using <strong>RFID read/write</strong> with a microcontroller that
-      decides access and operates the lock motor. :contentReference[oaicite:3]{index=3}
-    </p>
-
-    <h2>System Overview</h2>
-    <ul class="list-tight">
-      <li><strong>Reader:</strong> MFRC522 (ISO/IEC 14443 A/MIFARE/NTAG compatible) with ~0–30 mm read range. :contentReference[oaicite:4]{index=4}</li>
-      <li><strong>Controller:</strong> Arduino UNO (ATmega328P), SPI to MFRC522; I²C to LCD. :contentReference[oaicite:5]{index=5}</li>
-      <li><strong>UI/Feedback:</strong> 16×2 I²C LCD; Green/Red/Blue LEDs; 5 V piezo buzzer. :contentReference[oaicite:6]{index=6}</li>
-      <li><strong>Actuator:</strong> Servo motor that rotates the latch (demo door lock). :contentReference[oaicite:7]{index=7}</li>
-    </ul>
-
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/RFID/frid-module.jpg" alt="MFRC522 RFID module"/>
-        <figcaption>MFRC522 RFID reader/writer and tags. :contentReference[oaicite:8]{index=8}</figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/RFID/arduino.jpg" alt="Arduino UNO board"/>
-        <figcaption>Arduino UNO microcontroller board. :contentReference[oaicite:9]{index=9}</figcaption>
-      </figure>
-    </div>
-
-    <h2>Working Principle</h2>
-    <ul class="list-tight">
-      <li>When a tag enters range, MFRC522 sends UID to Arduino via SPI.</li>
-      <li>Arduino compares the UID against an authorized master UID.</li>
-      <li>On match: LCD shows <em>Access Granted</em>, Green LED blinks, buzzer beeps, servo rotates to open lock.</li>
-      <li>On mismatch: LCD shows <em>Access Denied</em>, Red LED blinks, buzzer sounds, lock remains closed. :contentReference[oaicite:10]{index=10}</li>
-    </ul>
-
-    <h2>Wiring Summary</h2>
-    <ul class="list-tight">
-      <li><strong>MFRC522 ↔ UNO:</strong> SPI (SS=D10, RST=D9, SCK=D13, MOSI=D11, MISO=D12).</li>
-      <li><strong>LCD (I²C):</strong> VCC, GND, SDA → A4, SCL → A5 (UNO).</li>
-      <li><strong>Servo:</strong> Signal → D6; <strong>LEDs:</strong> D2/D3/D4; <strong>Buzzer:</strong> D5. :contentReference[oaicite:11]{index=11}</li>
-    </ul>
-
-    <h2>Arduino Code</h2>
-    <pre><code>#include &lt;SPI.h&gt;
-#include &lt;MFRC522.h&gt;
-#include &lt;LiquidCrystal_I2C.h&gt;
-#include &lt;Servo.h&gt;
-
-#define RST_PIN 9
-#define SS_PIN 10
-MFRC522 mfrc522(SS_PIN, RST_PIN);
-
-String MasterTag = "A4 15 D0 28"; // Authorized UID (from initial scan)
-String UIDCard = "";
-
-LiquidCrystal_I2C lcd(0x27, 16, 2);
-Servo servo;
-
-#define BlueLED 2
-#define GreenLED 3
-#define RedLED 4
-#define Buzzer 5
-
-void setup() {
-  Serial.begin(9600);
-  SPI.begin();
-  mfrc522.PCD_Init();
-
-  lcd.init();
-  lcd.backlight();
-  lcd.clear();
-
-  servo.attach(6);
-  servo.write(10);
-
-  pinMode(GreenLED, OUTPUT);
-  pinMode(BlueLED, OUTPUT);
-  pinMode(RedLED, OUTPUT);
-  pinMode(Buzzer, OUTPUT);
-
-  digitalWrite(BlueLED, HIGH);
-  lcd.clear();
-  lcd.print(" Access Control ");
-  lcd.setCursor(0, 1);
-  lcd.print("Scan Your Card&gt;&gt;");
-}
-
-void loop() {
-  digitalWrite(BlueLED, HIGH);
-  digitalWrite(RedLED, LOW);
-  digitalWrite(GreenLED, LOW);
-  noTone(Buzzer);
-  servo.write(10);
-
-  while (getUID()) {
-    Serial.print("UID: ");
-    Serial.println(UIDCard);
-    lcd.clear();
-    lcd.setCursor(2, 0);
-    lcd.print("Permission");
-    lcd.setCursor(0, 1);
-
-    if (UIDCard == MasterTag) {
-      lcd.print(" Access Granted!");
-      digitalWrite(GreenLED, HIGH);
-      digitalWrite(BlueLED, LOW);
-      digitalWrite(RedLED, LOW);
-      servo.write(100);
-      delay(50);
-      for (int i = 0; i &lt; 2; i++) {
-        tone(Buzzer, 2000); delay(250);
-        noTone(Buzzer);     delay(250);
-      }
-    } else {
-      lcd.print(" Access Denied!");
-      digitalWrite(BlueLED, LOW);
-      digitalWrite(GreenLED, LOW);
-      tone(Buzzer, 2000);
-      servo.write(10);
-      for (int i = 0; i &lt; 10; i++) {
-        digitalWrite(RedLED, HIGH); delay(250);
-        digitalWrite(RedLED, LOW);  delay(250);
-      }
-      noTone(Buzzer);
-    }
-
-    delay(2000);
-    lcd.clear();
-    lcd.print(" Access Control ");
-    lcd.setCursor(0, 1);
-    lcd.print("Scan Your Card&gt;&gt;");
-  }
-}
-
-boolean getUID() {
-  if (!mfrc522.PICC_IsNewCardPresent()) return false;
-  if (!mfrc522.PICC_ReadCardSerial())   return false;
-
-  UIDCard = "";
-  for (byte i = 0; i &lt; mfrc522.uid.size; i++) {
-    UIDCard.concat(String(mfrc522.uid.uidByte[i] &lt; 0x10 ? " 0" : " "));
-    UIDCard.concat(String(mfrc522.uid.uidByte[i], HEX));
-  }
-  UIDCard.toUpperCase();
-  UIDCard = UIDCard.substring(1);
-  mfrc522.PICC_HaltA();
-  return true;
-}
-</code></pre>
-    <p><em>Full sketch reproduced from the report’s “Arduino Code” section.</em> :contentReference[oaicite:12]{index=12}</p>
-
-    <h2>Schematic &amp; Hardware</h2>
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/RFID/rfid-schematic.jpg" alt="Schematic diagram of RFID access system"/>
-        <figcaption>Schematic showing MFRC522, UNO, LCD, LEDs/buzzer, and servo connections. :contentReference[oaicite:13]{index=13}</figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/RFID/rfid-hardware.jpg" alt="Breadboard hardware prototype with LCD and RFID tag"/>
-        <figcaption>Breadboard prototype with 16×2 LCD (I²C), MFRC522 reader, and servo lock. :contentReference[oaicite:14]{index=14}</figcaption>
-      </figure>
-    </div>
-
-
-
-    <h2>Results &amp; Discussion</h2>
-    <ul class="list-tight">
-      <li>Valid card → servo unlocks; invalid card → buzzer/Red LED alert; relay output optional for EM locks.</li>
-      <li>Demonstrates reliable, low-cost, keyless entry—extendable to attendance or parking gates. :contentReference[oaicite:16]{index=16}</li>
-    </ul>
-
-    <h2>Conclusion</h2>
-    <p>
-      The build solidified understanding of RFID (AIDC) and practical access control. The same design
-      pattern adapts easily to attendance systems, parking control, and ticketing with minimal changes. :contentReference[oaicite:17]{index=17}
-    </p>
-
-    <h2>References</h2>
-    <ul class="list-tight">
-      <li>MFRC522 Datasheet and application notes (ISO/IEC 14443 A/MIFARE/NTAG).</li>
-      <li>Arduino UNO board reference &amp; libraries (SPI, Servo, LiquidCrystal_I2C). :contentReference[oaicite:18]{index=18}</li>
-    </ul>
+    <a
+      class="btn"
+      href="https://github.com/Obaid Tanveer/smart-grid"
+      target="_blank"
+      >View Code ↗</a
+    >
   </article>
 
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Portfolio Website · Muhammad Sheraz</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Website (This website) · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    figure { margin:1rem 0; }
-    figure img { width:100%; border-radius:.6rem; display:block; margin-inline:auto; }
-    figure figcaption { font-size:.9rem; opacity:.85; margin-top:.35rem; }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1.1rem; }
-    @media (min-width: 900px) { .two-col { grid-template-columns:1fr 1fr; } }
-    .list-tight li { margin-bottom:.35rem; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.3); }
-    .metric { display:inline-block; padding:.3rem .55rem; border-radius:.35rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.3); margin:.15rem .25rem .15rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); padding:.05rem .4rem; border-radius:.35rem; }
-
-    /* center smaller images (when intrinsic width < container) */
-    figure.center { display:flex; flex-direction:column; align-items:center; }
-    figure.center img { width:auto; max-width:100%; height:auto; }
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
   </style>
 </head>
 <body>
   <div class="bg"></div>
-
-  <!-- NAV -->
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -40,101 +42,93 @@
     </ul>
   </nav>
 
-  <!-- CONTENT -->
   <article class="project-page container glass">
     <div class="title-row">
-      <h1>Portfolio Website — This Website</h1>
-      <!-- <a class="btn" href="https://github.com/dsshaizy/portfolio-website" target="_blank" rel="noopener">View Code ↗</a> -->
+      <h1>Portfolio Website (This website)</h1>
+      <a class="btn" href="https://github.com/Obaidtanveer1804/portfolio-website" target="_blank">View Code ↗</a>
     </div>
-
-    <p class="tags">HTML · CSS · JavaScript · Vanilla Tilt.js · Font Awesome · GitHub Pages</p>
-
+    <p class="tags">HTML · CSS · JS · GitHub</p>
+    
     <p>
-      I built this <strong>Portfolio Website</strong> to showcase my projects and journey as an Electrical &amp; Embedded Firmware Engineer.
-      It’s a responsive, glassmorphism-themed site with subtle interactions that highlight work in embedded systems, robotics,
-      and EV charging. The site is fully open-source and intended as a learning reference for others to <em>use</em> or <em>fork</em>.
+      I created this <strong>Portfolio Website</strong> as a personal project to showcase my skills, projects, and journey as an Electrical Engineer and Embedded Firmware Engineer. This website, which you’re exploring right now, is a dynamic and responsive platform designed to highlight my work in embedded systems, robotics, and EV charging solutions. Built from the ground up, it’s an open site, freely accessible and usable by anyone interested in learning from or contributing to my projects. I’ve included screenshots to give you a glimpse of its design and functionality, reflecting my growth in web development and design.
     </p>
 
-    <figure>
-      <img src="../../assets/cholesterol/port-intro.jpg" alt="Portfolio Website main page with hero and project grid"/>
-      <figcaption>Main page: hero, project grid, glassmorphism surfaces, and hover tilt on cards.</figcaption>
-    </figure>
-
-    <!-- 1) OVERVIEW / GOALS -->
-    <h2>1) Overview & Goals</h2>
-    <div class="callout">
-      <p><strong>Goal:</strong> A clean, mobile-friendly portfolio that communicates skills and experience clearly, with smooth interactions and fast load times.</p>
-    </div>
-    <ul class="list-tight">
-      <li>Single-page browsing with clear sections for <em>Projects</em>, <em>Experience</em>, <em>Education</em>, <em>Skills</em>, and <em>Contact</em>.</li>
-      <li>Use of <span class="metric">HTML</span>, <span class="metric">CSS</span>, and lightweight <span class="metric">JavaScript</span> for speed and simplicity.</li>
-      <li>Interactive details using <span class="metric">Vanilla&nbsp;Tilt.js</span> and <span class="metric">Font&nbsp;Awesome</span> icons.</li>
-      <li>Easy hosting and updates via <span class="metric">GitHub&nbsp;Pages</span>.</li>
-    </ul>
-
-    <!-- 2) DESIGN -->
-    <h2>2) Design & UX</h2>
+    <h2>Project Overview</h2>
     <p>
-      The UI uses a soft <strong>glassmorphism</strong> aesthetic, readable typography (Inter), and consistent spacing. Components are designed with
-      CSS variables for theme consistency and smooth transitions for hover/focus states. The navigation keeps visitors oriented across sections.
+      The Portfolio Website serves as a digital resume and project gallery, featuring sections for my projects, experience, education, skills, and contact information. I developed it using <strong>HTML</strong> for structure, <strong>CSS</strong> for styling with a glassmorphism effect, and <strong>JavaScript</strong> for interactivity, such as the tilt effect on project cards. Hosted on <strong>GitHub Pages</strong>, it’s a live representation of my technical abilities and a testament to my self-directed learning in web development. The site is designed to be mobile-friendly and visually appealing, with a focus on showcasing my embedded systems projects effectively.
+    </p>
+    <p>
+      This project was a labor of love, evolving over time as I added new features and refined its design. It’s open to the public, and I encourage others to use it as a reference or fork it for their own portfolios, reflecting my commitment to sharing knowledge.
     </p>
 
-    <!-- 3) DEVELOPMENT PROCESS -->
-    <h2>3) Development Process</h2>
-    <ul class="list-tight">
-      <li><strong>Planning:</strong> Sketched a single-page layout with top navigation, hero area, and a responsive project grid.</li>
-      <li><strong>Coding:</strong> Semantic HTML, modular CSS with variables, and JS for interactivity (Tilt and small utilities).</li>
-      <li><strong>Testing:</strong> Used browser dev tools to verify responsiveness across desktop, tablet, and mobile viewports.</li>
-      <li><strong>Deployment:</strong> Pushed to GitHub and enabled <em>GitHub Pages</em> for static hosting.</li>
-      <li><strong>Iteration:</strong> Added a dynamic footer year and moved libraries to trusted CDNs to improve performance.</li>
+    <h2>Development Process</h2>
+    <p>
+      I started this website with a basic HTML structure, gradually adding CSS to create a modern look with a glassmorphism background and smooth transitions. I used the Inter font from Google Fonts for readability and Font Awesome for icons, enhancing the user experience. JavaScript was integrated to add the Vanilla Tilt.js library, giving project cards a 3D tilt effect on hover, which adds an engaging touch.
+    </p>
+    <p>
+      The development involved several key steps:
+    </p>
+    <ul>
+      <li><strong>Planning:</strong> Sketched the layout, deciding on a single-page design with a navigation bar, hero section, and project grid.</li>
+      <li><strong>Coding:</strong> Wrote semantic HTML, styled with CSS variables for consistency, and added JavaScript for dynamic behavior.</li>
+      <li><strong>Testing:</strong> Tested responsiveness across devices (desktop, tablet, mobile) using browser developer tools, ensuring compatibility.</li>
+      <li><strong>Deployment:</strong> Pushed the code to a GitHub repository and enabled GitHub Pages for hosting, learning the deployment process along the way.</li>
+    </ul>
+    <p>
+      I iterated on the design based on feedback, adding a footer with a dynamic year update and optimizing load times by using CDN-hosted libraries.
+    </p>
+
+    <h2>Screenshots</h2>
+    <p>
+      Here are a couple of screenshots showcasing the website’s design and functionality:
+    </p>
+    <img class="hero-img" src="../../assets/pfws-1.png" alt="Portfolio Website Main Page Screenshot" />
+    <p>
+      This screenshot shows the main page, featuring the hero section and project grid, highlighting the glassmorphism effect and tilt animation on the project cards.
+    </p>
+    <img class="hero-img" src="../../assets/pfws-2.png" alt="Portfolio Website Experience Page Screenshot" />
+    <p>
+      This screenshot captures the experience page, showcasing the responsive layout and navigation bar, providing a view of my professional background.
+    </p>
+    <p>
+      These images reflect the website’s clean design and user-friendly interface, which I crafted to make my portfolio accessible and engaging.
+    </p>
+
+    <h2>What I Learned</h2>
+    <p>
+      Building this website was a significant learning experience that expanded my skill set beyond embedded systems. Here’s what I gained:
+    </p>
+    <ul>
+      <li><strong>Web Development Basics:</strong> Mastered HTML, CSS, and JavaScript, understanding how to structure, style, and add interactivity to a site.</li>
+      <li><strong>Responsive Design:</strong> Learned to use CSS media queries and flexible layouts to ensure the site works on all screen sizes.</li>
+      <li><strong>Version Control:</strong> Gained hands-on experience with Git and GitHub, including commits, branches, and deployment via GitHub Pages.</li>
+      <li><strong>Performance Optimization:</strong> Discovered the importance of minimizing load times by leveraging CDNs for libraries like Font Awesome and Vanilla Tilt.js.</li>
+      <li><strong>User Experience (UX):</strong> Explored UX principles, focusing on intuitive navigation and visual appeal to engage visitors.</li>
+      <li><strong>Problem-Solving:</strong> Troubleshot issues like CSS conflicts and JavaScript errors, improving my debugging skills.</li>
+    </ul>
+    <p>
+      This project taught me the value of cross-disciplinary skills, blending my engineering background with web development to create a professional online presence. I also learned to embrace open-source principles, making the site available for others to learn from or adapt.
+    </p>
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>Responsive single-page design using HTML, CSS, and JavaScript.</li>
+      <li>Glassmorphism effect and tilt animation for an interactive user interface.</li>
+      <li>Inter font and Font Awesome icons for a polished look.</li>
+      <li>Vanilla Tilt.js for 3D hover effects on project cards.</li>
+      <li>GitHub Pages hosting for easy deployment and updates.</li>
+      <li>Dynamic footer with a current year update via JavaScript.</li>
+      <li>Open-source availability for public use and contribution.</li>
     </ul>
 
-    <!-- 4) SCREENSHOTS -->
-    <h2>4) Screenshots</h2>
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/port-intro.jpg" alt="Main portfolio page screenshot"/>
-        <figcaption>Home: hero section and project grid with tilt interactions.</figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/port-exp.jpg" alt="Experience page layout screenshot"/>
-        <figcaption>Experience: responsive layout and sticky navigation across pages/sections.</figcaption>
-      </figure>
-    </div>
-
-    <!-- 5) WHAT I LEARNED -->
-    <h2>5) What I Learned</h2>
-    <ul class="list-tight">
-      <li><strong>Web Basics:</strong> Structuring with HTML, styling with CSS, and enhancing interactivity with JavaScript.</li>
-      <li><strong>Responsive Design:</strong> Media queries and flexible layouts for a great mobile experience.</li>
-      <li><strong>Version Control:</strong> Git workflows (commits, branches) and deployment via GitHub Pages.</li>
-      <li><strong>Performance:</strong> CDN-hosted assets and minimal JS for faster load times.</li>
-      <li><strong>UX Thinking:</strong> Simple navigation, clear hierarchy, and visual polish to keep visitors engaged.</li>
-      <li><strong>Debugging:</strong> Resolved CSS conflicts and small JS issues while iterating on design.</li>
-    </ul>
-
-    <!-- 6) TECH FEATURES -->
-    <h2>6) Technical Features</h2>
-    <ul class="list-tight">
-      <li>Responsive single-page layout with semantic HTML, modern CSS, and light JS.</li>
-      <li>Glassmorphism surfaces and <span class="metric">Vanilla&nbsp;Tilt.js</span> for subtle 3D hover effects.</li>
-      <li>Inter font + <span class="metric">Font&nbsp;Awesome</span> icons for readability and visual cues.</li>
-      <li><span class="metric">GitHub&nbsp;Pages</span> hosting for hassle-free deployment and updates.</li>
-      <li>Dynamic footer year via a tiny JavaScript helper.</li>
-      <li>Open-source: available for public use, learning, and contributions.</li>
-    </ul>
-
-    <p class="callout">
-      <strong>Status:</strong> Completed as of <strong>June 02, 2025</strong> — and continuously refined as my work evolves.
+    <p>
+      This Portfolio Website project, completed as of June 02, 2025, is more than just a showcase—it’s a reflection of my growth as an engineer and developer. By making it an open site, I hope to inspire others and build a community around my work. The skills I’ve gained in web development complement my embedded systems expertise, opening new avenues for future projects. I’m proud of this creation and excited to continue refining it as my career evolves!
     </p>
   </article>
 
-  <!-- FOOTER -->
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

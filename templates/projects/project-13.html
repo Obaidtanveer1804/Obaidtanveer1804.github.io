@@ -1,31 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Doctor Agent & CureBot · Clinical AI Platform · Muhammad Sheraz</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCARA Robot with ROS2 · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    figure { margin:1rem 0; }
-    figure img { width:100%; border-radius:.6rem; }
-    figure figcaption { font-size:.9rem; opacity:.85; margin-top:.35rem; }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1.1rem; }
-    @media (min-width: 900px) { .two-col { grid-template-columns:1fr 1fr; } }
-    .list-tight li { margin-bottom:.35rem; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.3); }
-    .metric { display:inline-block; padding:.3rem .55rem; border-radius:.35rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.3); margin:.15rem .25rem .15rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
   </style>
 </head>
-
 <body>
   <div class="bg"></div>
-
-  <!-- Navigation Bar -->
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -36,136 +42,93 @@
     </ul>
   </nav>
 
-  <!-- Main Content -->
   <article class="project-page container glass">
-
     <div class="title-row">
-      <h1>Doctor Agent & CureBot — Clinical AI for SOAP Workflows</h1>
-      <!-- Optional demo/repo link -->
-      <!-- <a class="btn" href="YOUR_DEMO_OR_REPO" target="_blank">View Demo ↗</a> -->
+      <h1>SCARA Robot with ROS2</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/scara-robot-ros2" target="_blank">View Code ↗</a>
     </div>
-
-    <p class="tags">Clinical AI · LLM Agents · RAG (Milvus) · ICD-10/CPT/GPI · Guideline Compliance · Python</p>
-
+    <p class="tags">ROBOTICS · ROS2 · STM32 · CoppeliaSim · Python</p>
+    
     <p>
-      <strong>Doctor Agent</strong> and <strong>CureBot</strong> are production-oriented clinical agents that draft complete
-      <strong>SOAP</strong> notes and support decision-making. They transform the patient–doctor conversation
-      and uploaded context into an <em>Assessment</em> (ranked diagnoses with ICD-10) and a structured <em>Plan</em>
-      (procedures with CPT, medications with GPI, referrals, education, follow-up). A compliance pass aligns the result with
-      provider guidelines, reducing rework and improving documentation quality.
+      As part of my advanced robotics work at <strong>Esforge Pvt Ltd</strong>, I led the development of a <strong>SCARA Robot</strong> integrated with <strong>ROS2</strong>, showcasing my expertise in robotic operating systems, motion planning, and embedded systems. This project demonstrated my ability to design, simulate, and deploy a high-precision robotic arm for industrial automation tasks.
     </p>
 
-    <figure>
-      <img src="../../assets/cholesterol/doctor/whole.jpg" alt="Doctor Agent and CureBot overview"/>
-      <figcaption>Vision: reduce physician workload, raise documentation quality, and shorten the patient journey.</figcaption>
-    </figure>
+    <h2>Project Overview</h2>
+    <p>
+      The <strong>SCARA (Selective Compliance Assembly Robot Arm)</strong> was developed to perform precise pick-and-place operations for industrial automation, capable of achieving a repeatability of <strong>±0.1 mm</strong>. The robot was controlled using <strong>ROS2</strong>, enabling modular, scalable, and real-time robotic control. The system was designed to handle tasks such as assembly, material handling, and precision placement, with seamless integration of hardware and software components.
+    </p>
+    <img class="hero-img" src="../../assets/ros-2.png" alt="SCARA Robot with ROS2" />
 
-    <!-- Section 1 -->
-    <h2>1) Problem & Objectives</h2>
-    <div class="callout">
-      <p><strong>Goal:</strong> Build a physician-style agent that produces reliable <em>Assessment</em> and <em>Plan</em> grounded in prior notes and guidelines, with correct ICD, CPT, and GPI mappings for interoperability.</p>
-    </div>
-    <ul class="list-tight">
-      <li>Generate <span class="metric">A</span> (diagnoses + ICD-10) and <span class="metric">P</span> (CPT/GPI, education, follow-up) from S + O.</li>
-      <li>Ground reasoning with <span class="metric">RAG</span> over provider-specific note collections and guideline packs.</li>
-      <li>Enforce <strong>compliance</strong> before final SOAP assembly.</li>
-    </ul>
+    <h2>System Architecture</h2>
+    <p>
+      The SCARA robot utilized a <strong>STM32</strong> microcontroller as the primary controller for low-level motor control and sensor interfacing, interfaced with a <strong>Raspberry Pi</strong> running <strong>ROS2</strong> for high-level control and communication. The STM32 handled real-time tasks such as motor control and encoder feedback, while the Raspberry Pi managed <strong>ROS2</strong> nodes for motion planning, trajectory generation, and communication with external systems.
+    </p>
+    <p>
+      The system leveraged <strong>ROS2</strong>’s publish-subscribe model for efficient communication between nodes, ensuring low-latency coordination between the robot’s joints, sensors, and control algorithms. I developed custom <strong>ROS2</strong> packages to handle the robot’s kinematics and dynamics, enabling smooth and accurate operation.
+    </p>
 
-    <!-- Section 2 -->
-    <h2>2) SOAP Explained (in Words)</h2>
-    <ul class="list-tight">
-      <li><strong>Subjective (S):</strong> Patient narrative — symptoms, history, and context captured from conversation and forms.</li>
-      <li><strong>Objective (O):</strong> Measurable findings — vitals, exam, lab or imaging summaries, and device data.</li>
-      <li><strong>Assessment (A):</strong> Clinician reasoning — likely diagnoses and differentials, prioritized and coded with ICD-10.</li>
-      <li><strong>Plan (P):</strong> Next steps — procedures (CPT), medications (GPI with strength/dose/days), referrals, education, and follow-up.</li>
+    <h2>ROS2 Implementation</h2>
+    <p>
+      I designed and implemented a comprehensive <strong>ROS2</strong> architecture for the SCARA robot, utilizing <strong>Python</strong> and <strong>C++</strong> for node development. Key <strong>ROS2</strong> components included:
+    </p>
+    <ul>
+      <li><strong style="color: var(--clr-accent)">MoveIt</strong>: Configured for motion planning, generating collision-free trajectories for the SCARA robot’s 4 degrees of freedom (DOF).</li>
+      <li><strong style="color: var(--clr-accent)">RViz</strong>: Used for real-time visualization of the robot’s state, joint positions, and planned trajectories.</li>
+      <li><strong style="color: var(--clr-accent)">Gazebo</strong> and <strong style="color: var(--clr-accent)">CoppeliaSim</strong>: Employed for simulation, allowing testing and optimization of control algorithms before hardware deployment.</li>
+      <li>Custom <strong style="color: var(--clr-accent)">ROS2</strong> nodes for interfacing with the <strong style="color: var(--clr-accent)">STM32</strong> via <strong style="color: var(--clr-accent)">UART</strong>, ensuring reliable data exchange for motor commands and sensor feedback.</li>
     </ul>
     <p>
-      The system composes A and P from S+O, then renders a final SOAP note. This mirrors how clinicians think (evidence → inference → action) and increases reliability and interpretability of results.
+      The <strong>ROS2</strong> system was optimized for real-time performance, achieving a control loop frequency of <strong>100 Hz</strong>, critical for precise robotic operations.
     </p>
 
-    <!-- Section 3 -->
-    <h2>3) End-to-End Flow</h2>
+    <h2>Motor Control and Firmware Development</h2>
     <p>
-      Input S+O → Retrieve similar prior notes and guideline snippets (RAG) → Produce Assessment → Generate Plan → Apply compliance → Render SOAP.
+      The SCARA robot was equipped with <strong>NEMA 17</strong> stepper motors for its joints, driven by <strong style="color: var(--clr-accent)">DRV8825</strong> drivers supporting up to <strong>1/32 microstepping</strong>. I developed firmware for the <strong>STM32</strong> to control the motors, implementing closed-loop control using <strong style="color: var(--clr-accent)">AS5600</strong> magnetic encoders for precise joint positioning. The firmware included <strong style="color: var(--clr-accent)">PID</strong> control algorithms to minimize positional errors and ensure smooth motion.
+    </p>
+    <p>
+      I also created a custom <strong style="color: var(--clr-accent)">C++</strong> library for the STM32 to handle inverse kinematics calculations, translating <strong>ROS2</strong> trajectory commands into joint-specific motor movements.
     </p>
 
-    <figure>
-      <img src="../../assets/cholesterol/doctor/so+ap.jpg" alt="Doctor Agent pipeline"/>
-      <figcaption>Pipeline: S+O → RAG → A → P → Compliance → final SOAP note.</figcaption>
-    </figure>
+    <h2>Simulation and Testing</h2>
+    <p>
+      Extensive simulations were conducted using <strong style="color: var(--clr-accent)">CoppeliaSim</strong> to validate the robot’s kinematics and control algorithms. I modeled the SCARA robot in <strong>CoppeliaSim</strong>, integrating it with <strong>ROS2</strong> to test motion planning and obstacle avoidance. This simulation-driven approach reduced development time and ensured robust performance before hardware deployment.
+    </p>
+    <img class="hero-img" src="../../assets/scara-ros2-sim.png" alt="SCARA Robot Simulation in CoppeliaSim" />
 
-    <div class="two-col">
-      <figure>
-        <img src="../../assets/cholesterol/doctor/guide-comply.jpg" alt="Guideline compliance flow"/>
-        <figcaption>Compliance layer adjusts A+P to align with provider-specific rules on dosing, contraindications, and follow-up intervals.</figcaption>
-      </figure>
-      <figure>
-        <img src="../../assets/cholesterol/doctor/assess.jpg" alt="Assessment Agent diagram"/>
-        <figcaption>Assessment Agent: Multi-strategy retrieval → LLM ranking of diagnoses → ICD mapping → differentials retained with reasoning.</figcaption>
-      </figure>
-    </div>
+    <h2>Hardware Integration</h2>
+    <p>
+      I designed a custom <strong>PCB</strong> to integrate the <strong>STM32</strong>, motor drivers, and encoder interfaces, ensuring a compact and reliable control system. The PCB supported high-speed communication with the Raspberry Pi via <strong style="color: var(--clr-accent)">UART</strong> and included power management for stable operation under varying loads.
+    </p>
+    <p>
+      The robot’s mechanical design, created using <strong style="color: var(--clr-accent)">SolidWorks</strong>, was optimized for rigidity and precision, with custom end-effectors for pick-and-place tasks. I collaborated with mechanical engineers to align the hardware design with <strong>ROS2</strong> control requirements.
+    </p>
+    <img class="hero-img" src="../../assets/scara-ros2-pcb.png" alt="PCB for SCARA Robot with ROS2" />
 
-    <!-- Section 4 -->
-    <h2>4) Data Platform (Milvus RAG)</h2>
-    <ul class="list-tight">
-      <li>Provider-scoped Milvus collections with embedded notes (MX-Bai embeddings) for semantic retrieval.</li>
-      <li>Top-K note retrieval (10–20 per query) with frequency re-weighting to capture provider-specific ICD patterns.</li>
-      <li>Optional LLM re-ranking on retrieved ICD descriptions enhances precision and context match for Assessment.</li>
+    <h2>Deployment and Performance</h2>
+    <p>
+      The SCARA robot was deployed in a controlled environment, achieving a cycle time of <strong>1.5 seconds</strong> for pick-and-place operations. The <strong>ROS2</strong> system enabled real-time monitoring and dynamic trajectory adjustments, ensuring adaptability to varying task requirements. The robot maintained a repeatability of <strong>±0.1 mm</strong>, meeting industrial standards for precision.
+    </p>
+    <img class="hero-img" src="../../assets/scara-ros2-deploy.png" alt="SCARA Robot Deployment" />
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>High-precision SCARA robot with ±0.1 mm repeatability</li>
+      <li><strong style="color: var(--clr-accent)">ROS2</strong> architecture for modular and scalable robotic control</li>
+      <li>Custom <strong style="color: var(--clr-accent)">STM32</strong> firmware with <strong style="color: var(--clr-accent)">PID</strong> control and inverse kinematics</li>
+      <li>Integration with <strong style="color: var(--clr-accent)">MoveIt</strong> and <strong style="color: var(--clr-accent)">RViz</strong> for motion planning and visualization</li>
+      <li>Simulation in <strong style="color: var(--clr-accent)">CoppeliaSim</strong> for algorithm validation</li>
+      <li>Custom <strong>PCB</strong> design for reliable hardware integration</li>
+      <li>Real-time control at 100 Hz for smooth and accurate operation</li>
     </ul>
 
-    <!-- Section 5 -->
-    <h2>5) Plan Agent (A → P with CPT/GPI)</h2>
     <p>
-      Using confirmed diagnoses, the Plan Agent retrieves similar treatment patterns and generates a comprehensive Plan:
-      <em>Reasoning</em>, <em>Therapy/Plan</em> actions, <em>Procedures</em> (CPT), <em>Medications</em> (GPI with full drug metadata),
-      <em>Referrals</em>, <em>Education</em>, and <em>Follow-Up</em>.
+      This project at Esforge Pvt Ltd highlighted my expertise in <strong>ROS2</strong>, embedded systems, and robotics, demonstrating my ability to lead the development of a sophisticated robotic system from concept to deployment. It solidified my proficiency in integrating advanced software frameworks with hardware for high-performance industrial automation.
     </p>
-
-    <figure>
-      <img src="../../assets/cholesterol/doctor/plan.jpg" alt="Plan Agent workflow"/>
-      <figcaption>Plan Agent: integrates CPT for procedures, GPI for prescriptions, and structured education/follow-up items.</figcaption>
-    </figure>
-
-    <!-- Section 6 -->
-    <h2>6) Evaluation Highlights</h2>
-    <p>
-      Initial runs using <em>Subjective-only</em> inputs missed codes requiring objective exam context (e.g., Z23, I10, Z11.*).
-      Adding Objective data significantly improved accuracy in Assessment and Plan. Remaining errors stemmed from provider-specific templates and differential ambiguities.
-    </p>
-
-    <figure>
-      <img src="../../assets/cholesterol/doctor/eval.jpg" alt="Evaluation: Subjective vs Subjective+Objective"/>
-      <figcaption>Adding Objective data boosted Assessment and Plan accuracy; remaining mismatches relate to note format variations.</figcaption>
-    </figure>
-
-    <!-- Section 7 -->
-    <h2>7) CureBot (Conversational Surface)</h2>
-    <p>
-      <strong>CureBot</strong> is a conversational interface that intelligently routes user intent:
-      <span class="metric">Assessment Agent</span> for diagnosis reasoning,
-      <span class="metric">Medical QA</span> via CureDoc guideline packs,
-      or <span class="metric">Plan Generation</span>.
-      If no path applies, it classifies the request as out-of-scope to avoid hallucinations. A curated QA dataset improves reliability.
-    </p>
-
- 
-
-    <!-- Section 8 -->
-    <h2>8) Why This Design Works</h2>
-    <ul class="list-tight">
-      <li><strong>Clinician-like flow:</strong> S+O → A → P mirrors how doctors reason, reducing brittleness and improving interpretability.</li>
-      <li><strong>Stable coding:</strong> Separating diagnosis naming from ICD assignment increases reproducibility and code accuracy.</li>
-      <li><strong>Guideline compliance:</strong> The compliance agent enforces adherence to dosing, contraindication, and follow-up guidelines.</li>
-      <li><strong>Localized intelligence:</strong> Provider-scoped Milvus RAG captures real-world practice nuances rather than generic textbook behavior.</li>
-    </ul>
-
   </article>
 
-  <!-- Footer -->
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-
-  <script src="../../script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

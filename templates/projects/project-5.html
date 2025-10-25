@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Interview Bot · Multimodal AI System · Muhammad Sheraz</title>
-  <link rel="stylesheet" href="../../styles.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protein Bars Pressing Machine · Obaid Tanveer</title>
+  <link rel="stylesheet" href="../../styles.css" />
   <style>
-    .project-page p strong { color: var(--clr-accent); }
-    .title-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:1rem; }
-    .title-row h1 { margin:0; line-height:1; }
-    figure { margin:1rem 0; }
-    figure img { width:100%; border-radius:.6rem; }
-    figure figcaption { font-size:.9rem; opacity:.8; margin-top:.35rem; }
-    .callout { padding:.9rem 1rem; border-radius:.6rem; background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.3); }
-    .two-col { display:grid; grid-template-columns:1fr; gap:1rem; }
-    @media (min-width: 900px) { .two-col { grid-template-columns: 1fr 1fr; } }
-    .list-tight li { margin-bottom:.35rem; }
-    .metric { display:inline-block; padding:.3rem .6rem; border-radius:.4rem; background:rgba(125,255,200,.08); border:1px solid rgba(125,255,200,.3); margin:.15rem .25rem .15rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .project-page p strong {
+      color: var(--clr-accent); /* Matches the theme's orange accent */
+    }
+    .title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline; /* Aligns items by their baseline */
+      margin-bottom: 1rem;
+    }
+    .title-row h1 {
+      margin: 0; /* Reset default margin on h1 */
+      line-height: 1; /* Ensure consistent line height */
+    }
+    .btn {
+      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
+      font-size: 1rem;
+      line-height: 1; /* Match the line height of the title */
+      display: inline-flex;
+      align-items: center; /* Center the button text vertically */
+    }
   </style>
 </head>
 <body>
   <div class="bg"></div>
-
   <nav class="nav glass container">
-    <span class="logo">Muhammad Sheraz</span>
+    <span class="logo">Obaid Tanveer</span>
     <ul class="nav__links">
       <li><a href="../../index.html">Home</a></li>
       <li><a href="../../index.html#projects" class="active">Projects</a></li>
@@ -36,152 +44,77 @@
 
   <article class="project-page container glass">
     <div class="title-row">
-      <h1>Interview Bot — Multimodal Conversational AI System</h1>
-      <!-- Optional: link to demo or repo -->
-      <!-- <a class="btn" href="YOUR_DEMO_LINK" target="_blank">View Demo ↗</a> -->
+      <h1>Protein Bars Pressing Machine</h1>
+      <a class="btn" href="https://github.com/obaidtanveer/protein-bars-pressing-machine" target="_blank">View Code ↗</a>
     </div>
-    <p class="tags">Multimodal AI · LLM Agents · Whisper STT · Kokoro TTS · LiveKit · AWS Bedrock · Vision Models · Python · FFMPEG</p>
+    <p class="tags">ROBOTICS · RPI-PICO · ESP32</p>
+    
+    <p>
+      During my tenure at <strong>Esforge Pvt Ltd</strong>, I worked on the development of a <strong>Protein Bars Pressing Machine</strong>, where I was responsible for the complete embedded firmware development. This project showcased a blend of robotics, embedded systems, and IoT, enabling the automated production of protein bars with high efficiency and precision.
+    </p>
+
+    <h2>Project Overview</h2>
+    <p>
+      The Protein Bars Pressing Machine was designed to automate the production of protein bars, capable of pressing and producing <strong>75 protein bars per minute</strong>. The machine operates by automatically filling slots or cavities with protein bar mixture, pressing them into shape, and then pushing the finished bars out—all within a minute. This high-speed operation required precise motor control, reliable communication between components, and a robust design to ensure durability and safety.
+    </p>
+    <img class="hero-img" src="../../assets/protien-press.JPEG" alt="Protein Bars Pressing Machine" />
+
+    <h2>System Architecture</h2>
+    <p>
+      The system utilized a dual-controller architecture with a <strong>Raspberry Pi Pico (RPI Pico)</strong> as the primary motor controller and an <strong>ESP32</strong> for data collection and cloud communication. The RPI Pico handled the control of <strong>NEMA 34 high-torque stepper motors</strong> using its Programmable I/O (PIO) capabilities, while the ESP32, programmed using the <strong>Arduino framework</strong>, managed Wi-Fi communication to send operational data to the cloud for monitoring and analytics.
+    </p>
+    <p>
+      Communication between the RPI Pico and ESP32 was facilitated through a custom <strong>UART driver</strong> I developed, ensuring reliable and efficient data exchange. This setup allowed for seamless coordination between motor control and data logging functionalities.
+    </p>
+
+    <h2>Motor Control and Firmware Development</h2>
+    <p>
+      The machine employed <strong>NEMA 34 stepper motors</strong> paired with specialized stepper drivers supporting up to <strong>512 microstepping</strong>. This high level of microstepping ensured precise and smooth motor movements, critical for the pressing and ejection processes. I developed a custom <strong>stepper control library</strong> using the RPI Pico's PIO, which allowed for fine-grained control over the motors' speed, direction, and position.
+    </p>
+    <p>
+      The firmware for the RPI Pico was written to handle real-time motor control, ensuring the machine could fill, press, and eject protein bars in a continuous cycle. The PIO-based library optimized the performance of the stepper motors, reducing latency and improving the overall efficiency of the machine.
+    </p>
+
+    <h2>IoT Integration and Cloud Communication</h2>
+    <p>
+      The ESP32 was integrated to collect operational data, such as production rate, motor status, and error logs, and transmit this data over Wi-Fi to a cloud server. Programmed using the Arduino framework, the ESP32 provided a user-friendly interface for cloud connectivity. This IoT integration allowed for remote monitoring and diagnostics, enabling Esforge Pvt Ltd to track the machine's performance in real-time and address any issues promptly.
+    </p>
+
+    <h2>Hardware Design: PCB and Control Box</h2>
+    <p>
+      In addition to firmware development, I designed the <strong>PCB</strong> for the machine, which integrated the motor drivers, power supplies, and communication modules into a single board. The PCB was designed to be compact yet robust, ensuring reliable operation under the machine's high-speed conditions.
+    </p>
+    <img class="hero-img" src="../../assets/protien-press-pcg.JPEG" alt="Back Side of the PCB for Protein Bars Pressing Machine" />
+    <p>
+      To house the electronics, I also designed a <strong>waterproof control box</strong> that contained the PCB, motor drivers, power supplies, and all necessary connections. The control box was engineered to protect the components from environmental factors, ensuring the machine's longevity and safety during operation.
+    </p>
+    <img class="hero-img" src="../../assets/protien-press-control-box.JPEG" alt="Control Box of the Protein Bars Pressing Machine" />
+
+    <h2>Deployment and Performance</h2>
+    <p>
+      During deployment, the machine was set up with all components integrated, as shown in the assembly image below. The control box was mounted securely, and the system was tested to ensure it met the production target of 75 protein bars per minute. The machine performed flawlessly, automating the entire process from filling to ejection, and the IoT features provided valuable insights into its operation.
+    </p>
+    <img class="hero-img" src="../../assets/protien-press-asm.JPEG" alt="Protein Bars Pressing Machine During Deployment with Control Box" />
+
+    <h2>Technical Features</h2>
+    <ul>
+      <li>High-speed production: 75 protein bars per minute</li>
+      <li>Precise motor control using NEMA 34 stepper motors with 512 microstepping</li>
+      <li>Custom stepper control library using RPI Pico's PIO</li>
+      <li>Custom UART learnership communication between RPI Pico and ESP32 via a custom UART driver</li>
+      <li>IoT integration with ESP32 for cloud connectivity and remote monitoring</li>
+      <li>Custom-designed PCB for integrated electronics</li>
+      <li>Waterproof control box for environmental protection</li>
+    </ul>
 
     <p>
-      The <strong>Interview Bot</strong> is a fully autonomous <strong>multimodal AI agent</strong> that conducts professional interviews via
-      <em>audio, video, and text</em>. It leverages <strong>LLM reasoning</strong>, <strong>speech synthesis</strong>, and <strong>computer vision</strong>
-      to create a seamless interviewer experience — complete with real-time interaction, transcription, and behavioral analysis.
-      The system was designed to be modular, scalable, and adaptable for corporate HR, medical, or educational assessments. :contentReference[oaicite:0]{index=0}
+      This project at Esforge Pvt Ltd was a comprehensive endeavor, combining embedded systems, robotics, IoT, and hardware design to create an efficient and reliable protein bars pressing machine. It demonstrated my ability to manage a complex system from firmware development to hardware design and deployment.
     </p>
-
-    <h2>1) Problem Statement</h2>
-    <p class="callout">
-      Traditional digital interviews rely only on form-based questionnaires or scripted video prompts. The goal here was to
-      create an <strong>interactive, human-like interviewer</strong> capable of understanding audio and visual cues,
-      conducting dynamic conversations, and analyzing both verbal and non-verbal signals for objective assessment.
-    </p>
-
-    <h2>2) System Goals</h2>
-    <ul class="list-tight">
-      <li>Build a <strong>multimodal conversational system</strong> capable of audio, text, and video interaction.</li>
-      <li>Enable <strong>real-time interviews</strong> using LiveKit for streaming and low-latency voice feedback.</li>
-      <li>Develop an <strong>automated post-processing agent</strong> that evaluates responses, emotions, and behaviors.</li>
-      <li>Ensure modular design — interchangeable <em>LLMs, STT, TTS</em>, and <em>vision modules</em>.</li>
-    </ul>
-
-    <h2>3) Tech Stack</h2>
-    <ul class="list-tight">
-      <li><strong>Core:</strong> Python, JavaScript, CSS, HTML</li>
-      <li><strong>LLMs:</strong> LLaMA via AWS Bedrock, Qwen Omni 2.5 & Qwen 3:32B (for multimodal reasoning)</li>
-      <li><strong>Speech:</strong> Whisper API (STT), Kokoro TTS API (low-latency voice synthesis)</li>
-      <li><strong>Realtime:</strong> LiveKit (WebRTC) for streaming audio/video</li>
-      <li><strong>Vision:</strong> YOLOv8s, ViT, Emonet, MediaPipe Face Mesh (for gaze and emotion)</li>
-      <li><strong>Utilities:</strong> FFMPEG for video/audio extraction, MongoDB for logs, AWS Plugins for orchestration</li>
-    </ul>
-
-    <!-- SYSTEM ARCHITECTURE IMAGE -->
-    <h2>4) System Architecture</h2>
-    <figure>
-      <img src="../../assets/cholesterol/interview-arc.jpg" alt="Interview Bot system architecture"/>
-      <figcaption>
-        End-to-end architecture integrating LiveKit (WebRTC) with STT (Whisper), LLM (LLaMA/Qwen), and TTS (Kokoro).  
-        The output stream is synchronized for real-time response and recorded locally for post-processing analytics.
-      </figcaption>
-    </figure>
-
-    <h2>5) Architectural Approach</h2>
-    <p>
-      We explored two main paradigms:
-    </p>
-    <ul class="list-tight">
-      <li><strong>Cascaded Pipeline:</strong> STT → LLM → TTS, sequential processing for modular control and debugging.</li>
-      <li><strong>End-to-End (Omni Models):</strong> Direct audio-text reasoning for lower latency but less interpretability.</li>
-    </ul>
-    <p>
-      The final design used a <strong>hybrid cascaded pipeline</strong> to balance transparency, latency, and model flexibility.
-    </p>
-
-    <h2>6) LiveKit Integration</h2>
-    <p>
-      <strong>LiveKit</strong> was used to manage all voice and video sessions.  
-      We replaced Deepgram/ElevenLabs-style plugins with <em>custom STT and TTS endpoints</em> that mirror their APIs for compatibility.  
-      This allowed full control over transcription, response timing, and latency optimization.  
-      The bot joins a LiveKit meeting as a participant — listening, transcribing, and speaking dynamically using Kokoro TTS.
-    </p>
-
-    <h2>7) Interview Flow</h2>
-    <ul class="list-tight">
-      <li><strong>1️⃣ Greeting:</strong> Bot starts with a friendly introduction and explains the interview structure.</li>
-      <li><strong>2️⃣ Dynamic Questioning:</strong> The LLM adjusts follow-ups based on candidate’s responses and tone.</li>
-      <li><strong>3️⃣ Non-Verbal Observation:</strong> Vision modules monitor face, gaze, and expressions in parallel.</li>
-      <li><strong>4️⃣ Summarization:</strong> At the end, responses and visuals are sent for analytics and scoring.</li>
-    </ul>
-
-    <h2>8) Key Design Components</h2>
-    <div class="two-col">
-      <div>
-        <h3>STT Module</h3>
-        <ul class="list-tight">
-          <li>Uses a Whisper-compatible endpoint for real-time transcription.</li>
-          <li>Handles punctuation restoration and speaker diarization.</li>
-          <li>Optimized to maintain <strong>&lt;1s delay</strong> for live interaction.</li>
-        </ul>
-
-        <h3>LLM Dialogue Engine</h3>
-        <ul class="list-tight">
-          <li>Backed by LLaMA/Qwen multimodal models.</li>
-          <li>Understands context, HR guidelines, and follow-up structure.</li>
-          <li>Prompts engineered for <strong>politeness, professionalism, and empathy</strong>.</li>
-        </ul>
-      </div>
-      <div>
-        <h3>TTS Module</h3>
-        <ul class="list-tight">
-          <li>Powered by Kokoro API, outperforming other TTS systems (ElevenLabs, Nari, ChatterBox) in latency and pronunciation.</li>
-          <li>Supports multiple voice profiles and emotion intensity levels.</li>
-        </ul>
-
-        <h3>Frontend & Logging</h3>
-        <ul class="list-tight">
-          <li>Built using LiveKit Meet frontend templates.</li>
-          <li>Stores interview recordings locally using a custom Egress handler (bypassing AWS-only storage).</li>
-          <li>Logs all LLM messages and confidence metrics for audit trails.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- POST-PROCESSING ARCHITECTURE IMAGE -->
-    <h2>9) Post-Processing Architecture</h2>
-    <figure>
-      <img src="../../assets/cholesterol/interview-post-arc.jpg" alt="Post-Processing architecture of Interview Bot"/>
-      <figcaption>
-        Post-processing workflow: Recorded session → video frames & audio extraction → analysis modules (face verification, object detection,
-        gaze tracking, emotion/confidence detection, transcription & QA extraction) → integrated scoring pipeline for HR evaluation.
-      </figcaption>
-    </figure>
-
-    <h2>10) Post-Processing Modules</h2>
-    <ul class="list-tight">
-      <li><strong>Face Verification:</strong> Face encodings with cosine similarity for identity validation.</li>
-      <li><strong>Object Detection:</strong> YOLOv8s filters “person” class and tracks movement consistency.</li>
-      <li><strong>Gaze Detection:</strong> MediaPipe landmarks calculate pupil ratios → classify gaze (center/left/right/up/down).</li>
-      <li><strong>Emotion & Confidence:</strong> ViT + Emonet → detect emotions and valence-arousal → map to confidence levels.</li>
-      <li><strong>Transcript Generation:</strong> Whisper large-v3 → cleaned .txt and .srt files with timestamps.</li>
-      <li><strong>Q/A Extraction:</strong> Extracts question–answer pairs and aligns timestamps.</li>
-      <li><strong>Red Flag Detector:</strong> Scans transcript for HR-specified alert phrases and ethical violations.</li>
-      <li><strong>Summary Generator:</strong> Combines non-verbal and verbal metrics into an overall performance report.</li>
-    </ul>
-
-    <h2>11) Results & Evaluation</h2>
-    <ul class="list-tight">
-      <li><strong>96% accuracy</strong> in detecting intent and producing relevant responses.</li>
-      <li>Average latency reduced by <strong>40%</strong> vs plugin-based frameworks.</li>
-      <li>Video analytics achieved robust emotion tracking with consistent gaze mapping.</li>
-      <li>Comprehensive evaluation reports auto-generated for HR review.</li>
-    </ul>
-
- 
-
   </article>
 
   <footer class="footer container">
-    © <span id="year"></span> Muhammad Sheraz
+    © <span id="year"></span> Obaid Tanveer
   </footer>
-  <script src="../../script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
