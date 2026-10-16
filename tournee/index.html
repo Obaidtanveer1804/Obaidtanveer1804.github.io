@@ -1035,7 +1035,7 @@ svg { display: block; }
     <div class="busy-bar"><i id="busyBar"></i></div></div>
 </div>
 
-<input type="file" id="csvInput" accept=".csv,text/csv,text/plain" hidden>
+<input type="file" id="csvInput" accept=".csv,.tsv,.txt,.xlsx,.xlsm,.xls,.ods,.pdf,text/csv,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,application/vnd.oasis.opendocument.spreadsheet" hidden>
 
 <script>/* @preserve
  * Leaflet 1.9.3, a JS library for interactive maps. https://leafletjs.com
@@ -1454,99 +1454,288 @@ const Optimizer = (() => {
 })();
 
 
-/* csv.js — read a delivery-list CSV (Spoke / Client / No. / Street / Code / Notes / Paper …) into stops.
-   Tolerant: ; , or tab separators, quoted fields, French or English headers, Excel's Windows-1252 export. */
+/* importer.js — turn a delivery list (CSV, Excel, ODS or PDF) into stops.
+   1. Read the file into a table of text cells (format specific).
+   2. Find the header row (it may not be the first row) and map columns by name, French or English.
+   3. Columns without a recognisable header are guessed from their content (house numbers, streets, city...).
+   4. Rows sharing house number + street + city become one stop. */
 "use strict";
 
-const CsvImport = (() => {
+const Importer = (() => {
+  const DEFAULT_CITY = "Besançon";
+  const DEFAULT_POSTCODE = "25000";
+  const LIBS = {
+    xlsx: ["lib/xlsx.full.min.js", "https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"],
+    pdf: ["https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/legacy/build/pdf.min.js"],
+    pdfWorker: "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/legacy/build/pdf.worker.min.js",
+  };
+
+  /* Exact header names (normalised: lower case, no accents, no ° or trailing dot). */
   const HEADER_ALIASES = {
-    seq: ["spoke", "ordre", "order", "seq", "sequence", "tournee", "rang", "#"],
-    client: ["client", "nom", "name", "abonne", "destinataire"],
-    number: ["no", "n", "num", "numero", "number", "nr", "no."],
-    street: ["street", "rue", "voie", "adresse", "address", "addr"],
-    code: ["code / complement", "code/complement", "code", "complement", "digicode", "acces"],
-    notes: ["notes", "note", "remarque", "remarques", "commentaire", "commentaires", "comment", "info"],
-    paper: ["paper", "journal", "titre", "publication", "produit", "papers"],
+    seq: ["spoke", "ordre", "order", "seq", "sequence", "tournee", "rang", "#", "ordre de passage", "position"],
+    client: ["client", "clients", "nom", "name", "abonne", "abonnes", "destinataire", "nom client", "nom du client", "customer", "nom prenom", "nom et prenom"],
+    number: ["no", "n", "num", "numero", "number", "nr", "house number", "house no", "street number", "numero de rue",
+      "n de rue", "n rue", "num rue", "numero voie", "n voie", "num voie", "numero de voie", "no rue"],
+    street: ["street", "rue", "voie", "adresse", "address", "addr", "street name", "nom de rue", "nom de la rue", "nom de voie",
+      "libelle voie", "libelle de voie", "adresse 1", "adresse1", "ligne adresse", "address line 1", "rue / voie"],
+    city: ["city", "ville", "commune", "localite", "town"],
+    postcode: ["postcode", "cp", "code postal", "zip", "zip code", "postal code"],
+    code: ["code / complement", "code/complement", "code", "complement", "digicode", "acces", "code acces", "code porte",
+      "complement d adresse", "complement adresse", "adresse 2", "address line 2", "batiment"],
+    notes: ["notes", "note", "remarque", "remarques", "commentaire", "commentaires", "comment", "comments", "info", "infos", "observations"],
+    paper: ["paper", "papers", "journal", "journaux", "titre", "titres", "publication", "produit", "produits", "magazine"],
     status: ["status", "statut", "etat"],
     lat: ["lat", "latitude"],
     lon: ["lon", "lng", "long", "longitude"],
-    postcode: ["postcode", "cp", "code postal", "zip"],
-    city: ["city", "ville", "commune"],
   };
+  const FIELD_LABELS = { client: "Client", number: "House no.", street: "Street", city: "City", postcode: "Postcode",
+    code: "Code / complement", notes: "Notes", paper: "Paper", seq: "Order", status: "Status", lat: "Latitude", lon: "Longitude" };
 
-  /** Decode file bytes: UTF-8 unless that produces replacement characters, then Windows-1252. */
-  async function readFileText(file) {
-    const buffer = await file.arrayBuffer();
+  const STREET_WORDS = /\b(rue|avenue|av|bd|boulevard|chemin|ch|place|pl|quai|passage|impasse|imp|allee|route|rte|square|cours|faubourg|fg|sentier|rond[- ]point|cite|residence|chaussee|promenade|esplanade|voie|montee|ruelle|lotissement)\b/i;
+  const NUMBER_RE = /^\d{1,4}\s?(bis|ter|quater|[a-h])?$/i;
+  const LEADING_NUMBER_RE = /^(\d{1,4}(?:\s?(?:bis|ter|quater|[a-h]))?)\b[\s,]+(.+)$/i;
+
+  /* ------------------------------------------------------------------ readers */
+
+  function loadScript(urls) {
+    const list = Array.isArray(urls) ? urls : [urls];
+    return list.reduce((chain, url) => chain.catch(() => new Promise((resolve, reject) => {
+      const el = document.createElement("script");
+      el.src = url;
+      el.onload = resolve;
+      el.onerror = () => { el.remove(); reject(new Error(`could not load ${url}`)); };
+      document.head.appendChild(el);
+    })), Promise.reject(new Error("start")));
+  }
+
+  /** Decode bytes: UTF-8 unless that produces replacement characters, then Windows-1252 (old Excel CSV). */
+  function decodeText(buffer) {
     const utf8 = new TextDecoder("utf-8").decode(buffer);
     if (!utf8.includes("�")) return utf8.replace(/^﻿/, "");
     return new TextDecoder("windows-1252").decode(buffer);
   }
 
-  function detectDelimiter(firstLine) {
-    const counts = [";", ",", "\t"].map((d) => [d, firstLine.split(d).length - 1]);
+  function detectDelimiter(text) {
+    const sample = text.split(/\r?\n/).slice(0, 15).join("\n");
+    const counts = [";", ",", "\t", "|"].map((d) => [d, sample.split(d).length - 1]);
     counts.sort((a, b) => b[1] - a[1]);
     return counts[0][1] > 0 ? counts[0][0] : ",";
   }
 
-  /** RFC 4180-style parser (quotes, escaped quotes, newlines in quotes). */
-  function parse(text) {
-    const delimiter = detectDelimiter(text.split(/\r?\n/, 1)[0] || "");
+  /** RFC 4180-style CSV parser (quotes, escaped quotes, newlines inside quotes). */
+  function parseCsv(text) {
+    const delimiter = detectDelimiter(text);
     const rows = [];
     let row = [], field = "", inQuotes = false;
     for (let i = 0; i < text.length; i++) {
       const ch = text[i];
       if (inQuotes) {
-        if (ch === "\"") {
-          if (text[i + 1] === "\"") { field += "\""; i++; } else inQuotes = false;
-        } else field += ch;
-      } else if (ch === "\"") inQuotes = true;
+        if (ch === "\"") { if (text[i + 1] === "\"") { field += "\""; i++; } else inQuotes = false; } else field += ch;
+      } else if (ch === "\"" && field.trim() === "") inQuotes = true;
       else if (ch === delimiter) { row.push(field); field = ""; }
       else if (ch === "\n" || ch === "\r") {
         if (ch === "\r" && text[i + 1] === "\n") i++;
         row.push(field); field = "";
-        if (row.some((cell) => cell.trim() !== "")) rows.push(row);
-        row = [];
+        rows.push(row); row = [];
       } else field += ch;
     }
     row.push(field);
-    if (row.some((cell) => cell.trim() !== "")) rows.push(row);
+    rows.push(row);
+    return rows.filter((r) => r.some((c) => String(c).trim() !== ""));
+  }
+
+  async function readSpreadsheet(buffer) {
+    if (!window.XLSX) await loadScript(LIBS.xlsx);
+    const workbook = XLSX.read(new Uint8Array(buffer), { type: "array", cellDates: false });
+    let best = null;
+    for (const name of workbook.SheetNames) {
+      const rows = XLSX.utils.sheet_to_json(workbook.Sheets[name], { header: 1, raw: false, defval: "", blankrows: false })
+        .map((r) => r.map((c) => String(c ?? "")));
+      const score = findHeader(rows).score * 1000 + rows.length;
+      if (!best || score > best.score) best = { name, rows, score };
+    }
+    if (!best) throw new Error("The workbook has no sheets.");
+    return { rows: best.rows, source: `sheet “${best.name}”` };
+  }
+
+  async function readPdf(buffer) {
+    if (!window.pdfjsLib) await loadScript(LIBS.pdf);
+    pdfjsLib.GlobalWorkerOptions.workerSrc = LIBS.pdfWorker;
+    const doc = await pdfjsLib.getDocument({ data: new Uint8Array(buffer) }).promise;
+    const pages = [];
+    for (let p = 1; p <= doc.numPages; p++) {
+      const page = await doc.getPage(p);
+      const viewport = page.getViewport({ scale: 1 });
+      const content = await page.getTextContent();
+      const items = content.items.filter((it) => it.str && it.str.trim()).map((it) => ({
+        str: it.str, x: it.transform[4], y: viewport.height - it.transform[5],
+        w: it.width, h: Math.abs(it.transform[3]) || it.height || 8,
+      }));
+      pages.push({ items });
+    }
+    const rows = pdfPagesToRows(pages);
+    if (!rows.length) throw new Error("No text found in the PDF (is it a scanned image?)");
+    return { rows, source: `${doc.numPages} PDF page${doc.numPages > 1 ? "s" : ""}` };
+  }
+
+  /**
+   * Rebuild table rows from positioned PDF text.
+   * pages: [{ items: [{ str, x, y (top-down), w, h }] }]
+   * The header line fixes the column start positions; every later text item goes into the column it falls in.
+   */
+  function pdfPagesToRows(pages) {
+    const rows = [];
+    let anchors = null;
+    let headerKey = "";
+    for (const page of pages) {
+      for (const line of groupLines(page.items)) {
+        const chunks = mergeChunks(line);
+        const headerScore = chunks.filter((c) => fieldForHeader(c.str)).length;
+        if (headerScore >= 3) {
+          const key = chunks.map((c) => normaliseHeader(c.str)).join("|");
+          if (!anchors || key !== headerKey) {
+            anchors = chunks.map((c) => ({ x: c.x, str: c.str.trim() }));
+            headerKey = key;
+            rows.push(anchors.map((a) => a.str));
+          }
+          continue;
+        }
+        if (!anchors) continue; // title, legend… before the table
+        if (/\bpage\s*\d+\s*(\/|of|sur)\s*\d+\b/i.test(line.map((it) => it.str).join(" "))) continue; // page footer
+        const cells = anchors.map(() => []);
+        for (const item of line) {
+          let col = 0;
+          for (let i = 0; i < anchors.length; i++) if (item.x + 4 >= anchors[i].x) col = i;
+          cells[col].push(item.str.trim());
+        }
+        rows.push(cells.map((parts) => parts.join(" ").replace(/\s+/g, " ").trim()));
+      }
+    }
     return rows;
   }
 
-  function normaliseHeader(text) {
-    return Util.stripAccents(text).toLowerCase().replace(/[°º]/g, "").replace(/\s+/g, " ").trim();
+  function groupLines(items) {
+    const sorted = items.slice().sort((a, b) => a.y - b.y || a.x - b.x);
+    const lines = [];
+    for (const item of sorted) {
+      const tolerance = Math.max(2.5, 0.45 * (item.h || 8));
+      const line = lines[lines.length - 1];
+      if (line && Math.abs(item.y - line.y) <= tolerance) line.items.push(item);
+      else lines.push({ y: item.y, items: [item] });
+    }
+    return lines.map((l) => l.items.sort((a, b) => a.x - b.x));
   }
 
-  function mapHeaders(headerRow) {
-    const columns = {};
-    headerRow.forEach((raw, index) => {
-      const h = normaliseHeader(raw);
-      for (const [field, aliases] of Object.entries(HEADER_ALIASES)) {
-        if (columns[field] !== undefined) continue;
-        if (aliases.includes(h) || aliases.includes(h.replace(/\.$/, ""))) { columns[field] = index; return; }
-      }
+  /** Join items that are close together on a line ("Code" "/" "complement" -> one chunk). */
+  function mergeChunks(line) {
+    const chunks = [];
+    for (const item of line) {
+      const last = chunks[chunks.length - 1];
+      const gap = last ? item.x - (last.x + last.w) : Infinity;
+      if (last && gap < Math.max(6, (item.h || 8) * 0.9)) {
+        last.str += (gap > 0.8 ? " " : "") + item.str;
+        last.w = item.x + item.w - last.x;
+      } else chunks.push({ str: item.str, x: item.x, w: item.w });
+    }
+    return chunks;
+  }
+
+  async function readTable(file) {
+    const name = file.name.toLowerCase();
+    const buffer = await file.arrayBuffer();
+    const head = new Uint8Array(buffer.slice(0, 8));
+    const isPdf = name.endsWith(".pdf") || (head[0] === 0x25 && head[1] === 0x50 && head[2] === 0x44 && head[3] === 0x46);
+    const isZipOrOle = (head[0] === 0x50 && head[1] === 0x4b) || (head[0] === 0xd0 && head[1] === 0xcf);
+    if (isPdf) return { ...(await readPdf(buffer)), kind: "PDF" };
+    if (/\.(xlsx|xlsm|xls|ods)$/.test(name) || isZipOrOle) return { ...(await readSpreadsheet(buffer)), kind: "Spreadsheet" };
+    return { rows: parseCsv(decodeText(buffer)), kind: "CSV", source: "text" };
+  }
+
+  /* ------------------------------------------------------------- interpretation */
+
+  function normaliseHeader(text) {
+    return Util.stripAccents(String(text)).toLowerCase().replace(/[°º]/g, "").replace(/['’_.]/g, " ")
+      .replace(/\s+/g, " ").trim();
+  }
+
+  /** True for cells that are clearly values, not column titles ("RUE DE DOLE", "M JEAN X", "26", long notes). */
+  function looksLikeData(h) {
+    if (/\d/.test(h) || h.length > 32 || h.split(" ").length > 4) return true;
+    if (/^(m|mme|mlle|mle|mr|mrs|ms|monsieur|madame)\s+\S/.test(h)) return true;
+    return !/^(nom|libelle|adresse|numero|n)\b/.test(h) && /\b(rue|avenue|boulevard|chemin|quai|place|impasse|allee|route)\s+(de |du |des |d )?[a-z]{3,}/.test(h);
+  }
+
+  function fieldForHeader(raw) {
+    const h = normaliseHeader(raw);
+    if (!h) return null;
+    for (const [field, aliases] of Object.entries(HEADER_ALIASES)) if (aliases.includes(h)) return field;
+    if (looksLikeData(h)) return null;
+    // Looser rules, number before street so "numero de rue" is a number.
+    if (/^(n|no|num|numero|number|nr)\b|house ?n|numero|street number/.test(h)) return "number";
+    if (/code postal|postal|^cp\b|zip/.test(h)) return "postcode";
+    if (/^code|digicode|complement|batiment/.test(h)) return "code";
+    if (/ville|city|commune|localite/.test(h)) return "city";
+    if (/rue|street|voie|adresse|address/.test(h)) return "street";
+    if (/^note|remarq|comment|observ/.test(h)) return "notes";
+    if (/client|abonn|destinataire|^nom\b|name|customer/.test(h)) return "client";
+    if (/journal|paper|titre|publication|produit|magazine/.test(h)) return "paper";
+    if (/statu|etat/.test(h)) return "status";
+    return null;
+  }
+
+  /** Best header row among the first 40 rows: the one naming the most known columns. */
+  function findHeader(rows) {
+    let best = { index: -1, score: 0 };
+    rows.slice(0, 40).forEach((row, index) => {
+      const fields = new Set(row.map(fieldForHeader).filter(Boolean));
+      const score = fields.size + (fields.has("street") ? 1 : 0);
+      if (score > best.score) best = { index, score };
     });
-    // Looser second pass for headers like "Code / complément d'adresse".
-    headerRow.forEach((raw, index) => {
-      const h = normaliseHeader(raw);
-      if (columns.code === undefined && h.startsWith("code")) columns.code = index;
-      if (columns.notes === undefined && h.startsWith("note")) columns.notes = index;
+    return best.score >= 2 ? best : { index: -1, score: 0 };
+  }
+
+  function mapColumns(headerRow) {
+    const columns = {};
+    (headerRow || []).forEach((raw, index) => {
+      const field = fieldForHeader(raw);
+      if (field && columns[field] === undefined) columns[field] = index;
     });
     return columns;
   }
 
-  /** "12 RUE DE DOLE" -> ["12", "RUE DE DOLE"] when there is no separate number column. */
-  function splitAddress(text) {
-    const match = String(text).trim().match(/^(\d+\s?(?:bis|ter|[a-z])?)\b[\s,]+(.*)$/i);
-    return match ? [match[1].replace(/\s+/g, "").toUpperCase(), match[2]] : ["", text];
+  const CONTENT_TESTS = {
+    number: (v) => NUMBER_RE.test(v),
+    street: (v) => STREET_WORDS.test(v) && /[a-z]{3}/i.test(v),
+    city: (v) => /besan[cç]on/i.test(v),
+    postcode: (v) => /^\d{5}$/.test(v),
+    client: (v) => /^(m|mme|mlle|mle|mr|mrs|ms|monsieur|madame|dr|ste|sarl|sas)\.?\s+\S/i.test(v),
+  };
+
+  /** Guess columns with no recognisable header from what their cells look like. */
+  function inferColumns(rows, columns) {
+    const width = Math.max(0, ...rows.map((r) => r.length));
+    const used = new Set(Object.values(columns));
+    const sample = rows.slice(0, 300);
+    for (const field of ["street", "number", "client", "postcode", "city"]) {
+      if (columns[field] !== undefined) continue;
+      let best = { col: -1, ratio: 0 };
+      for (let col = 0; col < width; col++) {
+        if (used.has(col)) continue;
+        const values = sample.map((r) => String(r[col] ?? "").trim()).filter(Boolean);
+        if (values.length < Math.min(3, sample.length)) continue;
+        const ratio = values.filter(CONTENT_TESTS[field]).length / values.length;
+        if (ratio > best.ratio) best = { col, ratio };
+      }
+      if (best.ratio >= 0.45) { columns[field] = best.col; used.add(best.col); columns[`${field}Guessed`] = true; }
+    }
+    return columns;
   }
 
   /** Paper label written after the client's name, e.g. "M PAUL EXEMPLE   Monde". */
   function paperFromName(name) {
     const found = Round.PAPERS.find((p) => p.key !== "est" && p.test.test(name));
     if (!found) return { name, paper: "" };
-    const cleaned = name.replace(new RegExp(`\\s*${found.label.replace(/^Le /, "")}\\s*$`, "i"), "")
-      .replace(/\s*(paris match|monde|elle|marianne)\s*$/i, "").trim();
+    const cleaned = name.replace(/\s*(paris\s*match|le\s*monde|monde|elle|marianne)(\s*\+\s*l.est)?\s*$/i, "").trim();
     return { name: cleaned || name, paper: found.label };
   }
 
@@ -1557,62 +1746,99 @@ const CsvImport = (() => {
     const appt = apptMatch ? apptMatch[1] : "";
     if (apptMatch) rest = rest.replace(apptMatch[0], "");
     rest = rest.replace(/^[\s,;\-·]+|[\s,;\-·]+$/g, "");
-    const codeMatch = rest.match(/\b(?:code|digicode)\s*:?\s*#?\s*(.+)$/i);
+    const codeMatch = rest.match(/\b(?:code|digicode)\s*:?\s*\(?\s*#?\s*(\d{3,6}[a-z]?(?:\s*\+\s*entr[ée]e)?(?:\s*\/\s*\d{3,6}[a-z]?)?)\s*\)?/i);
     if (codeMatch) {
-      const [code, ...after] = codeMatch[1].split(/[,;]/);
-      const extra = [rest.slice(0, codeMatch.index), ...after].map((x) => x.replace(/^[\s,;]+|[\s,;]+$/g, "")).filter(Boolean).join(", ");
-      return { code: code.trim(), appt, extra };
+      const extra = [rest.slice(0, codeMatch.index), rest.slice(codeMatch.index + codeMatch[0].length)]
+        .map((x) => x.replace(/^[\s,;\-·]+|[\s,;\-·]+$/g, "")).filter(Boolean).join(", ");
+      return { code: codeMatch[1].trim(), appt, extra };
     }
     if (/^#?\d{3,5}[A-Z]?$/i.test(rest)) return { code: rest.replace("#", ""), appt, extra: "" };
     return { code: "", appt, extra: rest };
   }
 
-  /**
-   * Turn CSV text into raw stops (one per building) in list order.
-   * Returns { stops, rowCount, problems, defaults: {postcode, city} }.
-   */
-  function toStops(text) {
-    const rows = parse(text);
-    if (rows.length < 2) throw new Error("The file has no data rows.");
-    const columns = mapHeaders(rows[0]);
-    if (columns.street === undefined && columns.client === undefined) {
-      throw new Error("Could not find a Street/Rue column. Use the sample CSV headers.");
+  /** Normalise one row's address parts. Handles a full address in one cell and city/postcode glued to the street. */
+  function addressParts(numberCell, streetCell, cityCell, postcodeCell) {
+    let number = String(numberCell || "").trim().replace(/^(\d+)\.0+$/, "$1");
+    let street = String(streetCell || "").trim();
+    let city = String(cityCell || "").trim();
+    let postcode = String(postcodeCell || "").trim().replace(/\.0+$/, "");
+
+    // "26 rue X" typed in the number column, street column empty.
+    if (!street && LEADING_NUMBER_RE.test(number)) { street = number; number = ""; }
+    // City/postcode at the end of the street: "rue X, 25000 Besançon" / "rue X BESANCON".
+    const cityMatch = street.match(/[,\s]+(\d{5})?\s*(besan[cç]on)\s*$/i);
+    if (cityMatch) { if (!postcode && cityMatch[1]) postcode = cityMatch[1]; if (!city) city = cityMatch[2]; street = street.slice(0, cityMatch.index); }
+    const pcMatch = street.match(/[,\s]+(\d{5})\s*$/);
+    if (pcMatch) { if (!postcode) postcode = pcMatch[1]; street = street.slice(0, pcMatch.index); }
+    // Number at the start of the street when there is no separate number.
+    if (!number) {
+      const lead = street.match(LEADING_NUMBER_RE);
+      if (lead) { number = lead[1]; street = lead[2]; }
+    } else if (street.startsWith(`${number} `)) {
+      street = street.slice(number.length + 1);
     }
-    const cell = (row, field) => (columns[field] === undefined ? "" : String(row[columns[field]] ?? "").trim());
+    number = number.replace(/\s+/g, " ").toUpperCase().replace(/^(\d+) ([A-H])$/, "$1$2");
+    street = street.replace(/^[,\s]+|[,\s]+$/g, "");
+    if (!city || /besan[cç]on/i.test(city)) { city = DEFAULT_CITY; if (!postcode) postcode = DEFAULT_POSTCODE; }
+    return { number, street, city, postcode };
+  }
+
+  /**
+   * Interpret a table. Returns { stops, rowCount, problems, columns, headerIndex }.
+   * Stops are in list order; each has { id, key, number, street, city, postcode, lat, lon, clients[] }.
+   */
+  function interpret(rows) {
+    const header = findHeader(rows);
+    const headerRow = header.index >= 0 ? rows[header.index] : null;
+    const dataRows = rows.slice(header.index + 1);
+    const columns = inferColumns(dataRows, mapColumns(headerRow));
+    if (columns.street === undefined) {
+      throw new Error("Couldn't find the street/address column. Check the file has a header like “Street”, “Rue” or “Adresse”.");
+    }
+    const headerNorm = headerRow ? headerRow.map(normaliseHeader).join("|") : "";
+    const cell = (row, field) => (columns[field] === undefined ? "" : String(row[columns[field]] ?? "").replace(/\s+/g, " ").trim());
+
     const byKey = new Map();
     const problems = [];
     let rowCount = 0;
-    let defaults = { postcode: "25000", city: "Besançon" };
+    let lastClient = null;
 
-    rows.slice(1).forEach((row, i) => {
-      let number = cell(row, "number");
-      let street = cell(row, "street");
-      if (!number && street) [number, street] = splitAddress(street);
+    dataRows.forEach((row, i) => {
+      if (headerRow && row.map(normaliseHeader).join("|") === headerNorm) return; // header repeated on a new page
+      const parts = addressParts(cell(row, "number"), cell(row, "street"), cell(row, "city"), cell(row, "postcode"));
       const rawName = cell(row, "client");
-      if (!street) { if (rawName) problems.push(`Row ${i + 2}: no street for ${rawName}`); return; }
-      rowCount += 1;
-      if (cell(row, "postcode")) defaults = { postcode: cell(row, "postcode"), city: cell(row, "city") || defaults.city };
 
+      if (!parts.street || (!rawName && !parts.number && !STREET_WORDS.test(parts.street))) {
+        // A wrapped line from a PDF: extra notes or code for the previous client.
+        const extra = [cell(row, "code"), cell(row, "notes")].filter(Boolean).join(" ");
+        if (lastClient && extra && !rawName) lastClient.notes = `${lastClient.notes} ${extra}`.trim();
+        else if (rawName) problems.push(`Row ${header.index + i + 2}: no address for ${rawName}`);
+        return;
+      }
+      rowCount += 1;
       const named = cell(row, "paper") ? { name: rawName, paper: cell(row, "paper") } : paperFromName(rawName);
       const seqText = cell(row, "seq");
       const codeParts = splitCode(cell(row, "code"));
-      const notes = [codeParts.extra, cell(row, "notes")].filter(Boolean).join(" · ");
+      const noteParts = splitCode(cell(row, "notes"));
+      if (!codeParts.appt && noteParts.appt) codeParts.appt = noteParts.appt;
       const client = {
         name: Util.nameCase(named.name || "(no name)"),
         paper: named.paper || "L'Est",
         code: codeParts.code,
         appt: codeParts.appt,
-        notes,
+        notes: [codeParts.extra, noteParts.appt ? noteParts.extra : cell(row, "notes")].filter(Boolean).join(" · "),
         status: cell(row, "status"),
         isNew: /^new$/i.test(seqText),
       };
+      lastClient = client;
 
-      const key = Util.addressKey(number, street);
+      const baseKey = Util.addressKey(parts.number, parts.street);
+      const key = parts.city === DEFAULT_CITY ? baseKey : `${baseKey}|${Util.addressKey("", parts.city)}`;
       if (!byKey.has(key)) {
         const lat = parseFloat(cell(row, "lat").replace(",", "."));
         const lon = parseFloat(cell(row, "lon").replace(",", "."));
         byKey.set(key, {
-          id: `s${byKey.size + 1}`, key, number, street,
+          id: `s${byKey.size + 1}`, key, number: parts.number, street: parts.street, city: parts.city, postcode: parts.postcode,
           lat: Number.isFinite(lat) ? lat : NaN, lon: Number.isFinite(lon) ? lon : NaN,
           approx: false, clients: [], listIndex: byKey.size,
         });
@@ -1621,10 +1847,21 @@ const CsvImport = (() => {
     });
 
     if (!byKey.size) throw new Error("No addresses found in the file.");
-    return { stops: [...byKey.values()], rowCount, problems, defaults };
+    const found = Object.keys(FIELD_LABELS).filter((f) => columns[f] !== undefined).map((f) => ({
+      field: FIELD_LABELS[f],
+      from: headerRow && !columns[`${f}Guessed`] ? String(headerRow[columns[f]]).trim() : "guessed from content",
+    }));
+    return { stops: [...byKey.values()], rowCount, problems, columns: found, headerIndex: header.index };
   }
 
-  return { readFileText, parse, toStops, splitCode };
+  /** Read and interpret a file in one go. */
+  async function importFile(file) {
+    const table = await readTable(file);
+    if (!table.rows.length) throw new Error("The file is empty.");
+    return { ...interpret(table.rows), kind: table.kind, source: table.source };
+  }
+
+  return { importFile, readTable, interpret, parseCsv, pdfPagesToRows, splitCode, addressParts, fieldForHeader };
 })();
 
 
@@ -1665,13 +1902,14 @@ const Geocoder = (() => {
     return { lat, lon, score: feature.properties.score, type: feature.properties.type, label: feature.properties.label };
   }
 
-  async function locate(stop, defaults) {
+  async function locate(stop) {
     const key = stop.key || Util.addressKey(stop.number, stop.street);
     if (cache[key]) return { ...cache[key], cached: true };
-    const full = `${stop.number} ${stop.street} ${defaults.postcode} ${defaults.city}`;
-    let hit = await query(full, defaults.postcode);
+    const postcode = stop.postcode || "";
+    const place = `${postcode} ${stop.city || "Besançon"}`.trim();
+    let hit = await query(`${stop.number} ${stop.street} ${place}`, postcode);
     if (!hit || hit.score < 0.5) {
-      const streetOnly = await query(`${stop.street} ${defaults.postcode} ${defaults.city}`, defaults.postcode);
+      const streetOnly = await query(`${stop.street} ${place}`, postcode);
       if (streetOnly) hit = { ...streetOnly, score: Math.min(streetOnly.score, 0.5) };
     }
     if (!hit) return null;
@@ -1684,7 +1922,7 @@ const Geocoder = (() => {
    * Fill lat/lon on every stop that lacks them. onProgress(done, total).
    * Returns { located, approx, failed: [stops] }.
    */
-  async function locateAll(stops, defaults, onProgress) {
+  async function locateAll(stops, onProgress) {
     const todo = stops.filter((s) => !Number.isFinite(s.lat));
     let done = 0, approx = 0;
     const failed = [];
@@ -1693,7 +1931,7 @@ const Geocoder = (() => {
       while (cursor < todo.length) {
         const stop = todo[cursor++];
         try {
-          const found = await locate(stop, defaults);
+          const found = await locate(stop);
           if (found) { stop.lat = found.lat; stop.lon = found.lon; stop.approx = found.approx; if (found.approx) approx++; }
           else failed.push(stop);
         } catch (err) {
@@ -2522,14 +2760,14 @@ const App = (() => {
 
         <div class="group-label">Import</div>
         <div class="list">
-          <button class="row" data-act="import"><span class="r-label">Import a CSV list<small>Same columns as your delivery sheet. Addresses are found automatically.</small></span><span class="r-value">›</span></button>
+          <button class="row" data-act="import"><span class="r-label">Import a list<small>CSV, Excel or PDF. Columns are detected automatically, addresses looked up online.</small></span><span class="r-value">›</span></button>
           <button class="row" data-act="sample"><span class="r-label">Download sample CSV<small>Today's list in the expected format</small></span><span class="r-value">↓</span></button>
         </div>
 
         <div class="group-label">Route order</div>
         <div class="list">
           <button class="row" data-act="optimise"><span class="r-label">Optimise route<small>Shortest loop from the start point, done stops kept</small></span><span class="r-value">${r.optimised ? "On" : "Off"}</span></button>
-          <button class="row" data-act="listorder"><span class="r-label">Use the list's own order<small>As written in the CSV (Spoke order)</small></span><span class="r-value">${r.optimised ? "" : "On"}</span></button>
+          <button class="row" data-act="listorder"><span class="r-label">Use the list's own order<small>As written in the imported file</small></span><span class="r-value">${r.optimised ? "" : "On"}</span></button>
         </div>
 
         <div class="group-label">Start &amp; finish</div>
@@ -2643,9 +2881,9 @@ const App = (() => {
       <article class="card is-next" style="flex-basis:min(92vw,440px)">
         <div class="card-head"><div class="card-title">
           <div class="addr">Import your list</div>
-          <div class="who">CSV from your delivery sheet. It stays on this phone.</div></div></div>
+          <div class="who">CSV, Excel or PDF of your delivery sheet. It stays on this phone.</div></div></div>
         <div class="card-mid"><span class="chip">Client</span><span class="chip">No.</span><span class="chip">Street</span><span class="chip">Code</span><span class="chip">Paper</span></div>
-        <div class="card-foot"><button class="btn primary grow" id="welcomeImport">Import CSV</button><button class="btn" id="welcomeSample">Sample</button></div>
+        <div class="card-foot"><button class="btn primary grow" id="welcomeImport">Import list</button><button class="btn" id="welcomeSample">Sample</button></div>
       </article>`;
     Util.$("welcomeImport").onclick = () => Util.$("csvInput").click();
     Util.$("welcomeSample").onclick = downloadSample;
@@ -2655,7 +2893,7 @@ const App = (() => {
     const html = `
       <div class="settings"><h2>Get started</h2>
         <div class="list">
-          <button class="row" data-act="import"><span class="r-label">Import a CSV list<small>Same columns as your delivery sheet. Addresses are found automatically (needs internet once).</small></span><span class="r-value">›</span></button>
+          <button class="row" data-act="import"><span class="r-label">Import a list<small>CSV, Excel (.xlsx, .xls, .ods) or PDF. Columns are detected automatically; addresses need internet once.</small></span><span class="r-value">›</span></button>
           <button class="row" data-act="sample"><span class="r-label">Download sample CSV<small>Shows the expected columns</small></span><span class="r-value">↓</span></button>
         </div>
         <p class="foot-note">Your list, ticks and address cache are stored only in this browser on this phone.</p>
@@ -2688,28 +2926,73 @@ const App = (() => {
     await adoptRound(round, { optimise: true });
   }
 
+  /** Step 1: read the file and show what was understood before building anything. */
   async function importFile(file) {
+    Busy.show(/\.pdf$/i.test(file.name) ? "Reading PDF…" : "Reading list…");
+    let parsed;
     try {
-      const text = await CsvImport.readFileText(file);
-      const parsed = CsvImport.toStops(text);
+      parsed = await Importer.importFile(file);
+    } catch (err) {
+      Busy.hide();
+      const offline = /load|fetch|network/i.test(err.message) ? " Excel and PDF reading need internet the first time." : "";
+      Toast.show(`Couldn't read ${file.name}: ${err.message}.${offline}`, "", null, 10000);
+      console.error(err);
+      return;
+    }
+    Busy.hide();
+    openImportReview(file, parsed);
+  }
+
+  function openImportReview(file, parsed) {
+    const examples = parsed.stops.slice(0, 3).map((s) =>
+      `<div class="row"><span class="r-label">${Util.escapeHtml(`${s.number} ${Util.streetCase(s.street)}`)}<small>${Util.escapeHtml(s.city)} · ${s.clients.map((c) => Util.escapeHtml(c.name)).join(", ")}</small></span></div>`).join("");
+    const columns = parsed.columns.map((c) =>
+      `<div class="row"><span class="r-label">${c.field}</span><span class="r-value">${Util.escapeHtml(c.from)}</span></div>`).join("");
+    const cityRow = parsed.columns.some((c) => c.field === "City") ? "" :
+      "<div class=\"row\"><span class=\"r-label\">City</span><span class=\"r-value\">Besançon (default)</span></div>";
+    const html = `
+      <div class="settings"><h2>Check the import</h2>
+        <p class="foot-note" style="margin:4px 0 12px">${Util.escapeHtml(file.name)} · ${parsed.kind}${parsed.source ? ` (${Util.escapeHtml(parsed.source)})` : ""}</p>
+        <div class="list">
+          <div class="row"><span class="r-label">${parsed.rowCount} clients at ${parsed.stops.length} addresses${parsed.problems.length ? `<small>${parsed.problems.length} row${parsed.problems.length > 1 ? "s" : ""} skipped (no address)</small>` : ""}</span></div>
+        </div>
+        <div class="sh-actions"><button class="btn primary" data-act="go">Build route</button><button class="btn" data-act="cancel">Cancel</button></div>
+        <div class="group-label">Columns found</div>
+        <div class="list">${columns}${cityRow}</div>
+        <div class="group-label">First addresses</div>
+        <div class="list">${examples}</div>
+        ${parsed.problems.length ? `<p class="foot-note">${parsed.problems.slice(0, 4).map(Util.escapeHtml).join("<br>")}</p>` : ""}
+        <p class="foot-note">Addresses not seen before are looked up online (IGN), then remembered on this phone.</p>
+      </div>`;
+    const body = Sheet.open(html, { label: "Check the import" });
+    body.querySelector("[data-act=go]").onclick = () => { Sheet.close(); buildFromImport(file, parsed); };
+    body.querySelector("[data-act=cancel]").onclick = Sheet.close;
+  }
+
+  /** Step 2: locate addresses, optimise, switch to the new round. */
+  async function buildFromImport(file, parsed) {
+    try {
       const missing = parsed.stops.filter((s) => !Number.isFinite(s.lat)).length;
       if (missing) {
         Busy.show(`Finding ${missing} addresses…`, 0);
-        const result = await Geocoder.locateAll(parsed.stops, parsed.defaults, (done, total) =>
+        const result = await Geocoder.locateAll(parsed.stops, (done, total) =>
           Busy.show(`Finding addresses… ${done}/${total}`, done / total));
         if (result.failed.length) {
           const fallback = state.round ? state.round.start : DEFAULT_START;
-          result.failed.forEach((s, i) => { s.lat = fallback.lat + 0.0003 * (i + 1); s.lon = fallback.lon; s.approx = true; s.clients.forEach((c) => { c.notes = `${c.notes ? c.notes + " · " : ""}ADDRESS NOT FOUND`; }); });
+          result.failed.forEach((s, i) => {
+            s.lat = fallback.lat + 0.0003 * (i + 1); s.lon = fallback.lon; s.approx = true;
+            s.clients.forEach((c) => { c.notes = `${c.notes ? c.notes + " · " : ""}ADDRESS NOT FOUND`; });
+          });
         }
       }
-      const name = `${file.name.replace(/\.[^.]+$/, "")}`;
+      const name = file.name.replace(/\.[^.]+$/, "");
       const start = state.round ? state.round.start : DEFAULT_START;
-      const round = Round.create({ name, source: "csv", start, stops: parsed.stops });
+      const round = Round.create({ name, source: "import", start, stops: parsed.stops });
       await adoptRound(round, { optimise: true });
       const approx = round.stops.filter((s) => s.approx).length;
       const notFound = round.stops.filter((s) => s.clients.some((c) => /ADDRESS NOT FOUND/.test(c.notes))).length;
       const detail = [notFound ? `${notFound} not found` : "", approx ? `${approx} approximate` : ""].filter(Boolean).join(", ");
-      Toast.show(`Imported ${parsed.rowCount} clients · ${round.stops.length} stops${detail ? ` · ${detail}` : ""}`, "", null, 7000);
+      Toast.show(`${round.stops.length} stops ready${detail ? ` · ${detail}` : ""}`, "", null, 7000);
     } catch (err) {
       Busy.hide();
       const offline = err instanceof TypeError ? " Are you online? Address lookup needs internet the first time." : "";
