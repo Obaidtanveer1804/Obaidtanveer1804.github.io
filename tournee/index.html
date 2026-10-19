@@ -8,6 +8,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Tournée</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>/* required styles */
 
 .leaflet-pane,
@@ -775,6 +778,7 @@ svg { display: block; }
   white-space: nowrap;
 }
 .gps-banner.error { color: var(--crit); }
+.nav-banner:not([hidden]) ~ .gps-banner { top: calc(var(--safe-top) + 150px); }
 .dot-pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s infinite ease-in-out; }
 .gps-banner.error .dot-pulse { background: var(--crit); animation: none; }
 @keyframes pulse { 50% { opacity: .25; transform: scale(.7); } }
@@ -977,6 +981,89 @@ svg { display: block; }
 .sw-hyb::after { content: "Rue"; position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 12px; text-shadow: 0 1px 2px #000; }
 .sw-plan { background: linear-gradient(135deg, #f2efe6, #e3e0d6 45%, #ffffff 50%, #d9e7c8); }
 
+/* While the arrival panel is up, it owns the bottom of the screen. */
+.arrived .fab-col { opacity: 0; pointer-events: none; }
+.arrived .leaflet-bottom { bottom: 12px; }
+.fab-col { transition: bottom .25s, opacity .2s; }
+
+/* ---------- Turn-by-turn banner ---------- */
+.nav-banner {
+  position: fixed; z-index: 520; top: calc(var(--safe-top) + 74px); left: 12px; right: 12px;
+  min-height: 66px; border-radius: 18px; padding: 10px 14px 10px 10px; display: flex; align-items: center; gap: 12px;
+  background: #0f5ed7; color: #fff; box-shadow: var(--shadow); animation: dropIn .3s cubic-bezier(.2, .8, .2, 1);
+}
+.nav-banner.straight { background: #3a4452; }
+@keyframes dropIn { from { opacity: 0; transform: translateY(-10px); } }
+.nav-arrow { width: 46px; height: 46px; flex: none; display: grid; place-items: center; border-radius: 13px; background: rgba(255, 255, 255, .16); }
+.nav-arrow svg { width: 32px; height: 32px; fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s; }
+.nav-text { flex: 1; min-width: 0; }
+.nav-dist { font: 800 24px/1.05 var(--font-display); letter-spacing: -0.02em; }
+.nav-instr { font-size: 15px; font-weight: 600; opacity: .95; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+.nav-eta { flex: none; text-align: right; font-size: 12.5px; font-weight: 700; line-height: 1.3; opacity: .92; }
+.nav-eta b { display: block; font: 800 17px/1.1 var(--font-display); }
+
+/* Direction chevrons along the route */
+.chev i { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; display: block; }
+.chev i::before { content: ""; position: absolute; inset: 1px; border: solid #fff; border-width: 2.5px 2.5px 0 0; transform: rotate(-45deg) translate(-1px, 1px); opacity: .95; }
+
+/* ---------- Arrival panel ---------- */
+.arrival {
+  position: fixed; z-index: 700; left: 8px; right: 8px; bottom: calc(var(--safe-bottom) + 8px);
+  max-width: 560px; margin: 0 auto; max-height: min(66dvh, 620px); display: flex; flex-direction: column;
+  background: var(--glass-strong); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px);
+  border-radius: 26px; box-shadow: 0 -6px 40px rgba(0, 0, 0, .32); padding: 4px 14px 12px;
+  transition: transform .25s cubic-bezier(.2, .8, .2, 1), opacity .25s; user-select: text; -webkit-user-select: text;
+}
+.arrival.entering { animation: arriveIn .38s cubic-bezier(.2, .9, .25, 1.15); }
+.arrival.leaving { transform: translateY(110%); opacity: 0; }
+@keyframes arriveIn { from { transform: translateY(105%); } }
+.arr-grab { display: grid; place-items: center; padding: 6px 0 2px; }
+.arr-grab span { width: 38px; height: 5px; border-radius: 3px; background: var(--fg-3); opacity: .45; }
+.arr-top { display: flex; align-items: center; gap: 8px; }
+.arr-badge { display: inline-flex; align-items: center; gap: 7px; font-weight: 800; font-size: 13px; color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 15%, transparent); padding: 5px 10px; border-radius: 999px; }
+.arr-badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); animation: pulse 1.4s infinite; }
+.arr-badge.manual { color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.arr-badge.manual i { background: var(--accent); animation: none; }
+.arr-seq { flex: 1; font-size: 13px; color: var(--fg-2); font-weight: 650; }
+.arr-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--fill); display: grid; place-items: center; }
+.arr-icon svg { width: 16px; height: 16px; fill: none; stroke: var(--fg-2); stroke-width: 2.4; stroke-linecap: round; }
+.arr-addr { margin: 8px 2px 8px; font: 800 26px/1.08 var(--font-display); letter-spacing: -0.02em; text-wrap: balance; }
+.arr-summary { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip.big { height: 32px; font-size: 16px; padding: 0 12px; }
+.chip.sm { height: 23px; font-size: 12px; padding: 0 7px; gap: 5px; }
+.chip.sm i { width: 8px; height: 8px; }
+.arrival .alerts { margin-top: 10px; }
+.arr-clients { list-style: none; margin: 10px 0 0; padding: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; gap: 6px; min-height: 0; flex: 1 1 auto; }
+.arr-client { display: flex; gap: 11px; align-items: flex-start; padding: 10px 10px; border-radius: 14px; background: var(--solid); transition: background .2s, opacity .2s; }
+.arr-client.on { opacity: .55; }
+.arr-client.on .arr-name { text-decoration: line-through; }
+.arr-client.susp .arr-name { color: var(--fg-3); }
+.tick { width: 34px; height: 34px; flex: none; border-radius: 50%; border: 2.5px solid var(--hairline); display: grid; place-items: center; background: transparent; }
+.tick svg { width: 18px; height: 18px; fill: none; stroke: transparent; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.arr-client.on .tick { background: var(--ok); border-color: var(--ok); }
+.arr-client.on .tick svg { stroke: #fff; }
+.arr-client-body { flex: 1; min-width: 0; display: grid; gap: 5px; }
+.arr-name { font-weight: 750; font-size: 17px; line-height: 1.2; }
+.arr-meta { display: flex; flex-wrap: wrap; gap: 5px; }
+.arr-note { font-size: 13.5px; color: var(--fg-2); }
+.arr-nearby { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; font-size: 13px; color: var(--fg-2); font-weight: 600; }
+.chip.nearby { color: var(--accent); }
+.arr-foot { display: flex; gap: 8px; margin-top: 12px; }
+.arr-foot .btn { height: 54px; font-size: 17px; border-radius: 16px; }
+
+/* Toggle switch for settings */
+.switch { position: relative; width: 50px; height: 30px; flex: none; border-radius: 15px; background: var(--fill); transition: background .2s; }
+.switch::after { content: ""; position: absolute; left: 3px; top: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); transition: transform .2s; }
+.switch.on { background: var(--ok); }
+.switch.on::after { transform: translateX(20px); }
+
+/* Round summary */
+.stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.stat-tile { background: var(--solid); border-radius: 14px; padding: 12px; }
+.stat-tile b { display: block; font: 800 24px/1.1 var(--font-display); }
+.stat-tile span { font-size: 12.5px; color: var(--fg-2); font-weight: 600; }
+
 @media (min-width: 700px) {
   .card { flex-basis: 380px; }
   .cards { padding: 0 calc(50vw - 190px); }
@@ -1002,6 +1089,15 @@ svg { display: block; }
   </button>
 </header>
 
+<div class="nav-banner" id="navBanner" hidden aria-live="polite">
+  <div class="nav-arrow" id="navArrow"></div>
+  <div class="nav-text">
+    <div class="nav-dist" id="navDist"></div>
+    <div class="nav-instr" id="navInstr"></div>
+  </div>
+  <div class="nav-eta" id="navEta"></div>
+</div>
+
 <div class="gps-banner glass" id="gpsBanner" hidden>
   <span class="dot-pulse"></span><span id="gpsBannerText">Finding GPS…</span>
 </div>
@@ -1019,6 +1115,8 @@ svg { display: block; }
 </nav>
 
 <section class="cards" id="cards" aria-label="Stops"></section>
+
+<section class="arrival" id="arrival" hidden aria-live="polite" aria-label="Current stop"></section>
 
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
@@ -1138,7 +1236,7 @@ const Store = (() => {
     settings: "tournee.settings.v1",
     geocache: "tournee.geocache.v1",
   };
-  const DEFAULT_SETTINGS = { mapStyle: "hybrid", follow: true, windowSize: 8 };
+  const DEFAULT_SETTINGS = { mapStyle: "hybrid", follow: true, windowSize: 8, arrivalRadius: 25, voice: false, autoComplete: false, directions: true };
 
   function read(key, fallback) {
     try {
@@ -1294,12 +1392,15 @@ const Round = (() => {
 const Optimizer = (() => {
   /** Self-contained solver (no outer references) so it can be shipped to a Worker as source text.
       coords[0] is the depot. Returns the visiting order of indices 1..n-1. */
-  function solveTour(coords, budgetMs, seed) {
+  function solveTour(coords, budgetMs, seed, matrix) {
     const n = coords.length;
     if (n <= 2) return n === 2 ? [1] : [];
     const DEG = Math.PI / 180;
     const dist = new Float64Array(n * n);
-    for (let i = 0; i < n; i++) {
+    if (matrix && matrix.length === n * n) {
+      // Real travel times, symmetrised (the local search assumes A->B == B->A).
+      for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) dist[i * n + j] = (matrix[i * n + j] + matrix[j * n + i]) / 2;
+    } else for (let i = 0; i < n; i++) {
       for (let j = i + 1; j < n; j++) {
         const dLat = (coords[j].lat - coords[i].lat) * DEG;
         const dLon = (coords[j].lon - coords[i].lon) * DEG;
@@ -1409,11 +1510,11 @@ const Optimizer = (() => {
     return best.slice(1, -1);
   }
 
-  function runInWorker(coords, budgetMs, seed) {
+  function runInWorker(coords, budgetMs, seed, matrix) {
     return new Promise((resolve, reject) => {
       let worker;
       try {
-        const source = `${solveTour.toString()}\nonmessage = (e) => postMessage(solveTour(e.data.coords, e.data.budgetMs, e.data.seed));`;
+        const source = `${solveTour.toString()}\nonmessage = (e) => postMessage(solveTour(e.data.coords, e.data.budgetMs, e.data.seed, e.data.matrix));`;
         const url = URL.createObjectURL(new Blob([source], { type: "text/javascript" }));
         worker = new Worker(url);
         URL.revokeObjectURL(url);
@@ -1424,29 +1525,36 @@ const Optimizer = (() => {
       const timer = setTimeout(() => { worker.terminate(); reject(new Error("worker timeout")); }, budgetMs + 15000);
       worker.onmessage = (e) => { clearTimeout(timer); worker.terminate(); resolve(e.data); };
       worker.onerror = (e) => { clearTimeout(timer); worker.terminate(); reject(e); };
-      worker.postMessage({ coords, budgetMs, seed });
+      worker.postMessage({ coords, budgetMs, seed, matrix });
     });
   }
 
-  /** Optimise the round's order in place. Stops flagged "before 7:00" are pulled toward the start
-      by choosing the travel direction that reaches them sooner. */
-  async function optimise(round, budgetMs = 2500) {
+  /**
+   * Optimise the round's order in place (start -> stops -> start).
+   * travel: optional { n, durations } from Router.matrix for [start, ...stops]; otherwise straight lines.
+   * Direction: the one that reaches "before 7:00" stops sooner, else the one with less real riding time.
+   */
+  async function optimise(round, budgetMs = 2500, travel = null) {
     const coords = [round.start, ...round.stops.map((s) => ({ lat: s.lat, lon: s.lon }))];
+    const matrix = travel && travel.n === coords.length ? Array.from(travel.durations) : null;
     let order;
     try {
-      order = await runInWorker(coords, budgetMs, 20261016);
+      order = await runInWorker(coords, budgetMs, 20261016, matrix);
     } catch (err) {
-      order = solveTour(coords, Math.min(budgetMs, 1200), 20261016);
+      order = solveTour(coords, Math.min(budgetMs, 1200), 20261016, matrix);
     }
-    let ids = order.map((i) => round.stops[i - 1].id);
-    const earlyIds = new Set(round.stops.filter((s) => s.flags.early).map((s) => s.id));
-    if (earlyIds.size) {
-      const positionSum = (list) => list.reduce((sum, id, i) => sum + (earlyIds.has(id) ? i : 0), 0);
-      const reversed = ids.slice().reverse();
-      if (positionSum(reversed) < positionSum(ids)) ids = reversed;
+    const reversed = order.slice().reverse();
+    const earlyIdx = new Set(round.stops.map((s, i) => (s.flags.early ? i + 1 : -1)).filter((i) => i > 0));
+    if (earlyIdx.size) {
+      const positionSum = (list) => list.reduce((sum, idx, i) => sum + (earlyIdx.has(idx) ? i : 0), 0);
+      if (positionSum(reversed) < positionSum(order)) order = reversed;
+    } else if (matrix) {
+      const cost = (list) => { let c = 0, prev = 0; for (const idx of list) { c += matrix[prev * coords.length + idx]; prev = idx; } return c + matrix[prev * coords.length]; };
+      if (cost(reversed) < cost(order)) order = reversed;
     }
-    round.order = ids;
+    round.order = order.map((i) => round.stops[i - 1].id);
     round.optimised = true;
+    round.optimisedOn = matrix ? "bike" : "straight";
     return round;
   }
 
@@ -1950,6 +2058,278 @@ const Geocoder = (() => {
 })();
 
 
+/* router.js — street routing for a bike, from the FOSSGIS OSRM server (OpenStreetMap data, free, CORS enabled).
+   route(): directions through a list of points, with turn steps.
+   matrix(): bike travel times between many points, fetched in chunks, used by the optimiser.
+   Every call falls back gracefully: callers get `null` (matrix) or a straight-line route (route). */
+"use strict";
+
+const Router = (() => {
+  const BASE = "https://routing.openstreetmap.de/routed-bike";
+  const ROUTE_TIMEOUT_MS = 9000;
+  const TABLE_TIMEOUT_MS = 15000;
+  const TABLE_CHUNKS = [100, 40];     // coordinates per table request; smaller retry if the server refuses big ones
+  const STRAIGHT_DETOUR = 1.35;
+  const BIKE_MS = 15 / 3.6;           // fallback speed when no router
+
+  let enabled = true;                 // user setting: street directions on/off
+  let available = true;               // flips off after repeated failures, back on after a while
+  let failures = 0;
+  let retryAt = 0;
+
+  const coordString = (points) => points.map((p) => `${p.lon.toFixed(6)},${p.lat.toFixed(6)}`).join(";");
+
+  async function fetchJson(url, timeoutMs) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      if (json.code !== "Ok") throw new Error(json.message || json.code);
+      failures = 0;
+      return json;
+    } catch (err) {
+      failures += 1;
+      if (failures >= 3) { available = false; retryAt = Date.now() + 60000; }
+      throw err;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function usable() {
+    if (!enabled) return false;
+    if (!available && Date.now() > retryAt) { available = true; failures = 0; }
+    return available && navigator.onLine !== false;
+  }
+
+  /** Straight-line stand-in with the same shape as a real route. */
+  function straightRoute(points) {
+    const legs = [];
+    for (let i = 1; i < points.length; i++) {
+      const a = points[i - 1], b = points[i];
+      const distance = Util.distanceM(a.lat, a.lon, b.lat, b.lon) * STRAIGHT_DETOUR;
+      legs.push({
+        distance, duration: distance / BIKE_MS, coords: [[a.lat, a.lon], [b.lat, b.lon]],
+        steps: [{ type: "arrive", modifier: "", name: "", distance: 0, cum: distance, location: [b.lat, b.lon] }],
+      });
+    }
+    return finish(legs, "straight");
+  }
+
+  function finish(legs, source) {
+    return {
+      source, legs,
+      distance: legs.reduce((s, l) => s + l.distance, 0),
+      duration: legs.reduce((s, l) => s + l.duration, 0),
+      createdAt: Date.now(),
+    };
+  }
+
+  /** Directions through points (first = start). Always resolves. */
+  async function route(points) {
+    if (points.length < 2) return finish([], "none");
+    if (!usable()) return straightRoute(points);
+    try {
+      const url = `${BASE}/route/v1/driving/${coordString(points)}?overview=false&geometries=geojson&steps=true&continue_straight=false`;
+      const json = await fetchJson(url, ROUTE_TIMEOUT_MS);
+      const legs = json.routes[0].legs.map((leg) => {
+        const coords = [];
+        const steps = [];
+        let cum = 0;
+        for (const step of leg.steps) {
+          const line = step.geometry.coordinates.map(([lon, lat]) => [lat, lon]);
+          if (coords.length && line.length) line.shift();
+          coords.push(...line);
+          const [lon, lat] = step.maneuver.location;
+          steps.push({ type: step.maneuver.type, modifier: step.maneuver.modifier || "", name: step.name || "",
+            distance: step.distance, cum, location: [lat, lon], exit: step.maneuver.exit });
+          cum += step.distance;
+        }
+        return { distance: leg.distance, duration: leg.duration, coords, steps };
+      });
+      return finish(legs, "bike");
+    } catch (err) {
+      console.warn("Routing failed, using straight lines", err);
+      return straightRoute(points);
+    }
+  }
+
+  /**
+   * Bike travel times (s) and distances (m) between all points, or null when the router is unreachable.
+   * Returned as flat Float64Arrays of size n*n (row = from, col = to).
+   */
+  async function matrix(points, onProgress = () => {}) {
+    const n = points.length;
+    if (n < 2 || !usable()) return null;
+    for (const chunk of TABLE_CHUNKS) {
+      try {
+        return await matrixInChunks(points, chunk, onProgress);
+      } catch (err) {
+        console.warn(`Travel-time table failed with ${chunk}-point requests`, err);
+        failures = 0;
+        available = true;
+      }
+    }
+    return null;
+  }
+
+  async function matrixInChunks(points, chunk, onProgress) {
+    const n = points.length;
+    const durations = new Float64Array(n * n);
+    const distances = new Float64Array(n * n);
+    const half = n <= chunk ? n : Math.floor(chunk / 2);
+    const blocks = [];
+    for (let i = 0; i < n; i += half) blocks.push([i, Math.min(n, i + half)]);
+    const jobs = [];
+    for (const src of blocks) for (const dst of blocks) jobs.push([src, dst]);
+    let done = 0;
+    for (const [[s0, s1], [d0, d1]] of jobs) {
+      const same = s0 === d0;
+      const pts = same ? points.slice(s0, s1) : [...points.slice(s0, s1), ...points.slice(d0, d1)];
+      const srcIdx = Array.from({ length: s1 - s0 }, (_, k) => k);
+      const dstIdx = same ? srcIdx : Array.from({ length: d1 - d0 }, (_, k) => s1 - s0 + k);
+      const url = `${BASE}/table/v1/driving/${coordString(pts)}?annotations=duration,distance` +
+        `&sources=${srcIdx.join(";")}&destinations=${dstIdx.join(";")}`;
+      const json = await fetchJson(url, TABLE_TIMEOUT_MS);
+      for (let a = 0; a < srcIdx.length; a++) {
+        for (let b = 0; b < dstIdx.length; b++) {
+          const from = s0 + a, to = d0 + b;
+          const fallback = Util.distanceM(points[from].lat, points[from].lon, points[to].lat, points[to].lon) * STRAIGHT_DETOUR;
+          const dur = json.durations[a][b];
+          const dist = json.distances ? json.distances[a][b] : null;
+          durations[from * n + to] = Number.isFinite(dur) ? dur : fallback / BIKE_MS;
+          distances[from * n + to] = Number.isFinite(dist) ? dist : fallback;
+        }
+      }
+      done += 1;
+      onProgress(done, jobs.length);
+    }
+    return { n, durations, distances };
+  }
+
+  return { route, matrix, straightRoute, setEnabled(on) { enabled = Boolean(on); }, get online() { return usable(); } };
+})();
+
+
+/* guidance.js — keeps a live route from my position through the next stops and tracks progress along it:
+   remaining distance/time to the next stop and the next turn. Re-routes when the target changes
+   or when I leave the route. */
+"use strict";
+
+const Guidance = (() => {
+  const OFF_ROUTE_M = 35;
+  const OFF_ROUTE_FIXES = 2;
+  const MIN_REROUTE_MS = 12000;
+  const MIN_RETARGET_MS = 1500;
+
+  let current = null;          // { key, route, stopIds }
+  let pending = null;          // key of an in-flight request
+  let lastRequest = 0;
+  let offRouteCount = 0;
+  let onChange = () => {};
+
+  /** Closest point on a polyline: returns { along (m from start), offset (m from line) }. */
+  function project(coords, lat, lon) {
+    const k = Math.cos(lat * Math.PI / 180) * 111320;
+    const toXY = ([la, lo]) => [(lo - lon) * k, (la - lat) * 110540];
+    let best = { along: 0, offset: Infinity };
+    let walked = 0;
+    for (let i = 1; i < coords.length; i++) {
+      const [ax, ay] = toXY(coords[i - 1]);
+      const [bx, by] = toXY(coords[i]);
+      const dx = bx - ax, dy = by - ay;
+      const segLen = Math.hypot(dx, dy);
+      const t = segLen ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / (segLen * segLen))) : 0;
+      const px = ax + t * dx, py = ay + t * dy;
+      const offset = Math.hypot(px, py);
+      if (offset < best.offset) best = { along: walked + t * segLen, offset };
+      walked += segLen;
+    }
+    return best;
+  }
+
+  function keyFor(stopIds) { return stopIds.join(","); }
+
+  /**
+   * Called on every location update and whenever the stop list changes.
+   * from: {lat, lon} (my position or the start), stops: upcoming stops to route through.
+   */
+  async function update(from, stops, { force = false } = {}) {
+    if (!from || !stops.length) { current = null; onChange(null); return; }
+    const stopIds = stops.map((s) => s.id);
+    const key = keyFor(stopIds);
+    const now = Date.now();
+    const targetChanged = !current || current.key !== key;
+
+    if (!targetChanged && !force && current.route.legs.length) {
+      const leg = current.route.legs[0];
+      const pos = project(leg.coords, from.lat, from.lon);
+      const tolerance = OFF_ROUTE_M + Math.min(from.accuracy || 0, 40) / 2;
+      offRouteCount = pos.offset > tolerance ? offRouteCount + 1 : 0;
+      const offRoute = offRouteCount >= OFF_ROUTE_FIXES && current.route.source === "bike";
+      if (!offRoute || now - lastRequest < MIN_REROUTE_MS) return;
+    }
+    if (pending === key && !force) return;
+    if (targetChanged && now - lastRequest < MIN_RETARGET_MS && current) {
+      setTimeout(() => update(from, stops, { force: true }), MIN_RETARGET_MS);
+      return;
+    }
+    pending = key;
+    lastRequest = now;
+    offRouteCount = 0;
+    const route = await Router.route([{ lat: from.lat, lon: from.lon }, ...stops]);
+    if (pending !== key) return; // a newer request superseded this one
+    pending = null;
+    current = { key, route, stopIds };
+    onChange(current);
+  }
+
+  /** Live progress on the first leg: distance left, time left and the next manoeuvre. */
+  function progress(me) {
+    if (!current || !current.route.legs.length) return null;
+    const leg = current.route.legs[0];
+    const pos = me ? project(leg.coords, me.lat, me.lon) : { along: 0, offset: 0 };
+    const along = Math.min(pos.along, leg.distance);
+    const left = Math.max(0, leg.distance - along);
+    const timeLeft = leg.distance ? leg.duration * (left / leg.distance) : 0;
+    const next = leg.steps.find((s) => s.type !== "depart" && s.cum > along + 3) || leg.steps[leg.steps.length - 1];
+    const toTurn = next ? Math.max(0, next.cum - along) : left;
+    const restDuration = current.route.legs.slice(1).reduce((s, l) => s + l.duration, 0);
+    const restDistance = current.route.legs.slice(1).reduce((s, l) => s + l.distance, 0);
+    return {
+      targetId: current.stopIds[0], source: current.route.source, left, timeLeft, next, toTurn, offset: pos.offset,
+      windowDistance: left + restDistance, windowDuration: timeLeft + restDuration,
+    };
+  }
+
+  /** Short instruction for a manoeuvre, e.g. { icon: "left", text: "Turn left", street: "Rue de Dole" }. */
+  function describe(step) {
+    if (!step) return null;
+    const m = step.modifier;
+    const side = m.includes("left") ? "left" : (m.includes("right") ? "right" : "");
+    if (step.type === "arrive") return { icon: "arrive", text: "Arrive at the stop", street: "" };
+    if (step.type === "roundabout" || step.type === "rotary") {
+      return { icon: "roundabout", text: step.exit ? `Roundabout, exit ${step.exit}` : "Take the roundabout", street: step.name };
+    }
+    if (m === "uturn") return { icon: "uturn", text: "Make a U-turn", street: step.name };
+    if (!side || m === "straight") return { icon: "straight", text: "Continue straight", street: step.name };
+    const sharp = m.startsWith("sharp") ? "Sharp " : (m.startsWith("slight") ? "Bear " : "Turn ");
+    const icon = m.startsWith("slight") ? `slight-${side}` : (m.startsWith("sharp") ? `sharp-${side}` : side);
+    return { icon, text: `${sharp}${side}`, street: step.name };
+  }
+
+  return {
+    update, progress, describe, project,
+    onChange(fn) { onChange = fn; },
+    get route() { return current ? current.route : null; },
+    get stopIds() { return current ? current.stopIds : []; },
+    reset() { current = null; pending = null; },
+  };
+})();
+
+
 /* map.js — Leaflet map: base layers, stop pins, route line, my-position marker, camera helpers. */
 "use strict";
 
@@ -1964,7 +2344,9 @@ const MapView = (() => {
   let map;
   let baseLayers = {};
   let activeLayers = [];
-  let pinLayer, routeLayer, approachLine, startMarker, meMarker, meAccuracy;
+  let pinLayer, routeLayer, guideLayer, startMarker, meMarker;
+  let meAnim = null;            // { from, to, start } for smooth marker motion
+  const ME_ANIM_MS = 850;
   let callbacks = { stopTap: () => {}, userPan: () => {}, longPress: () => {} };
   let lastRender = null;
 
@@ -2001,7 +2383,7 @@ const MapView = (() => {
     baseLayers = makeLayers();
     routeLayer = L.layerGroup().addTo(map);
     pinLayer = L.layerGroup().addTo(map);
-    approachLine = L.polyline([], { pane: "route", color: "#2f8cff", weight: 4, opacity: .95, dashArray: "2 9", lineCap: "round", interactive: false }).addTo(map);
+    guideLayer = L.layerGroup().addTo(map);
 
     map.on("dragstart", () => callbacks.userPan());
     map.on("zoomstart", (e) => { if (e && e.originalEvent) callbacks.userPan(); });
@@ -2019,9 +2401,13 @@ const MapView = (() => {
 
   /** Pixels hidden by floating UI, used to keep targets in the visible part of the map. */
   function insets() {
+    const panel = document.getElementById("arrival");
     const cards = document.getElementById("cards");
-    const bottom = cards && !cards.hidden ? cards.getBoundingClientRect().height + 26 : 30;
-    return { top: 84, bottom, left: 18, right: 72 };
+    const covering = panel && !panel.hidden ? panel : cards;
+    const bottom = covering && !covering.hidden ? covering.getBoundingClientRect().height + 26 : 30;
+    const banner = document.getElementById("navBanner");
+    const top = banner && !banner.hidden ? 160 : 84;
+    return { top, bottom, left: 18, right: 72 };
   }
 
   function pinIcon(label, classes) {
@@ -2061,11 +2447,6 @@ const MapView = (() => {
     } else {
       for (const stop of recentDone) visible.set(stop.id, "done");
       windowStops.forEach((stop, i) => visible.set(stop.id, i === 0 ? "next" : "upcoming"));
-      const chain = windowStops.map((s) => [s.lat, s.lon]);
-      if (chain.length > 1) {
-        L.polyline(chain, { pane: "route", color: "#ffffff", weight: 8, opacity: .9, lineJoin: "round", interactive: false }).addTo(routeLayer);
-        L.polyline(chain, { pane: "route", color: "#2f8cff", weight: 5, opacity: 1, lineJoin: "round", interactive: false }).addTo(routeLayer);
-      }
       const selected = ordered.find((s) => s.id === selectedId);
       if (selected && !visible.has(selected.id)) visible.set(selected.id, doneIds.has(selected.id) ? "done" : "upcoming");
     }
@@ -2091,9 +2472,41 @@ const MapView = (() => {
       .addTo(map);
   }
 
-  /** Dashed line from my position to the target stop. */
-  function setApproach(from, to) {
-    approachLine.setLatLngs(from && to ? [[from.lat, from.lon], [to.lat, to.lon]] : []);
+  /**
+   * Draw the live route: first leg (to the next stop) bold, the following legs lighter.
+   * Straight-line fallbacks are dashed so it is obvious they are not real streets.
+   */
+  function setRoute(route) {
+    guideLayer.clearLayers();
+    if (!route || !route.legs.length) return;
+    const dashed = route.source !== "bike";
+    route.legs.forEach((leg, i) => {
+      const first = i === 0;
+      const casing = { pane: "route", color: "#ffffff", weight: first ? 11 : 7, opacity: first ? 0.95 : 0.6,
+        lineJoin: "round", lineCap: "round", interactive: false };
+      const line = { pane: "route", color: first ? "#1a7bff" : "#5aa4ff", weight: first ? 7 : 4, opacity: first ? 1 : 0.85,
+        lineJoin: "round", lineCap: "round", interactive: false, dashArray: dashed ? (first ? "1 12" : "1 9") : null };
+      if (!dashed) L.polyline(leg.coords, casing).addTo(guideLayer);
+      L.polyline(leg.coords, line).addTo(guideLayer);
+    });
+    // Small chevrons along the first leg show the riding direction.
+    const coords = route.legs[0].coords;
+    if (!dashed && coords.length > 2) {
+      let walked = 0, nextMark = 60;
+      for (let i = 1; i < coords.length; i++) {
+        const seg = Util.distanceM(coords[i - 1][0], coords[i - 1][1], coords[i][0], coords[i][1]);
+        while (walked + seg >= nextMark && seg > 0) {
+          const t = (nextMark - walked) / seg;
+          const lat = coords[i - 1][0] + t * (coords[i][0] - coords[i - 1][0]);
+          const lon = coords[i - 1][1] + t * (coords[i][1] - coords[i - 1][1]);
+          const angle = Util.bearingDeg(coords[i - 1][0], coords[i - 1][1], coords[i][0], coords[i][1]);
+          L.marker([lat, lon], { pane: "route", interactive: false, keyboard: false,
+            icon: L.divIcon({ className: "chev", html: `<i style="transform:rotate(${angle}deg)"></i>`, iconSize: [0, 0] }) }).addTo(guideLayer);
+          nextMark += 60;
+        }
+        walked += seg;
+      }
+    }
   }
 
   function meIcon(heading, accuracyPx, stale) {
@@ -2107,16 +2520,30 @@ const MapView = (() => {
     return meters / metersPerPixel;
   }
 
+  /** Update my marker. Position changes glide over ~0.85 s instead of jumping between GPS fixes. */
   function setMe(position) {
     if (!position) { if (meMarker) { meMarker.remove(); meMarker = null; } return; }
     const accPx = Math.min(metersToPixels(position.accuracy || 0, position.lat), 220);
     const icon = meIcon(position.heading, accPx, position.stale);
+    const target = L.latLng(position.lat, position.lon);
     if (!meMarker) {
-      meMarker = L.marker([position.lat, position.lon], { pane: "me", icon, interactive: false, keyboard: false }).addTo(map);
-    } else {
-      meMarker.setLatLng([position.lat, position.lon]);
-      meMarker.setIcon(icon);
+      meMarker = L.marker(target, { pane: "me", icon, interactive: false, keyboard: false }).addTo(map);
+      return;
     }
+    meMarker.setIcon(icon);
+    const from = meMarker.getLatLng();
+    if (from.distanceTo(target) < 0.3 || from.distanceTo(target) > 300) { meMarker.setLatLng(target); meAnim = null; return; }
+    const startAnim = !meAnim;
+    meAnim = { from, to: target, start: performance.now() };
+    if (startAnim) requestAnimationFrame(stepMe);
+  }
+
+  function stepMe(now) {
+    if (!meAnim || !meMarker) return;
+    const t = Math.min(1, (now - meAnim.start) / ME_ANIM_MS);
+    const ease = 1 - (1 - t) * (1 - t);
+    meMarker.setLatLng([meAnim.from.lat + (meAnim.to.lat - meAnim.from.lat) * ease, meAnim.from.lng + (meAnim.to.lng - meAnim.from.lng) * ease]);
+    if (t < 1) requestAnimationFrame(stepMe); else meAnim = null;
   }
 
   /** Point that places `latlng` in the middle of the visible (un-covered) area at `zoom`. */
@@ -2145,7 +2572,14 @@ const MapView = (() => {
     });
   }
 
-  return { init, on, setStyle, render, setMe, setApproach, focus, fit, get map() { return map; }, get last() { return lastRender; } };
+  /** URL templates of the tile layers used by a style (for the offline downloader). */
+  function layerTemplates(style) {
+    return (baseLayers[style] || baseLayers.hybrid).map((layer) => ({
+      url: layer._url, subdomains: layer.options.subdomains ? [...layer.options.subdomains] : [], maxNativeZoom: layer.options.maxNativeZoom || 19,
+    }));
+  }
+
+  return { init, on, setStyle, render, setMe, setRoute, focus, fit, layerTemplates, get map() { return map; }, get last() { return lastRender; } };
 })();
 
 
@@ -2503,24 +2937,323 @@ const Busy = (() => {
 })();
 
 
-/* main.js — app controller: state, wiring between map, cards, sheets, location and import. */
+/* arrival.js — automatic "you are here" panel.
+   When my position comes within the arrival radius of an upcoming stop, a panel slides up with every client,
+   paper, code and note. It stays until I dismiss it, mark the stop, or ride away; the next stop pops on arrival.
+   Detection is pure (decide); the panel is plain DOM (show/hide). */
+"use strict";
+
+const Arrival = (() => {
+  const EXIT_MARGIN_M = 20;          // hysteresis so GPS jitter at the edge doesn't flicker the panel
+  const MAX_ACCURACY_BONUS_M = 40;
+  const ICON_CHECK = "<svg viewBox=\"0 0 24 24\"><path d=\"m5 12.5 4.5 4.5L19 7.5\"/></svg>";
+  const ICON_LATER = "<svg viewBox=\"0 0 24 24\"><path d=\"M12 7v5l3 2\"/><circle cx=\"12\" cy=\"12\" r=\"8.5\"/></svg>";
+  const ICON_CLOSE = "<svg viewBox=\"0 0 24 24\"><path d=\"M6 6l12 12M18 6 6 18\"/></svg>";
+  const ICON_INFO = "<svg viewBox=\"0 0 24 24\"><path d=\"M4 6h16M4 12h16M4 18h10\"/></svg>";
+
+  let el;
+  let activeId = null;
+  let enteredAt = 0;
+  let manual = false;                // opened by hand (no auto-close on leaving)
+  const dismissed = new Set();
+  let handlers = {};
+
+  function radiusFor(me, settings) {
+    return Math.max(settings.arrivalRadius, Math.min((me.accuracy || 0) * 0.7, MAX_ACCURACY_BONUS_M));
+  }
+
+  /**
+   * Decide what the panel should show for this position.
+   * candidates: upcoming (not delivered) stops in route order. Returns { enter, exit } stop ids (or null).
+   */
+  function decide(me, candidates, settings) {
+    if (!me || me.stale || !candidates.length) return { enter: null, exit: null };
+    const radius = radiusFor(me, settings);
+    const dist = (s) => Util.distanceM(me.lat, me.lon, s.lat, s.lon);
+    for (const id of [...dismissed]) {
+      const stop = candidates.find((s) => s.id === id);
+      if (!stop || dist(stop) > radius + EXIT_MARGIN_M) dismissed.delete(id);
+    }
+    let exit = null;
+    if (activeId && !manual) {
+      const active = candidates.find((s) => s.id === activeId);
+      if (!active || dist(active) > radius + EXIT_MARGIN_M) exit = activeId;
+    }
+    if (activeId && !exit) return { enter: null, exit: null };
+    const inside = candidates.slice(0, 25).filter((s) => !dismissed.has(s.id) && dist(s) <= radius);
+    if (!inside.length) return { enter: null, exit };
+    const next = candidates[0];
+    const pick = inside.includes(next) ? next : inside.sort((a, b) => dist(a) - dist(b))[0];
+    return { enter: pick.id, exit };
+  }
+
+  function chip(key, label, count) {
+    return `<span class="chip"><i class="p-${key}"></i>${label}${count > 1 ? ` ×${count}` : ""}</span>`;
+  }
+
+  function render(stop, ctx) {
+    const ticked = new Set(ctx.ticked || []);
+    const counts = Round.paperCounts([stop]);
+    const paperChips = Round.PAPERS.slice().reverse().filter((p) => counts[p.key])
+      .map((p) => chip(p.key, p.key === "est" ? "L'Est" : p.label, counts[p.key])).join("");
+    const codes = [...new Set(stop.clients.map((c) => c.code).filter(Boolean))];
+    const alerts = [
+      stop.flags.early ? "<div class=\"alert-row crit\">⏰ Before 7:00</div>" : "",
+      stop.flags.must ? "<div class=\"alert-row warn\">⚠️ Not received yesterday — make sure</div>" : "",
+    ].join("");
+    const clients = stop.clients.map((c, i) => {
+      const on = ticked.has(i);
+      const papers = c.papers.map((k) => `<span class="chip sm"><i class="p-${k}"></i>${Round.paperLabel(k)}</span>`).join("");
+      const meta = [
+        papers,
+        c.appt ? `<span class="chip sm">Appt ${Util.escapeHtml(c.appt)}</span>` : "",
+        c.code && codes.length > 1 ? `<span class="chip sm code">#${Util.escapeHtml(c.code)}</span>` : "",
+        c.flags.suspended ? "<span class=\"chip sm\">Suspended</span>" : "",
+        c.flags.isNew ? "<span class=\"chip sm okc\">New</span>" : "",
+      ].join("");
+      return `
+        <li class="arr-client${on ? " on" : ""}${c.flags.suspended ? " susp" : ""}">
+          <button class="tick" data-tick="${i}" aria-pressed="${on}" aria-label="Delivered to ${Util.escapeHtml(c.name)}">${ICON_CHECK}</button>
+          <div class="arr-client-body">
+            <div class="arr-name">${Util.escapeHtml(c.name)}</div>
+            <div class="arr-meta">${meta}</div>
+            ${c.notes ? `<div class="arr-note">${Util.escapeHtml(c.notes)}</div>` : ""}
+          </div>
+        </li>`;
+    }).join("");
+    const nearby = (ctx.nearby || []).map((s) =>
+      `<button class="chip nearby" data-switch="${s.id}">${s.seq} · ${Util.escapeHtml(Round.stopAddress(s))}</button>`).join("");
+    const doneCount = ticked.size;
+    const total = stop.clients.length;
+    return `
+      <div class="arr-grab"><span></span></div>
+      <div class="arr-top">
+        <span class="arr-badge${ctx.auto ? "" : " manual"}"><i></i>${ctx.auto ? "You've arrived" : "Stop details"}</span>
+        <span class="arr-seq">Stop ${stop.seq} of ${ctx.total}</span>
+        <button class="arr-icon" data-act="details" aria-label="Full details">${ICON_INFO}</button>
+        <button class="arr-icon" data-act="close" aria-label="Hide">${ICON_CLOSE}</button>
+      </div>
+      <h2 class="arr-addr">${Util.escapeHtml(Round.stopAddress(stop))}</h2>
+      <div class="arr-summary">${paperChips}${codes.length === 1 ? `<span class="chip code big">Code ${Util.escapeHtml(codes[0])}</span>` : ""}</div>
+      ${alerts ? `<div class="alerts">${alerts}</div>` : ""}
+      <ul class="arr-clients">${clients}</ul>
+      ${nearby ? `<div class="arr-nearby"><span>Also here:</span>${nearby}</div>` : ""}
+      <div class="arr-foot">
+        <button class="btn" data-act="later">${ICON_LATER}Later</button>
+        <button class="btn success grow" data-act="done">${ICON_CHECK}${total > 1 && doneCount ? `Finish (${doneCount}/${total})` : (total > 1 ? `All ${total} delivered` : "Delivered")}</button>
+      </div>`;
+  }
+
+  function wire() {
+    el.onclick = (event) => {
+      const tick = event.target.closest("[data-tick]");
+      if (tick) { Util.haptic(10); handlers.tick(activeId, Number(tick.dataset.tick)); return; }
+      const sw = event.target.closest("[data-switch]");
+      if (sw) { handlers.switchTo(sw.dataset.switch); return; }
+      const act = event.target.closest("[data-act]")?.dataset.act;
+      if (!act) return;
+      const id = activeId;
+      if (act === "close") { dismiss(); handlers.dismissed(id); }
+      else if (act === "done") handlers.done(id);
+      else if (act === "later") handlers.later(id);
+      else if (act === "details") handlers.details(id);
+    };
+    // Swipe the panel down to hide it.
+    let startY = null, delta = 0;
+    el.addEventListener("touchstart", (e) => { if (e.target.closest(".arr-clients") && el.querySelector(".arr-clients").scrollTop > 0) return; startY = e.touches[0].clientY; delta = 0; }, { passive: true });
+    el.addEventListener("touchmove", (e) => {
+      if (startY === null) return;
+      delta = Math.max(0, e.touches[0].clientY - startY);
+      if (delta > 6) { el.style.transition = "none"; el.style.transform = `translateY(${delta}px)`; }
+    }, { passive: true });
+    el.addEventListener("touchend", () => {
+      if (startY === null) return;
+      el.style.transition = ""; el.style.transform = "";
+      if (delta > 80) { const id = activeId; dismiss(); handlers.dismissed(id); }
+      startY = null;
+    });
+  }
+
+  function init(element, eventHandlers) {
+    el = element;
+    handlers = eventHandlers;
+    wire();
+  }
+
+  /** Show (or refresh) the panel for a stop. ctx: { auto, total, ticked:[], nearby:[stops] } */
+  function show(stop, ctx) {
+    const isNew = activeId !== stop.id || el.hidden;
+    activeId = stop.id;
+    manual = !ctx.auto;
+    if (isNew) enteredAt = Date.now();
+    el.innerHTML = render(stop, ctx);
+    const wasLeaving = el.classList.contains("leaving");
+    el.classList.remove("leaving");
+    if (el.hidden || wasLeaving) {
+      el.hidden = false;
+      el.classList.add("entering");
+      setTimeout(() => el.classList.remove("entering"), 380);
+    }
+  }
+
+  function hide() {
+    if (el.hidden) { activeId = null; return; }
+    activeId = null;
+    el.classList.add("leaving");
+    setTimeout(() => { if (!activeId) { el.hidden = true; el.classList.remove("leaving"); } }, 240);
+  }
+
+  function dismiss() {
+    if (activeId) dismissed.add(activeId);
+    hide();
+  }
+
+  return {
+    init, decide, show, hide, dismiss,
+    get activeId() { return activeId; },
+    get stayedMs() { return activeId ? Date.now() - enteredAt : 0; },
+    get isManual() { return manual; },
+    forget(id) { dismissed.delete(id); },
+  };
+})();
+
+/* Spoken announcements (French voice so street names sound right). */
+const Voice = (() => {
+  let voice = null;
+  function pickVoice() {
+    const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+    voice = voices.find((v) => /^fr(-|_)FR/i.test(v.lang)) || voices.find((v) => /^fr/i.test(v.lang)) || null;
+  }
+  if (window.speechSynthesis) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+
+  function say(text) {
+    if (!window.speechSynthesis) return;
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "fr-FR";
+      if (voice) u.voice = voice;
+      u.rate = 1.05;
+      speechSynthesis.speak(u);
+    } catch (err) { /* speech unavailable */ }
+  }
+
+  /** "Arrêt 12. 26 rue Xavier Marmier. 4 clients. L'Est, 3. Paris Match, 1. Code 1234." */
+  function announceStop(stop) {
+    const counts = Round.paperCounts([stop]);
+    const papers = Round.PAPERS.slice().reverse().filter((p) => counts[p.key]).map((p) => `${p.label}, ${counts[p.key]}`).join(". ");
+    const code = stop.clients.find((c) => c.code)?.code;
+    const n = stop.clients.length;
+    say(`Arrêt ${stop.seq}. ${Round.stopAddress(stop)}. ${n} client${n > 1 ? "s" : ""}. ${papers}.${code ? ` Code ${code.split("").join(" ")}.` : ""}`);
+  }
+
+  return { say, announceStop, get supported() { return Boolean(window.speechSynthesis); } };
+})();
+
+
+/* offline.js — service-worker registration and "save map for offline": pre-downloads the map tiles around the
+   round so the satellite map still shows with no signal. The service worker (sw.js) stores them. */
+"use strict";
+
+const Offline = (() => {
+  const MIN_ZOOM = 14;
+  const MAX_ZOOM = 19;
+  const PAD_M = 200;
+  const CONCURRENCY = 6;
+  const KB_PER_TILE = { jpeg: 28, png: 9 };
+
+  const supported = "serviceWorker" in navigator && window.isSecureContext && location.protocol !== "file:";
+
+  function register() {
+    if (!supported) return;
+    navigator.serviceWorker.register("sw.js").catch((err) => console.warn("Service worker not registered", err));
+  }
+
+  function lonToX(lon, z) { return Math.floor(((lon + 180) / 360) * 2 ** z); }
+  function latToY(lat, z) {
+    const r = lat * Math.PI / 180;
+    return Math.floor(((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2) * 2 ** z);
+  }
+
+  /** Every tile URL for the round's area at zooms 14..19, using the same URLs the map requests. */
+  function planTiles(points, style) {
+    const lats = points.map((p) => p.lat), lons = points.map((p) => p.lon);
+    const padLat = PAD_M / 110540;
+    const padLon = PAD_M / (111320 * Math.cos((lats[0] || 47) * Math.PI / 180));
+    const box = { n: Math.max(...lats) + padLat, s: Math.min(...lats) - padLat, e: Math.max(...lons) + padLon, w: Math.min(...lons) - padLon };
+    const urls = [];
+    let kb = 0;
+    for (const layer of MapView.layerTemplates(style)) {
+      for (let z = MIN_ZOOM; z <= Math.min(MAX_ZOOM, layer.maxNativeZoom); z++) {
+        for (let x = lonToX(box.w, z); x <= lonToX(box.e, z); x++) {
+          for (let y = latToY(box.n, z); y <= latToY(box.s, z); y++) {
+            const s = layer.subdomains.length ? layer.subdomains[Math.abs(x + y) % layer.subdomains.length] : "";
+            urls.push(L.Util.template(layer.url, { s, x, y, z, r: L.Browser.retina ? "@2x" : "" }));
+            kb += /jpeg/.test(layer.url) ? KB_PER_TILE.jpeg : KB_PER_TILE.png;
+          }
+        }
+      }
+    }
+    return { urls, count: urls.length, megabytes: Math.max(1, Math.round(kb / 1024)) };
+  }
+
+  /** Fetch every URL once; the service worker caches tile responses as they pass. */
+  async function download(urls, onProgress) {
+    let cursor = 0, ok = 0, failed = 0;
+    async function worker() {
+      while (cursor < urls.length) {
+        const url = urls[cursor++];
+        try {
+          const response = await fetch(url, { mode: "cors" });
+          if (response.ok) ok++; else failed++;
+        } catch (err) {
+          failed++;
+        }
+        onProgress(ok + failed, urls.length);
+      }
+    }
+    await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+    return { ok, failed };
+  }
+
+  return { supported, register, planTiles, download };
+})();
+
+
+/* main.js — app controller: state, and the wiring between map, guidance, arrival panel, cards, sheets,
+   location and import. */
 "use strict";
 
 const App = (() => {
   const DEFAULT_START = { label: "Lidl · av. du 60e RI", lat: 47.2409, lon: 6.0060 };
   const FOLLOW_REFRAME_MS = 1500;
+  const AUTO_COMPLETE_AFTER_MS = 8000;
+  const DEFAULT_DWELL_S = 40;
   const ICONS = {
     nav: "<svg viewBox=\"0 0 24 24\"><path d=\"M3 11 21 3l-8 18-2-8-8-2Z\"/></svg>",
     check: "<svg viewBox=\"0 0 24 24\"><path d=\"m5 12.5 4.5 4.5L19 7.5\"/></svg>",
     undo: "<svg viewBox=\"0 0 24 24\"><path d=\"M9 14 4 9l5-5\"/><path d=\"M4 9h10a6 6 0 0 1 0 12h-3\"/></svg>",
     close: "<svg viewBox=\"0 0 24 24\"><path d=\"M6 6l12 12M18 6 6 18\"/></svg>",
   };
+  /* Manoeuvre arrows for the turn banner (24x24, stroked). */
+  const TURN_ICONS = {
+    straight: "M12 20V5M6 11l6-6 6 6",
+    left: "M17 20v-7a4 4 0 0 0-4-4H5M10 4 5 9l5 5",
+    right: "M7 20v-7a4 4 0 0 1 4-4h8M14 4l5 5-5 5",
+    "slight-left": "M15 20v-6L8 7M8 13V7h6",
+    "slight-right": "M9 20v-6l7-7M16 13V7h-6",
+    "sharp-left": "M16 4v9l-8 7M8 13v7h7",
+    "sharp-right": "M8 4v9l8 7M16 13v7H9",
+    uturn: "M8 20V9a4 4 0 0 1 8 0v4M12 10l4 4 4-4",
+    roundabout: "M12 20v-5M12 15a4 4 0 1 0-4-4M8 11H4M6 9l-2 2 2 2",
+    arrive: "M12 21s6-5.2 6-10.5A6 6 0 0 0 6 10.5C6 15.8 12 21 12 21ZM12 12.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z",
+  };
 
   const state = {
     round: null,
     ordered: [],
     byId: new Map(),
-    progress: { done: {}, history: [] },
+    progress: { done: {}, history: [], partial: {} },
     settings: Store.loadSettings(),
     selectedId: null,
     mode: "window",
@@ -2531,7 +3264,10 @@ const App = (() => {
 
   /* ---------- derived state ---------- */
   const doneIds = () => new Set(Object.keys(state.progress.done));
-  const nextStop = () => { const d = doneIds(); return state.ordered.find((s) => !d.has(s.id)) || null; };
+  const upcomingStops = () => { const d = doneIds(); return state.ordered.filter((s) => !d.has(s.id)); };
+  const nextStop = () => upcomingStops()[0] || null;
+  const windowStops = () => upcomingStops().slice(0, state.settings.windowSize);
+  const freshMe = () => (state.me && !state.me.stale ? state.me : null);
 
   function rebuildOrder() {
     state.ordered = Round.orderedStops(state.round);
@@ -2543,23 +3279,71 @@ const App = (() => {
     Store.saveProgress(state.round.id, state.progress);
   }
 
+  function clockIn(seconds) {
+    const d = new Date(Date.now() + seconds * 1000);
+    return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  }
+
+  function formatDuration(seconds) {
+    const min = Math.max(1, Math.round(seconds / 60));
+    return min < 60 ? `${min} min` : `${Math.floor(min / 60)} h ${String(min % 60).padStart(2, "0")}`;
+  }
+
+  /* ---------- distance & time estimates ---------- */
+  /** Riding metres/seconds between two points: real bike values when the travel table has them. */
+  function legCost(a, b) {
+    const t = state.round.travel;
+    if (t) {
+      const i = t.index[a.id ?? "START"], j = t.index[b.id ?? "START"];
+      if (i !== undefined && j !== undefined) return { m: t.dist[i * t.n + j], s: t.dur[i * t.n + j] };
+    }
+    const m = Util.distanceM(a.lat, a.lon, b.lat, b.lon) * 1.35;
+    return { m, s: m / 4.2 };
+  }
+
+  /** Average seconds per stop measured today (riding + delivering), once a few stops are done. */
+  function measuredPace() {
+    const times = Object.values(state.progress.done).sort((a, b) => a - b);
+    if (times.length < 4) return null;
+    const gaps = [];
+    for (let i = 1; i < times.length; i++) { const g = (times[i] - times[i - 1]) / 1000; if (g > 5 && g < 1200) gaps.push(g); }
+    if (gaps.length < 3) return null;
+    gaps.sort((a, b) => a - b);
+    return gaps[Math.floor(gaps.length / 2)];
+  }
+
+  function remainingEstimate() {
+    const remaining = upcomingStops();
+    let meters = 0, seconds = 0;
+    let prev = freshMe() || (remaining[0] || state.round.start);
+    for (const stop of remaining) {
+      const c = prev.id ? legCost(prev, stop) : { m: Util.distanceM(prev.lat, prev.lon, stop.lat, stop.lon) * 1.35, s: 0 };
+      meters += c.m; seconds += c.s || c.m / 4.2; prev = stop;
+    }
+    const back = prev.id ? legCost(prev, { ...state.round.start, id: "START" }) : { m: 0, s: 0 };
+    meters += back.m; seconds += back.s;
+    const pace = measuredPace();
+    const total = pace ? pace * remaining.length + back.s : seconds + DEFAULT_DWELL_S * remaining.length;
+    return { meters, seconds: total, count: remaining.length };
+  }
+
   /* ---------- rendering ---------- */
   function renderProgress() {
     if (!state.round) return;
-    const done = doneIds();
     const total = state.ordered.length;
-    const count = state.ordered.filter((s) => done.has(s.id)).length;
-    const remaining = state.ordered.filter((s) => !done.has(s.id));
-    let meters = 0;
-    let prev = state.me && Number.isFinite(state.me.lat) ? state.me : (remaining.length ? remaining[0] : state.round.start);
-    for (const stop of remaining) { meters += Util.distanceM(prev.lat, prev.lon, stop.lat, stop.lon); prev = stop; }
-    meters += Util.distanceM(prev.lat, prev.lon, state.round.start.lat, state.round.start.lon);
-    meters *= 1.35;
-    Util.$("progressTitle").textContent = count === total && total ? "Round complete" : `${count} of ${total} stops`;
-    const clientsLeft = remaining.reduce((n, s) => n + s.clients.length, 0);
-    Util.$("progressSub").textContent = count === total ? "Head back to start" : `${Util.formatDistance(meters)} left · ${clientsLeft} clients`;
+    const est = remainingEstimate();
+    const count = total - est.count;
+    const clientsLeft = upcomingStops().reduce((n, s) => n + s.clients.length, 0);
+    if (count === total && total) {
+      Util.$("progressTitle").textContent = "Round complete";
+      Util.$("progressSub").textContent = "Head back to the start";
+    } else {
+      Util.$("progressTitle").textContent = `${count} of ${total} stops`;
+      Util.$("progressSub").textContent = `${Util.formatDistance(est.meters)} · ${clientsLeft} clients · back ≈ ${clockIn(est.seconds)}`;
+    }
     Util.$("ringFill").style.strokeDashoffset = String(97.4 * (1 - (total ? count / total : 0)));
   }
+  const renderProgressSoon = Util.debounce(renderProgress, 1000);
 
   function renderMap() {
     if (!state.round) return;
@@ -2567,13 +3351,6 @@ const App = (() => {
       ordered: state.ordered, doneIds: doneIds(), selectedId: state.selectedId, mode: state.mode,
       windowSize: state.settings.windowSize, start: state.round.start,
     });
-    updateApproach();
-  }
-
-  function updateApproach() {
-    const target = state.byId.get(state.selectedId) || nextStop();
-    const me = state.me && !state.me.stale ? state.me : null;
-    MapView.setApproach(me, target && !doneIds().has(target.id) ? target : null);
   }
 
   function renderAll({ scrollCards = true } = {}) {
@@ -2583,7 +3360,56 @@ const App = (() => {
     if (scrollCards && state.selectedId) requestAnimationFrame(() => Cards.scrollTo(state.selectedId, false));
     renderProgress();
     renderMap();
+    refreshGuidance();
     if (state.me) Cards.updateDirections(state.me, state.byId);
+  }
+
+  /* ---------- guidance (live route + turn banner) ---------- */
+  function refreshGuidance(force = false) {
+    if (!state.round) return;
+    const origin = freshMe() || (doneIds().size ? null : state.round.start);
+    const stops = windowStops();
+    if (!origin) {
+      // No GPS and the round is under way: show the route between the upcoming stops only.
+      if (stops.length > 1) Guidance.update(stops[0], stops.slice(1), { force });
+      else { Guidance.reset(); MapView.setRoute(null); renderNav(); }
+      return;
+    }
+    Guidance.update(origin, stops, { force });
+  }
+
+  function turnIcon(name, rotate = 0) {
+    const d = TURN_ICONS[name] || TURN_ICONS.straight;
+    return `<svg viewBox="0 0 24 24" style="transform:rotate(${rotate}deg)"><path d="${d}"/></svg>`;
+  }
+
+  function renderNav() {
+    const banner = Util.$("navBanner");
+    const me = freshMe();
+    const p = state.round ? Guidance.progress(me) : null;
+    const arrivedAuto = Arrival.activeId && !Arrival.isManual;
+    if (!p || !me || arrivedAuto || !state.byId.has(p.targetId) || Guidance.stopIds[0] !== nextStop()?.id) { banner.hidden = true; return; }
+    const target = state.byId.get(p.targetId);
+    const addr = Round.stopAddress(target);
+    let icon, dist, instr;
+    if (p.source === "bike") {
+      const d = Guidance.describe(p.next);
+      const arriving = d.icon === "arrive";
+      icon = turnIcon(d.icon);
+      dist = Util.formatDistance(arriving ? p.left : p.toTurn);
+      instr = arriving ? `Stop ${target.seq} · ${addr}` : `${d.text}${d.street ? ` · ${d.street}` : ""}`;
+    } else {
+      const bearing = Util.bearingDeg(me.lat, me.lon, target.lat, target.lon);
+      icon = turnIcon("straight", Number.isFinite(me.heading) ? bearing - me.heading : bearing);
+      dist = Util.formatDistance(Util.distanceM(me.lat, me.lon, target.lat, target.lon));
+      instr = `Stop ${target.seq} · ${addr} (no street directions)`;
+    }
+    banner.classList.toggle("straight", p.source !== "bike");
+    Util.$("navArrow").innerHTML = icon;
+    Util.$("navDist").textContent = dist;
+    Util.$("navInstr").textContent = instr;
+    Util.$("navEta").innerHTML = `<b>${formatDuration(p.timeLeft)}</b>to stop ${target.seq}`;
+    banner.hidden = false;
   }
 
   /* ---------- selection & camera ---------- */
@@ -2593,15 +3419,16 @@ const App = (() => {
     if (on) { state.mode = "window"; Util.$("btnOverview").classList.remove("on"); reframeFollow(true); renderMap(); }
   }
 
-  /** Follow mode keeps both me and the next stop on screen. */
+  /** Follow mode keeps me and the next stop on screen (or me and the stop I'm at). */
   function reframeFollow(force = false) {
-    if (!state.follow || !state.me || state.me.stale) return;
+    const me = freshMe();
+    if (!state.follow || !me) return;
     const now = Date.now();
     if (!force && now - state.lastReframe < FOLLOW_REFRAME_MS) return;
     state.lastReframe = now;
-    const next = nextStop();
-    if (next && Util.distanceM(state.me.lat, state.me.lon, next.lat, next.lon) < 600) MapView.fit([state.me, next], { maxZoom: 19 });
-    else MapView.focus(state.me, { zoom: 17.5 });
+    const target = state.byId.get(Arrival.activeId) || nextStop();
+    if (target && Util.distanceM(me.lat, me.lon, target.lat, target.lon) < 700) MapView.fit([me, target], { maxZoom: 19 });
+    else MapView.focus(me, { zoom: 17.5 });
   }
 
   function selectStop(id, { fly = true, fromCards = false } = {}) {
@@ -2622,20 +3449,82 @@ const App = (() => {
     else if (fly) MapView.focus(next, { zoom: Math.max(MapView.map.getZoom(), 18) });
   }
 
+  /* ---------- arrival panel ---------- */
+  function openArrival(id, { auto }) {
+    const stop = state.byId.get(id);
+    if (!stop) return;
+    const me = freshMe();
+    const nearby = auto && me ? upcomingStops().filter((s) => s.id !== id &&
+      Util.distanceM(me.lat, me.lon, s.lat, s.lon) <= state.settings.arrivalRadius + 15).slice(0, 4) : [];
+    const wasActive = Arrival.activeId === id;
+    Arrival.show(stop, { auto, total: state.ordered.length, ticked: state.progress.partial[id] || [], nearby });
+    Util.$("cards").hidden = true;
+    document.body.classList.add("arrived");
+    state.selectedId = id;
+    renderMap();
+    renderNav();
+    if (!wasActive) {
+      if (auto) {
+        Util.haptic([40, 70, 40]);
+        if (state.settings.voice) Voice.announceStop(stop);
+      }
+      if (!state.follow) MapView.focus(stop, { zoom: Math.max(MapView.map.getZoom(), 18.5) });
+    }
+  }
+
+  function closeArrival() {
+    Arrival.hide();
+    Util.$("cards").hidden = false;
+    document.body.classList.remove("arrived");
+    if (state.selectedId) requestAnimationFrame(() => Cards.scrollTo(state.selectedId, false));
+    renderNav();
+  }
+
+  function refreshArrival() {
+    const id = Arrival.activeId;
+    if (id && state.byId.has(id) && !doneIds().has(id)) openArrival(id, { auto: !Arrival.isManual });
+  }
+
+  function toggleTick(id, index) {
+    const stop = state.byId.get(id);
+    if (!stop) return;
+    const set = new Set(state.progress.partial[id] || []);
+    if (set.has(index)) set.delete(index); else set.add(index);
+    state.progress.partial[id] = [...set];
+    persist();
+    const needed = stop.clients.map((c, i) => i).filter((i) => !stop.clients[i].flags.suspended);
+    if (needed.length && needed.every((i) => set.has(i))) markDone(id);
+    else refreshArrival();
+  }
+
+  function checkArrival() {
+    if (!state.round) return;
+    const { enter, exit } = Arrival.decide(freshMe(), upcomingStops(), state.settings);
+    if (exit) {
+      if (state.settings.autoComplete && Arrival.stayedMs >= AUTO_COMPLETE_AFTER_MS) markDone(exit, { auto: true });
+      else closeArrival();
+    }
+    if (enter && enter !== Arrival.activeId) openArrival(enter, { auto: true });
+  }
+
   /* ---------- delivery actions ---------- */
-  function markDone(id) {
+  function markDone(id, { auto = false } = {}) {
     if (state.progress.done[id]) return;
     state.progress.done[id] = Date.now();
     state.progress.history.push(id);
+    delete state.progress.partial[id];
     persist();
     Util.haptic([14, 40, 14]);
     const stop = state.byId.get(id);
     if (Sheet.isOpen) Sheet.close();
+    if (Arrival.activeId === id) closeArrival();
     state.selectedId = null;
     renderAll({ scrollCards: false });
     showNext();
+    refreshGuidance(true);
     const next = nextStop();
-    Toast.show(next ? `Stop ${stop.seq} delivered · next ${next.seq}` : "Last stop delivered 🎉", "Undo", () => undoDone(id));
+    if (!next) { openSummary(); return; }
+    Toast.show(`${auto ? "Auto-completed" : "Delivered"} stop ${stop.seq} · next ${next.seq}`, "Undo", () => undoDone(id));
   }
 
   function undoDone(id) {
@@ -2644,11 +3533,29 @@ const App = (() => {
     delete state.progress.done[target];
     state.progress.history = state.progress.history.filter((x) => x !== target);
     persist();
+    Arrival.forget(target);
     state.selectedId = target;
     if (Sheet.isOpen) Sheet.close();
     renderAll({ scrollCards: false });
     selectStop(target);
+    refreshGuidance(true);
     Toast.show(`Stop ${state.byId.get(target).seq} back to do`);
+  }
+
+  /** Move a stop to the end of the round (door closed, come back later). */
+  function postpone(id) {
+    const before = state.round.order.slice();
+    state.round.order = [...before.filter((x) => x !== id), id];
+    rebuildOrder();
+    persist();
+    if (Arrival.activeId === id) { Arrival.dismiss(); closeArrival(); }
+    state.selectedId = null;
+    renderAll({ scrollCards: false });
+    showNext();
+    refreshGuidance(true);
+    Toast.show(`Moved to the end · now stop ${state.byId.get(id).seq}`, "Undo", () => {
+      state.round.order = before; rebuildOrder(); persist(); state.selectedId = id; renderAll(); refreshGuidance(true);
+    });
   }
 
   /* ---------- detail sheet ---------- */
@@ -2667,10 +3574,9 @@ const App = (() => {
       client.flags.must ? "<span class=\"chip warnc\">Not received</span>" : "",
       client.flags.early ? "<span class=\"chip alert\">Before 7:00</span>" : "",
     ].join("");
-    const bar = `p-${client.papers[0]}`;
     return `
       <div class="client">
-        <div class="client-top"><span class="paper-bar ${bar}"></span>
+        <div class="client-top"><span class="paper-bar p-${client.papers[0]}"></span>
           <span class="client-name${client.flags.suspended ? " suspended" : ""}">${Util.escapeHtml(client.name)}</span></div>
         <div class="client-meta">${meta}</div>
         ${client.notes ? `<div class="client-note">${Util.escapeHtml(client.notes)}</div>` : ""}
@@ -2680,17 +3586,16 @@ const App = (() => {
   function openStop(id) {
     const stop = state.byId.get(id);
     if (!stop) return;
-    selectStop(id, { fly: true });
     const isDone = doneIds().has(id);
-    const me = state.me && !state.me.stale ? state.me : null;
+    const me = freshMe();
     const distance = me ? Util.formatDistance(Util.distanceM(me.lat, me.lon, stop.lat, stop.lon) * 1.25) : "";
     const alerts = [
       stop.flags.early ? "<div class=\"alert-row crit\">⏰ Deliver before 7:00</div>" : "",
       stop.flags.must ? "<div class=\"alert-row warn\">⚠️ Reported not received yesterday — make sure it's delivered</div>" : "",
       stop.flags.suspended ? "<div class=\"alert-row info\">A client here is marked suspended — check before delivering</div>" : "",
-      stop.approx ? "<div class=\"alert-row info\">📍 Pin position is approximate — long-press the map to report the right spot later</div>" : "",
+      stop.approx ? "<div class=\"alert-row info\">📍 Pin position is approximate</div>" : "",
     ].join("");
-    const waiting = state.ordered.filter((s) => !doneIds().has(s.id) && s.seq < stop.seq).length;
+    const waiting = upcomingStops().filter((s) => s.seq < stop.seq).length;
     const html = `
       <div class="sh-head">
         <div class="seq" style="${isDone ? "background:var(--ok);color:#fff" : (stop.id === nextStop()?.id ? "background:var(--accent);color:#fff" : "")}">${stop.seq}</div>
@@ -2705,16 +3610,50 @@ const App = (() => {
         ${isDone
           ? `<button class="btn" data-act="undo">${ICONS.undo}Not delivered</button>`
           : `<button class="btn success" data-act="done">${ICONS.check}Delivered</button>`}
-        <a class="btn" href="${navigateUrl(stop)}" target="_blank" rel="noopener">${ICONS.nav}Navigate</a>
+        <a class="btn" href="${navigateUrl(stop)}" target="_blank" rel="noopener">${ICONS.nav}Google Maps</a>
       </div>
+      ${isDone ? "" : "<button class=\"btn\" data-act=\"later\" style=\"width:100%\">Move to the end of the round</button>"}
       <div class="group-label">Papers to leave</div>
       <div class="list">${stop.clients.map(clientHtml).join("")}</div>`;
     const body = Sheet.open(html, { label: Round.stopAddress(stop) });
-    body.querySelector("[data-act=close]").onclick = Sheet.close;
-    const doneBtn = body.querySelector("[data-act=done]");
-    if (doneBtn) doneBtn.onclick = () => markDone(id);
-    const undoBtn = body.querySelector("[data-act=undo]");
-    if (undoBtn) undoBtn.onclick = () => undoDone(id);
+    const on = (act, fn) => { const el = body.querySelector(`[data-act=${act}]`); if (el) el.onclick = fn; };
+    on("close", Sheet.close);
+    on("done", () => markDone(id));
+    on("undo", () => undoDone(id));
+    on("later", () => { Sheet.close(); postpone(id); });
+  }
+
+  /* ---------- end of round ---------- */
+  function openSummary() {
+    const times = Object.values(state.progress.done).sort((a, b) => a - b);
+    const clients = state.ordered.reduce((n, s) => n + s.clients.length, 0);
+    const counts = Round.paperCounts(state.ordered);
+    const papers = Object.values(counts).reduce((a, b) => a + b, 0);
+    const span = times.length > 1 ? (times[times.length - 1] - times[0]) / 1000 : 0;
+    const est = state.round.routeMeters ? state.round.routeMeters : Round.routeLengthM(state.round);
+    const html = `
+      <div class="settings"><h2>Round complete 🎉</h2>
+        <p class="foot-note" style="margin:4px 0 0">Every stop is ticked. The route back to the start is on the map.</p>
+        <div class="stats-grid">
+          <div class="stat-tile"><b>${state.ordered.length}</b><span>stops</span></div>
+          <div class="stat-tile"><b>${clients}</b><span>clients · ${papers} papers</span></div>
+          <div class="stat-tile"><b>${span ? formatDuration(span) : "–"}</b><span>first to last delivery</span></div>
+          <div class="stat-tile"><b>${Util.formatDistance(est)}</b><span>planned loop</span></div>
+          <div class="stat-tile"><b>${span && times.length > 1 ? `${Math.round(span / (times.length - 1))} s` : "–"}</b><span>average per stop</span></div>
+          <div class="stat-tile"><b>${clockIn(0)}</b><span>finished</span></div>
+        </div>
+        <div class="sh-actions"><button class="btn primary" data-act="ok">Done</button><button class="btn" data-act="newday">New day</button></div>
+      </div>`;
+    const body = Sheet.open(html, { label: "Round complete" });
+    body.querySelector("[data-act=ok]").onclick = Sheet.close;
+    body.querySelector("[data-act=newday]").onclick = () => { Sheet.close(); resetDay(); };
+    if (state.round.start) Guidance.update(freshMe() || state.ordered[state.ordered.length - 1], [{ ...state.round.start, id: "START" }], { force: true });
+  }
+
+  function resetDay() {
+    state.progress = { done: {}, history: [], partial: {} };
+    persist(); state.selectedId = null; renderAll(); showNext(); refreshGuidance(true);
+    Toast.show("New day started");
   }
 
   /* ---------- map style ---------- */
@@ -2731,7 +3670,7 @@ const App = (() => {
         <div class="layer-grid">${opts.map(([key, label, sw]) =>
           `<button class="layer-opt${state.settings.mapStyle === key ? " on" : ""}" data-style="${key}"><span class="layer-swatch ${sw}"></span>${label}</button>`).join("")}
         </div>
-        <p class="foot-note">Imagery and street map: IGN (French national mapping agency). Street names: OpenStreetMap / CARTO.</p>
+        <p class="foot-note">Imagery and street map: IGN. Street names: OpenStreetMap / CARTO. Bike directions: OpenStreetMap via FOSSGIS.</p>
       </div>`;
     const body = Sheet.open(html, { label: "Map style" });
     body.querySelectorAll("[data-style]").forEach((btn) => {
@@ -2746,27 +3685,43 @@ const App = (() => {
       .map((p) => `<span class="chip"><i class="p-${p.key}"></i>${p.label} × ${counts[p.key]}</span>`).join(" ");
   }
 
+  function switchRow(key, label, hint) {
+    return `<button class="row" data-toggle="${key}" role="switch" aria-checked="${Boolean(state.settings[key])}">
+      <span class="r-label">${label}<small>${hint}</small></span><span class="switch${state.settings[key] ? " on" : ""}"></span></button>`;
+  }
+
   function openSettings() {
     if (!state.round) { openWelcomeSheet(); return; }
     const r = state.round;
     const clients = state.ordered.reduce((n, s) => n + s.clients.length, 0);
+    const loop = r.routeMeters ? `${Util.formatDistance(r.routeMeters)} by bike` : `≈ ${Util.formatDistance(Round.routeLengthM(r))}`;
     const html = `
       <div class="settings">
         <h2>Round</h2>
         <div class="list">
-          <div class="row"><span class="r-label">${Util.escapeHtml(r.name)}<small>${state.ordered.length} stops · ${clients} clients · ≈ ${Util.formatDistance(Round.routeLengthM(r))} loop</small></span></div>
+          <div class="row"><span class="r-label">${Util.escapeHtml(r.name)}<small>${state.ordered.length} stops · ${clients} clients · ${loop} loop</small></span></div>
           <div class="row"><span class="r-label">Papers to take<small style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">${paperSummaryHtml()}</small></span></div>
         </div>
 
         <div class="group-label">Import</div>
         <div class="list">
           <button class="row" data-act="import"><span class="r-label">Import a list<small>CSV, Excel or PDF. Columns are detected automatically, addresses looked up online.</small></span><span class="r-value">›</span></button>
-          <button class="row" data-act="sample"><span class="r-label">Download sample CSV<small>Today's list in the expected format</small></span><span class="r-value">↓</span></button>
+          <button class="row" data-act="sample"><span class="r-label">Download sample CSV<small>Shows the expected columns</small></span><span class="r-value">↓</span></button>
         </div>
+
+        <div class="group-label">Riding</div>
+        <div class="list">
+          ${switchRow("directions", "Street directions", "Bike route along real streets + turn banner (needs data)")}
+          ${switchRow("voice", "Spoken arrivals", "Reads the address, papers and code aloud when you arrive")}
+          ${switchRow("autoComplete", "Auto-tick when I ride away", "Marks a stop delivered if you stayed 8 s and leave without tapping")}
+        </div>
+        <div class="group-label">Arrival distance</div>
+        <div class="seg" role="group" aria-label="Arrival distance">${[15, 25, 40].map((n) =>
+          `<button data-radius="${n}" class="${state.settings.arrivalRadius === n ? "on" : ""}">${n} m</button>`).join("")}</div>
 
         <div class="group-label">Route order</div>
         <div class="list">
-          <button class="row" data-act="optimise"><span class="r-label">Optimise route<small>Shortest loop from the start point, done stops kept</small></span><span class="r-value">${r.optimised ? "On" : "Off"}</span></button>
+          <button class="row" data-act="optimise"><span class="r-label">Optimise route<small>Fastest loop by bike from the start, delivered stops kept</small></span><span class="r-value">${r.optimised ? (r.optimisedOn === "bike" ? "On · bike times" : "On") : "Off"}</span></button>
           <button class="row" data-act="listorder"><span class="r-label">Use the list's own order<small>As written in the imported file</small></span><span class="r-value">${r.optimised ? "" : "On"}</span></button>
         </div>
 
@@ -2780,16 +3735,19 @@ const App = (() => {
         <div class="seg" role="group" aria-label="Stops shown">${[5, 8, 12].map((n) =>
           `<button data-window="${n}" class="${state.settings.windowSize === n ? "on" : ""}">Next ${n}</button>`).join("")}</div>
 
-        <div class="group-label">Map style</div>
+        <div class="group-label">Map</div>
         <div class="seg" role="group" aria-label="Map style">${[["satellite", "Satellite"], ["hybrid", "Hybrid"], ["plan", "Plan"]].map(([k, l]) =>
           `<button data-style="${k}" class="${state.settings.mapStyle === k ? "on" : ""}">${l}</button>`).join("")}</div>
+        <div class="list" style="margin-top:8px" id="offlineBox">
+          <button class="row" data-act="offline"><span class="r-label">Save map for offline<small>${Offline.supported ? "Downloads the imagery around your round so it shows with no signal" : "Needs the installed web version (https)"}</small></span><span class="r-value">↓</span></button>
+        </div>
 
         <div class="group-label">Today</div>
         <div class="list" id="resetBox">
           <button class="row danger" data-act="reset"><span class="r-label">Start a new day<small>Clears every “delivered” tick</small></span></button>
           ${BUILTIN_ROUND ? "<button class=\"row\" data-act=\"builtin\"><span class=\"r-label\">Load the built-in Butte round</span><span class=\"r-value\">›</span></button>" : ""}
         </div>
-        <p class="foot-note">Distances are straight-line × 1.35 estimates. Your ticks and imported lists stay on this phone.</p>
+        <p class="foot-note">Your lists, ticks and saved map stay on this phone. Bike routes: © OpenStreetMap contributors, FOSSGIS routing.</p>
       </div>`;
     const body = Sheet.open(html, { label: "Settings" });
     const on = (act, fn) => { const el = body.querySelector(`[data-act=${act}]`); if (el) el.onclick = fn; };
@@ -2798,22 +3756,35 @@ const App = (() => {
     on("optimise", async () => { Sheet.close(); await reoptimise(true); });
     on("listorder", () => { Sheet.close(); useListOrder(); });
     on("startHere", () => {
-      if (!state.me || state.me.stale) { Toast.show("No GPS fix yet"); return; }
-      Sheet.close(); setStart({ lat: state.me.lat, lon: state.me.lon }, "My position");
+      const me = freshMe();
+      if (!me) { Toast.show("No GPS fix yet"); return; }
+      Sheet.close(); setStart({ lat: me.lat, lon: me.lon }, "My position");
     });
+    on("offline", () => { Sheet.close(); saveOfflineMap(); });
     on("reset", () => {
       const box = body.querySelector("#resetBox");
       box.innerHTML = `<div class="row"><span class="r-label">Clear all ticks for this round?</span></div>
         <div class="row" style="gap:8px"><button class="btn danger grow" data-act="confirmReset">Clear ticks</button><button class="btn grow" data-act="cancelReset">Cancel</button></div>`;
-      box.querySelector("[data-act=confirmReset]").onclick = () => {
-        state.progress = { done: {}, history: [] }; persist(); Sheet.close(); state.selectedId = null; renderAll(); showNext();
-        Toast.show("New day started");
-      };
+      box.querySelector("[data-act=confirmReset]").onclick = () => { Sheet.close(); resetDay(); };
       box.querySelector("[data-act=cancelReset]").onclick = openSettings;
     });
     on("builtin", async () => { Sheet.close(); await loadBuiltin(); });
+    const saveSettings = () => Store.saveSettings(state.settings);
+    body.querySelectorAll("[data-toggle]").forEach((b) => {
+      b.onclick = () => {
+        const key = b.dataset.toggle;
+        state.settings[key] = !state.settings[key];
+        saveSettings();
+        if (key === "directions") { Router.setEnabled(state.settings.directions); Guidance.reset(); refreshGuidance(true); }
+        if (key === "voice" && state.settings.voice) Voice.say("Annonces vocales activées");
+        openSettings();
+      };
+    });
+    body.querySelectorAll("[data-radius]").forEach((b) => {
+      b.onclick = () => { state.settings.arrivalRadius = Number(b.dataset.radius); saveSettings(); openSettings(); };
+    });
     body.querySelectorAll("[data-window]").forEach((b) => {
-      b.onclick = () => { state.settings.windowSize = Number(b.dataset.window); Store.saveSettings(state.settings); renderMap(); openSettings(); };
+      b.onclick = () => { state.settings.windowSize = Number(b.dataset.window); saveSettings(); renderMap(); refreshGuidance(true); openSettings(); };
     });
     body.querySelectorAll("[data-style]").forEach((b) => { b.onclick = () => { applyStyle(b.dataset.style); openSettings(); }; });
   }
@@ -2828,21 +3799,72 @@ const App = (() => {
     setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
   }
 
+  /* ---------- offline map ---------- */
+  async function saveOfflineMap() {
+    if (!Offline.supported) { Toast.show("Offline maps work in the web version opened over https"); return; }
+    const points = [state.round.start, ...state.ordered];
+    const plan = Offline.planTiles(points, state.settings.mapStyle);
+    const html = `
+      <div class="settings"><h2>Save map for offline</h2>
+        <p class="foot-note" style="margin:6px 0 12px">Downloads ${plan.count} map tiles (zoom 14–19) around your round, about ${plan.megabytes} MB. Best on Wi-Fi.</p>
+        <div class="sh-actions" style="margin-top:0"><button class="btn primary" data-act="go">Download</button><button class="btn" data-act="no">Cancel</button></div>
+      </div>`;
+    const body = Sheet.open(html, { label: "Save map for offline" });
+    body.querySelector("[data-act=no]").onclick = Sheet.close;
+    body.querySelector("[data-act=go]").onclick = async () => {
+      Sheet.close();
+      Busy.show("Saving map…", 0);
+      try {
+        const result = await Offline.download(plan.urls, (done, total) => Busy.show(`Saving map… ${done}/${total}`, done / total));
+        Toast.show(`Map saved for offline · ${result.ok} tiles${result.failed ? ` (${result.failed} failed)` : ""}`, "", null, 6000);
+      } finally {
+        Busy.hide();
+      }
+    };
+  }
+
   /* ---------- route order ---------- */
+  /** Bike travel table for [start, ...stops], stored on the round so estimates use real times. */
+  async function fetchTravel(start, stops) {
+    if (!state.settings.directions) return null;
+    Busy.show("Getting bike travel times…", 0);
+    const points = [start, ...stops];
+    const table = await Router.matrix(points, (done, total) => Busy.show(`Getting bike travel times… ${done}/${total}`, done / total));
+    if (!table) return null;
+    const ids = ["START", ...stops.map((s) => s.id)];
+    return {
+      table,
+      stored: { n: table.n, index: Object.fromEntries(ids.map((id, i) => [id, i])),
+        dur: Array.from(table.durations, Math.round), dist: Array.from(table.distances, Math.round) },
+    };
+  }
+
+  function routeMetersFor(round) {
+    const t = round.travel;
+    if (!t) return null;
+    let total = 0, prev = "START";
+    for (const id of round.order) { total += t.dist[t.index[prev] * t.n + t.index[id]] || 0; prev = id; }
+    return total + (t.dist[t.index[prev] * t.n] || 0);
+  }
+
   async function reoptimise(keepDone) {
-    Busy.show("Optimising route…");
     try {
       const done = doneIds();
       const doneOrder = keepDone ? state.round.order.filter((id) => done.has(id)) : [];
       const remaining = state.round.stops.filter((s) => !doneOrder.includes(s.id));
-      const sub = { ...state.round, stops: remaining };
-      const startPoint = keepDone && doneOrder.length && state.me && !state.me.stale ? state.me : state.round.start;
-      await Optimizer.optimise({ ...sub, start: startPoint, order: [] }).then((r) => { state.round.order = [...doneOrder, ...r.order]; });
+      const startPoint = keepDone && doneOrder.length && freshMe() ? freshMe() : state.round.start;
+      const travel = await fetchTravel(startPoint, remaining);
+      Busy.show("Optimising route…");
+      const sub = { ...state.round, stops: remaining, start: startPoint, order: [] };
+      await Optimizer.optimise(sub, 2500, travel && travel.table);
+      state.round.order = [...doneOrder, ...sub.order];
       state.round.optimised = true;
+      state.round.optimisedOn = sub.optimisedOn;
+      if (!doneOrder.length && travel) { state.round.travel = travel.stored; state.round.routeMeters = routeMetersFor(state.round); }
       rebuildOrder(); persist();
       state.selectedId = null;
-      renderAll(); showNext();
-      Toast.show(`Route optimised · ≈ ${Util.formatDistance(Round.routeLengthM(state.round))} loop`);
+      renderAll(); showNext(); refreshGuidance(true);
+      Toast.show(`Route optimised${sub.optimisedOn === "bike" ? " on bike travel times" : " (straight-line estimate)"}`);
     } finally {
       Busy.hide();
     }
@@ -2852,13 +3874,15 @@ const App = (() => {
     const listed = state.round.stops.slice().sort((a, b) => (a.listIndex ?? 0) - (b.listIndex ?? 0));
     state.round.order = listed.map((s) => s.id);
     state.round.optimised = false;
-    rebuildOrder(); persist(); state.selectedId = null; renderAll(); showNext();
-    Toast.show(`List order · ≈ ${Util.formatDistance(Round.routeLengthM(state.round))} loop`);
+    state.round.routeMeters = routeMetersFor(state.round);
+    rebuildOrder(); persist(); state.selectedId = null; renderAll(); showNext(); refreshGuidance(true);
+    Toast.show(`List order · ${Util.formatDistance(state.round.routeMeters || Round.routeLengthM(state.round))} loop`);
   }
 
   function setStart(latlng, label) {
     state.round.start = { lat: latlng.lat, lon: latlng.lon ?? latlng.lng, label };
-    persist(); renderMap();
+    state.round.travel = null;
+    persist(); renderMap(); refreshGuidance(true);
     Toast.show("Start point moved", "Re-optimise", () => reoptimise(true), 7000);
   }
 
@@ -2906,17 +3930,25 @@ const App = (() => {
   /* ---------- loading rounds ---------- */
   async function adoptRound(round, { optimise }) {
     if (optimise) {
-      Busy.show("Optimising route…");
-      try { await Optimizer.optimise(round); } finally { Busy.hide(); }
+      try {
+        const travel = await fetchTravel(round.start, round.stops);
+        Busy.show("Optimising route…");
+        await Optimizer.optimise(round, 2500, travel && travel.table);
+        if (travel) { round.travel = travel.stored; round.routeMeters = routeMetersFor(round); }
+      } finally {
+        Busy.hide();
+      }
     }
+    if (Arrival.activeId) closeArrival();
+    Guidance.reset();
     state.round = round;
-    state.progress = Store.loadProgress(round.id);
+    state.progress = { done: {}, history: [], partial: {}, ...Store.loadProgress(round.id) };
     rebuildOrder();
     persist();
     state.selectedId = null;
     renderAll();
     const next = nextStop();
-    MapView.fit([round.start, ...state.ordered.filter((s) => !doneIds().has(s.id)).slice(0, 6)], { animate: false });
+    MapView.fit([round.start, ...upcomingStops().slice(0, 6)], { animate: false });
     if (next) Cards.scrollTo(next.id, false);
   }
 
@@ -3001,18 +4033,20 @@ const App = (() => {
     }
   }
 
+
   /* ---------- location ---------- */
   function handleLocation(position) {
-    const first = !state.me;
+    const first = !state.me || state.me.stale;
     state.me = position;
     MapView.setMe(position);
+    if (!state.round) return;
     Cards.updateDirections(position, state.byId);
-    updateApproach();
-    if (first && !position.stale) { setFollow(true); }
-    else reframeFollow();
-    renderProgressThrottled();
+    if (first && !position.stale) { setFollow(true); refreshGuidance(true); }
+    else { refreshGuidance(); reframeFollow(); }
+    checkArrival();
+    renderNav();
+    renderProgressSoon();
   }
-  const renderProgressThrottled = Util.debounce(renderProgress, 1000);
 
   function handleLocationStatus(status) {
     const banner = Util.$("gpsBanner");
@@ -3032,12 +4066,13 @@ const App = (() => {
       setFollow(!state.follow);
     };
     Util.$("btnOverview").onclick = () => {
+      if (!state.round) return;
       state.mode = state.mode === "all" ? "window" : "all";
       Util.$("btnOverview").classList.toggle("on", state.mode === "all");
       setFollow(false);
       renderMap();
       if (state.mode === "all") MapView.fit([state.round.start, ...state.ordered], { maxZoom: 17 });
-      else { const next = nextStop(); MapView.fit([state.me && !state.me.stale ? state.me : null, ...state.ordered.filter((s) => !doneIds().has(s.id)).slice(0, state.settings.windowSize)].filter(Boolean)); if (next) Cards.scrollTo(next.id); }
+      else { const next = nextStop(); MapView.fit([freshMe(), ...windowStops()].filter(Boolean)); if (next) Cards.scrollTo(next.id); }
     };
     Util.$("csvInput").addEventListener("change", (e) => {
       const file = e.target.files && e.target.files[0];
@@ -3045,33 +4080,45 @@ const App = (() => {
       if (file) importFile(file);
     });
     document.addEventListener("pointerdown", () => LiveLocation.keepScreenOn(), { once: true });
-    MapView.on("stopTap", (id) => { if (state.selectedId === id) openStop(id); else selectStop(id, { fly: false }); });
+    MapView.on("stopTap", (id) => { if (state.selectedId === id || Arrival.activeId) openArrival(id, { auto: false }); else selectStop(id, { fly: false }); });
     MapView.on("userPan", () => { if (state.follow) setFollow(false); });
     MapView.on("longPress", askStartHere);
     MapView.map.on("zoomend", () => { if (state.me) MapView.setMe(state.me); });
+    Guidance.onChange((current) => { MapView.setRoute(current && current.route); renderNav(); renderProgressSoon(); });
+    Arrival.init(Util.$("arrival"), {
+      tick: toggleTick,
+      done: (id) => markDone(id),
+      later: postpone,
+      details: openStop,
+      dismissed: () => closeArrival(),
+      switchTo: (id) => openArrival(id, { auto: true }),
+    });
+    window.addEventListener("online", () => refreshGuidance(true));
   }
 
   async function boot() {
     Sheet.init();
+    Router.setEnabled(state.settings.directions);
     const saved = Store.loadRound();
     const start = saved ? saved.start : ((BUILTIN_ROUND && BUILTIN_ROUND.start) || DEFAULT_START);
     MapView.init(Util.$("map"), start);
     MapView.setStyle(state.settings.mapStyle);
     Cards.init(Util.$("cards"), {
       select: (id) => selectStop(id, { fly: true, fromCards: true }),
-      open: openStop,
+      open: (id) => openArrival(id, { auto: false }),
       done: markDone,
       undo: undoDone,
     });
     if (BUILTIN_ROUND) Geocoder.seed(BUILTIN_ROUND.stops);
     wireControls();
+    Offline.register();
     if (saved && saved.stops && saved.stops.length) await adoptRound(saved, { optimise: false });
     else if (BUILTIN_ROUND) await loadBuiltin();
     else showWelcome();
     LiveLocation.start(handleLocation, handleLocationStatus);
   }
 
-  return { boot, state, markDone, undoDone, openStop, importFile };
+  return { boot, state, markDone, undoDone, openStop, importFile, openArrival };
 })();
 
 document.addEventListener("DOMContentLoaded", () => {
