@@ -1236,7 +1236,7 @@ const Store = (() => {
     settings: "tournee.settings.v1",
     geocache: "tournee.geocache.v1",
   };
-  const DEFAULT_SETTINGS = { mapStyle: "hybrid", follow: true, windowSize: 8, arrivalRadius: 25, voice: false, autoComplete: false, directions: true };
+  const DEFAULT_SETTINGS = { mapStyle: "hybrid", follow: true, windowSize: 8, arrivalRadius: 25, voice: false, autoComplete: false, directions: true, optimiseOrder: false };
 
   function read(key, fallback) {
     try {
@@ -3721,8 +3721,9 @@ const App = (() => {
 
         <div class="group-label">Route order</div>
         <div class="list">
-          <button class="row" data-act="optimise"><span class="r-label">Optimise route<small>Fastest loop by bike from the start, delivered stops kept</small></span><span class="r-value">${r.optimised ? (r.optimisedOn === "bike" ? "On · bike times" : "On") : "Off"}</span></button>
-          <button class="row" data-act="listorder"><span class="r-label">Use the list's own order<small>As written in the imported file</small></span><span class="r-value">${r.optimised ? "" : "On"}</span></button>
+          <button class="row" data-act="orderSwitch" role="switch" aria-checked="${Boolean(r.optimised)}">
+            <span class="r-label">Optimise route order<small>${r.optimised ? "On: fastest loop by bike, delivered stops kept" : "Off: exactly the order of your list"}</small></span>
+            <span class="switch${r.optimised ? " on" : ""}"></span></button>
         </div>
 
         <div class="group-label">Start &amp; finish</div>
@@ -3753,8 +3754,12 @@ const App = (() => {
     const on = (act, fn) => { const el = body.querySelector(`[data-act=${act}]`); if (el) el.onclick = fn; };
     on("import", () => { Sheet.close(); Util.$("csvInput").click(); });
     on("sample", downloadSample);
-    on("optimise", async () => { Sheet.close(); await reoptimise(true); });
-    on("listorder", () => { Sheet.close(); useListOrder(); });
+    on("orderSwitch", async () => {
+      Sheet.close();
+      state.settings.optimiseOrder = !state.round.optimised;
+      Store.saveSettings(state.settings);
+      if (state.settings.optimiseOrder) await reoptimise(true); else useListOrder();
+    });
     on("startHere", () => {
       const me = freshMe();
       if (!me) { Toast.show("No GPS fix yet"); return; }
@@ -3876,7 +3881,7 @@ const App = (() => {
     state.round.optimised = false;
     state.round.routeMeters = routeMetersFor(state.round);
     rebuildOrder(); persist(); state.selectedId = null; renderAll(); showNext(); refreshGuidance(true);
-    Toast.show(`List order · ${Util.formatDistance(state.round.routeMeters || Round.routeLengthM(state.round))} loop`);
+    Toast.show("Following your list’s order");
   }
 
   function setStart(latlng, label) {
@@ -3955,7 +3960,7 @@ const App = (() => {
   async function loadBuiltin() {
     const stops = BUILTIN_ROUND.stops.map((s, i) => ({ ...s, listIndex: i }));
     const round = Round.create({ name: BUILTIN_ROUND.name, source: "builtin", start: BUILTIN_ROUND.start || DEFAULT_START, stops });
-    await adoptRound(round, { optimise: true });
+    await adoptRound(round, { optimise: Boolean(state.settings.optimiseOrder) });
   }
 
   /** Step 1: read the file and show what was understood before building anything. */
@@ -4020,7 +4025,7 @@ const App = (() => {
       const name = file.name.replace(/\.[^.]+$/, "");
       const start = state.round ? state.round.start : DEFAULT_START;
       const round = Round.create({ name, source: "import", start, stops: parsed.stops });
-      await adoptRound(round, { optimise: true });
+      await adoptRound(round, { optimise: Boolean(state.settings.optimiseOrder) });
       const approx = round.stops.filter((s) => s.approx).length;
       const notFound = round.stops.filter((s) => s.clients.some((c) => /ADDRESS NOT FOUND/.test(c.notes))).length;
       const detail = [notFound ? `${notFound} not found` : "", approx ? `${approx} approximate` : ""].filter(Boolean).join(", ");
@@ -4112,7 +4117,11 @@ const App = (() => {
     if (BUILTIN_ROUND) Geocoder.seed(BUILTIN_ROUND.stops);
     wireControls();
     Offline.register();
-    if (saved && saved.stops && saved.stops.length) await adoptRound(saved, { optimise: false });
+    if (saved && saved.stops && saved.stops.length) {
+      await adoptRound(saved, { optimise: false });
+      // Rounds optimised before "list order" became the default go back to the list's order.
+      if (saved.optimised && !state.settings.optimiseOrder) useListOrder();
+    }
     else if (BUILTIN_ROUND) await loadBuiltin();
     else showWelcome();
     LiveLocation.start(handleLocation, handleLocationStatus);

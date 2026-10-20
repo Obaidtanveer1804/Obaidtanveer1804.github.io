@@ -4,7 +4,7 @@
    - Routing and address lookups: always live, never cached. */
 "use strict";
 
-const VERSION = "tournee-2026-10-20";
+const VERSION = "tournee-2026-10-20b";
 const SHELL_CACHE = `${VERSION}-shell`;
 const TILE_CACHE = "tournee-tiles-v1";
 const LIB_CACHE = "tournee-libs-v1";
