@@ -1,239 +1,101 @@
 #!/usr/bin/env python3
-"""Generate the portfolio pages from one source of truth.
+"""Build the portfolio from tools/content.py.
 
-Writes index.html and templates/{experience,education,skills,contact}.html
-from the data below, and re-skins every detail page under templates/*/
-with the shared head, navigation and footer (page content is untouched).
+Outputs
+  site.html                          the graphical website
+  assets/js/portfolio-data.js        the same content for the terminal (index.html)
+  templates/*/*.html                 detail pages re-skinned with the website chrome
+  templates/{experience,...}.html    old section URLs, now redirects into site.html
 
-Run from the repository root:  python3 tools/build_pages.py
+The terminal itself (index.html, terminal.css, terminal.js) is hand-written and
+only reads portfolio-data.js.
+
+Run from anywhere:  python3 tools/build_pages.py
 """
 
 import html
+import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import content as C  # noqa: E402  (local module next to this script)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES_DIR = REPO_ROOT / "templates"
+DATA_FILE = REPO_ROOT / "assets" / "js" / "portfolio-data.js"
+SITE_FILE = "site.html"
+TERMINAL_FILE = "index.html"
 
-SITE_NAME = "Obaid Tanveer"
-EMAIL = "obaidtanveer04@gmail.com"
-GITHUB_URL = "https://github.com/Obaidtanveer1804"
-LINKEDIN_URL = "https://www.linkedin.com/in/obaid-tanveer-1a889523b/"
+FONT_LINKS = (
+    '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
+    '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+    '  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800'
+    '&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">'
+)
 
-# --------------------------------------------------------------------------
-# Content
-# --------------------------------------------------------------------------
+DEVICON_URL = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/{0}/{0}-original.svg"
 
-EXPERIENCE = [
-    {
-        "date": "Aug 2025 – Sep 2026",
-        "role": "Embedded Systems QA Engineer",
-        "org": "Motive",
-        "summary": "Tested AI dashcams and Linux-based embedded products. Wrote test "
-                   "profiles and automation scripts that widened coverage and cut about "
-                   "two weeks of manual testing.",
-        "page": "experience/experience-motive.html",
-    },
-    {
-        "date": "Nov 2024 – Aug 2025",
-        "role": "Embedded Firmware Engineer",
-        "org": "Powersoft",
-        "summary": "Firmware for EV charging and battery management on dual-core STM32H7: "
-                   "an L2 charger built from scratch, a Li-ion BMS over isoSPI and CAN, "
-                   "freeV2G on Raspberry Pi, and an OTA bootloader.",
-        "page": "experience/experience-powersoft.html",
-    },
-    {
-        "date": "Jul 2023 – Nov 2024",
-        "role": "Embedded Firmware Engineer, Robotics",
-        "org": "Esforge",
-        "summary": "Motor-control libraries for RP2040 (PIO) and ESP32 (FreeRTOS, LEDC), "
-                   "firmware and PCBs for industrial food machines, closed-loop steppers "
-                   "with AS5600 encoders.",
-        "page": "experience/experience-esforge.html",
-    },
-    {
-        "date": "Jul 2023 – Aug 2023",
-        "role": "Embedded Engineering Intern",
-        "org": "EPTeck Pvt. Ltd",
-        "summary": "FreeRTOS on ESP32 for IoT projects, firmware debugging with senior "
-                   "engineers, reusable C drivers for peripherals.",
-        "page": "experience/experience-epteck.html",
-    },
-    {
-        "date": "6 months",
-        "role": "Lab Assistant",
-        "org": "PIEAS, Microprocessors & Interfacing Lab",
-        "summary": "Taught STM32 assembly and C, timers, ADCs and GPIO in STM32CubeIDE "
-                   "and Keil, and sensor interfacing.",
-        "page": "experience/experience-pieas.html",
-    },
-    {
-        "date": "Aug 2022 – Sep 2022",
-        "role": "Firmware Engineering Intern",
-        "org": "109 AED",
-        "summary": "Robotics simulation in CoppeliaSim, SolidWorks parts for prototypes, "
-                   "embedded testing and debugging.",
-        "page": "experience/experience-aed.html",
-    },
-]
-
-FEATURED_PROJECTS = [
-    {
-        "title": "Battery Management System",
-        "text": "LTC6804 cell monitoring over isoSPI into an STM32, fault handling and "
-                "SoC estimation, data out over CAN, and a C#/.NET desktop app for live "
-                "monitoring.",
-        "tags": ["STM32", "isoSPI", "LTC6804", "CAN", "C#/.NET"],
-        "image": "assets/dc1941d.png",
-        "page": "templates/projects/project-1.html",
-    },
-    {
-        "title": "Level 2 EV charger",
-        "text": "A 7.4 kW single-phase charger following IEC 61851-1: Control Pilot and "
-                "Proximity Pilot detection, a charging state machine and relay control on "
-                "an STM32H7.",
-        "tags": ["STM32H7", "IEC 61851-1", "ADC", "CAN", "Relays"],
-        "image": "assets/ev-connector-tn.png",
-        "page": "templates/projects/project-2.html",
-    },
-    {
-        "title": "freeV2G",
-        "text": "Bidirectional vehicle-to-grid charging built on OpenEVSE, Whitebeet "
-                "boards and a Raspberry Pi 4.",
-        "tags": ["Raspberry Pi", "Whitebeet", "OpenEVSE", "V2G", "Python"],
-        "image": "assets/whitebeet-2.png",
-        "page": "templates/projects/project-3.html",
-    },
-]
-
-PROJECTS = [
-    ("SCARA robot with ROS2", ["ROS2", "STM32", "CoppeliaSim", "Python"],
-     "assets/ros-2.png", "templates/projects/project-13.html"),
-    ("6-DOF robot arm", ["STM32", "CoppeliaSim", "CAN"],
-     "assets/fyp-6dof.jpeg", "templates/projects/project-4.html"),
-    ("Protein bar pressing machine", ["RP2040", "ESP32", "Robotics"],
-     "assets/protien-press.JPEG", "templates/projects/project-5.html"),
-    ("Paratha pressing machine", ["ESP32", "FreeRTOS", "Robotics"],
-     "assets/paratha-pressing-machine-asm.JPEG", "templates/projects/project-6.html"),
-    ("Filling machine", ["RP2040", "ESP32", "Steppers", "C++"],
-     "assets/filling-machine-pcb.JPEG", "templates/projects/project-7.html"),
-    ("ESP32 smartwatch", ["ESP32", "FreeRTOS", "C++"],
-     "assets/schematic-tn.png", "templates/projects/project-9.html"),
-    ("Stepper library for RP2040", ["RP2040", "PIO", "C++"],
-     "assets/stepper-tn.jpeg", "templates/projects/project-10.html"),
-    ("Smart home relay device", ["ESP32", "PlatformIO", "IoT"],
-     "assets/relay.png", "templates/projects/project-11.html"),
-    ("This portfolio", ["HTML", "CSS", "JavaScript"],
-     "assets/pftn.png", "templates/projects/project-12.html"),
-]
-
-SKILL_GROUPS = [
-    ("Languages", ["C", "Embedded C", "C++", "Python", "Assembly", "C#", "JavaScript"]),
-    ("Microcontrollers & boards", ["STM32 (F0, F4, H7)", "ESP32", "Raspberry Pi Pico",
-                                   "Raspberry Pi 4"]),
-    ("RTOS & operating systems", ["FreeRTOS", "Linux", "Raspbian", "ROS2"]),
-    ("Protocols & buses", ["CAN", "CANopen", "isoSPI", "SPI", "UART", "I²C", "BLE",
-                           "Ethernet"]),
-    ("Domains", ["EV charging", "Battery management", "Motor control", "Robotics",
-                 "Sensor interfacing", "IoT", "Embedded test automation"]),
-    ("Tools", ["STM32CubeIDE", "ESP-IDF", "PlatformIO", "Keil", "Saleae logic analyzer",
-               "CAN sniffer", "Oscilloscope", "CoppeliaSim", "Git"]),
-]
-
-EDUCATION = [
-    {
-        "title": "M.Sc. Electronics, ELISE programme (M1)",
-        "place": "Université Marie et Louis Pasteur, Besançon",
-        "date": "2026 – present",
-        "logo": None,
-        "logo_text": "UMLP",
-        "page": None,
-    },
-    {
-        "title": "B.Sc. Electrical Engineering",
-        "place": "PIEAS, Pakistan Institute of Engineering and Applied Sciences",
-        "date": "2020 – 2024",
-        "logo": "assets/pieas.png",
-        "page": "templates/education/education-university.html",
-    },
-    {
-        "title": "Intermediate (FSc), Pre-Engineering",
-        "place": "College",
-        "date": "",
-        "logo": "assets/college.png",
-        "page": "templates/education/education-intermediate.html",
-    },
-    {
-        "title": "Matric, Science",
-        "place": "High school",
-        "date": "",
-        "logo": "assets/school.png",
-        "page": "templates/education/education-matric.html",
-    },
-]
-
-COURSES = [
-    ("ROS2 for robotics", "assets/ros-2.png", "templates/education/course-ros2.html"),
-    ("STM32 bootloader", "assets/bootloader.png",
-     "templates/education/course-stm32-bootloader.html"),
-    ("STM32 embedded C", "assets/stm.png", "templates/education/course-stm32-embedded-c.html"),
-    ("Robotics fundamentals", "assets/robotics.png", "templates/education/course-robotics.html"),
-    ("CANopen stack", "assets/canopen.png", "templates/education/course-canopen-stack.html"),
-]
-
-NAV_ITEMS = [
-    ("experience", "Experience"),
-    ("projects", "Projects"),
-    ("skills", "Skills"),
-    ("education", "Education"),
-    ("contact", "Contact"),
-]
-
-ICON_PATHS = {
-    "github": "M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37"
-              "-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76"
-              " 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29"
-              "-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0"
-              " .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58"
-              ".23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.39-5.25 5.67.41.36"
-              ".78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z",
-    "linkedin": "M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14"
-                " 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37"
-                " 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12"
-                " 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24"
-                " 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z",
-    "mail": "M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15"
-            "A2.5 2.5 0 0 1 2 18.5v-13Zm2.3-.5 7.7 6.16L19.7 5H4.3ZM20 6.3l-7.38 5.9a1 1 0 0 1"
-            "-1.24 0L4 6.3v12.2c0 .28.22.5.5.5h15a.5.5 0 0 0 .5-.5V6.3Z",
+# Simple 24px line icons (stroke-based), drawn for this site.
+ICONS = {
+    "home": '<path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+    "folder": '<path d="M3 6.5A1.5 1.5 0 0 1 4.5 5H9l2 2.5h8.5A1.5 1.5 0 0 1 21 9v9.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/>',
+    "briefcase": '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/>',
+    "chip": '<rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/>',
+    "cap": '<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/>',
+    "pen": '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
+    "terminal": '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M12 15h5"/>',
+    "arrow": '<path d="M7 17 17 7"/><path d="M8 7h9v9"/>',
+    "bolt": '<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',
+    "wave": '<path d="M2 12h3V6h4v12h4V6h4v6h5"/>',
+    "github": '<path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>',
+    "linkedin": '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"/>',
+    "mail": '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+    "pin": '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
 }
 
+NAV_ITEMS = [
+    ("home", "Home", "home"),
+    ("projects", "Projects", "folder"),
+    ("experience", "Experience", "briefcase"),
+    ("toolkit", "Toolkit", "chip"),
+    ("education", "Education", "cap"),
+    ("contact", "Contact", "pen"),
+]
+
 
 # --------------------------------------------------------------------------
-# Shared partials
+# Small helpers
 # --------------------------------------------------------------------------
 
 def esc(text):
     return html.escape(text, quote=True)
 
 
-def icon(name):
-    return (f'<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">'
-            f'<path d="{ICON_PATHS[name]}"/></svg>')
+def icon(name, extra_class=""):
+    class_name = f"icon {extra_class}".strip()
+    return (f'<svg class="{class_name}" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+            f'stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" '
+            f'aria-hidden="true">{ICONS[name]}</svg>')
 
 
-def social_links():
+def two_tone(first, second, tag="h2", element_id=None):
+    id_attr = f' id="{element_id}-title"' if element_id else ""
+    return (f'<{tag} class="display"{id_attr}><span>{esc(first)}</span>'
+            f'<span class="display__dim">{esc(second)}</span></{tag}>')
+
+
+def social_links(prefix=""):
     return (
-        f'<a href="{GITHUB_URL}" target="_blank" rel="noopener" aria-label="GitHub">'
-        f'{icon("github")}</a>'
-        f'<a href="{LINKEDIN_URL}" target="_blank" rel="noopener" aria-label="LinkedIn">'
-        f'{icon("linkedin")}</a>'
-        f'<a href="mailto:{EMAIL}" aria-label="Email">{icon("mail")}</a>'
+        f'<a href="{C.GITHUB_URL}" target="_blank" rel="noopener" aria-label="GitHub">{icon("github")}</a>'
+        f'<a href="{C.LINKEDIN_URL}" target="_blank" rel="noopener" aria-label="LinkedIn">{icon("linkedin")}</a>'
+        f'<a href="mailto:{C.EMAIL}" aria-label="Email">{icon("mail")}</a>'
     )
 
 
-def head(prefix, title, description="Embedded firmware engineer: STM32, EV charging, "
-                                    "battery management and robotics."):
+def head(prefix, title, description=None):
+    description = description or C.TAGLINE
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -241,303 +103,248 @@ def head(prefix, title, description="Embedded firmware engineer: STM32, EV charg
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(description)}">
-  <meta name="theme-color" content="#0f1420">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}styles.css">"""
+  <meta name="theme-color" content="#151312">
+  {FONT_LINKS}
+  <link rel="stylesheet" href="{prefix}styles.css">
+</head>"""
 
 
-def nav(prefix, active=None):
-    """`prefix` is the relative path back to the repository root."""
-    links = []
-    for section_id, label in NAV_ITEMS:
-        current = ' aria-current="page"' if section_id == active else ""
-        links.append(f'<li><a href="{prefix}index.html#{section_id}"{current}>{label}</a></li>')
-    return f"""<div class="bg" aria-hidden="true"></div>
-  <header class="site-nav">
-    <div class="container site-nav__inner">
-      <a class="site-nav__brand" href="{prefix}index.html"><span class="site-nav__led" aria-hidden="true"></span>{SITE_NAME}</a>
-      <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-links" aria-label="Menu">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
-      </button>
-      <ul class="site-nav__links" id="site-links">
-        {"".join(links)}
-        <li class="site-nav__social">{social_links()}</li>
-      </ul>
-    </div>
-  </header>"""
+def pill_nav(prefix, on_site_page):
+    """Floating icon nav. On site.html links are in-page anchors."""
+    base = "" if on_site_page else f"{prefix}{SITE_FILE}"
+    items = []
+    for section_id, label, icon_name in NAV_ITEMS:
+        items.append(
+            f'<a class="pill-nav__link" href="{base}#{section_id}" data-nav="{section_id}" '
+            f'aria-label="{label}" title="{label}">{icon(icon_name)}</a>')
+    items.append(
+        f'<a class="pill-nav__link pill-nav__link--terminal" href="{prefix}{TERMINAL_FILE}" '
+        f'title="Switch to the terminal">{icon("terminal")}<span>Terminal</span></a>')
+    return f'<nav class="pill-nav" aria-label="Main">{"".join(items)}</nav>'
 
 
 def footer(prefix):
     return f"""<footer class="site-footer">
-    <div class="container site-footer__inner">
-      <span>© <span data-year></span> {SITE_NAME}, Besançon</span>
-      <span><a href="mailto:{EMAIL}">{EMAIL}</a></span>
-    </div>
-  </footer>
-  <script src="{prefix}script.js"></script>"""
+      <span>© <span data-year></span> {esc(C.NAME)} · {esc(C.LOCATION)}</span>
+      <a href="{prefix}{TERMINAL_FILE}">{icon("terminal")} Prefer a shell? Open the terminal</a>
+    </footer>"""
 
 
 def chips(tags):
-    items = "".join(f'<li class="chip">{esc(tag)}</li>' for tag in tags)
-    return f'<ul class="chips">{items}</ul>'
+    return '<ul class="chips">' + "".join(f'<li class="chip">{esc(t)}</li>' for t in tags) + "</ul>"
 
 
 # --------------------------------------------------------------------------
-# Sections (prefix = path from the page to the repository root)
+# Website sections
 # --------------------------------------------------------------------------
 
-def section_experience(prefix, heading_tag="h2"):
-    items = []
-    for job in EXPERIENCE:
-        role = esc(job["role"])
-        if job["page"]:
-            role = f'<a href="{prefix}templates/{job["page"]}">{role}</a>'
-        items.append(f"""
-        <li class="timeline__item">
-          <div class="timeline__date">{esc(job["date"])}</div>
-          <div>
-            <h3 class="timeline__role">{role}</h3>
-            <div class="timeline__org">{esc(job["org"])}</div>
-            <p class="timeline__summary">{esc(job["summary"])}</p>
-          </div>
-        </li>""")
+def profile_card(prefix):
+    return f"""<aside class="profile" aria-label="Profile">
+        <div class="profile__card">
+          <svg class="profile__arc profile__arc--top" viewBox="0 0 200 120" aria-hidden="true"><path d="M2 2c30 90 120 120 196 80"/></svg>
+          <svg class="profile__arc profile__arc--side" viewBox="0 0 120 200" aria-hidden="true"><path d="M118 2C30 40 0 120 40 198"/></svg>
+          <span class="profile__badge" aria-hidden="true">{icon("bolt")}</span>
+          <div class="profile__photo"><img src="{prefix}{C.PHOTO}" alt="{esc(C.NAME)}"></div>
+          <h1 class="profile__name">{esc(C.NAME)}</h1>
+          <p class="profile__tagline">{esc(C.TITLE)} based in {esc(C.LOCATION.split(",")[0])}.</p>
+          <div class="profile__social">{social_links(prefix)}</div>
+        </div>
+      </aside>"""
+
+
+def section_home():
+    stats = "".join(f"""
+          <div class="stat"><span class="stat__value">+{esc(value)}</span><span class="stat__label">{esc(label)}</span></div>"""
+                    for value, label in C.STATS)
+    domains, stack = C.HIGHLIGHT_CARDS
     return f"""
-    <section class="section container" id="experience">
-      <div class="section__head">
-        <{heading_tag} class="section__title">Experience</{heading_tag}>
-        <p class="section__intro">About three years of embedded work, from robotics and
-        food-processing machines to EV chargers, battery packs and AI dashcams.</p>
-      </div>
-      <ol class="timeline" reversed>{"".join(items)}
-      </ol>
-    </section>"""
+      <section class="block block--hero" id="home" aria-labelledby="home-title">
+        {two_tone("Embedded", "Engineer", "h2", "home")}
+        <p class="lede">{esc(C.BIO)}</p>
+        <div class="stats">{stats}
+        </div>
+        <div class="highlight-cards">
+          <a class="highlight highlight--orange" href="#projects">
+            <svg class="highlight__pattern" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M-10 160 C 60 40, 120 220, 200 90 S 330 10, 410 120"/><path d="M-10 190 C 70 80, 140 250, 220 120 S 340 50, 410 150"/></svg>
+            {icon("bolt", "highlight__icon")}
+            <span class="highlight__text">{esc(domains["text"])}</span>
+            <span class="highlight__arrow">{icon("arrow")}</span>
+          </a>
+          <a class="highlight highlight--lime" href="#toolkit">
+            <svg class="highlight__pattern" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path d="M-5 150h40V60h50v90h40V60h60v90h30V60h50v90h40V60h60v90"/></svg>
+            {icon("wave", "highlight__icon")}
+            <span class="highlight__text">{esc(stack["text"])}</span>
+            <span class="highlight__arrow">{icon("arrow")}</span>
+          </a>
+        </div>
+      </section>"""
 
 
 def section_projects(prefix):
-    features = []
-    for project in FEATURED_PROJECTS:
-        features.append(f"""
-        <a class="feature" href="{prefix}{project["page"]}">
-          <div class="feature__media"><img src="{prefix}{project["image"]}" alt="" loading="lazy"></div>
-          <div class="feature__body">
-            <h3 class="feature__title">{esc(project["title"])}</h3>
-            <p class="feature__text">{esc(project["text"])}</p>
-            {chips(project["tags"])}
-            <span class="feature__more">Read the write-up</span>
-          </div>
-        </a>""")
-
-    cards = []
-    for title, tags, image, page in PROJECTS:
-        cards.append(f"""
-        <a class="project" href="{prefix}{page}">
-          <div class="project__media"><img src="{prefix}{image}" alt="" loading="lazy"></div>
-          <div class="project__body">
-            <h3 class="project__title">{esc(title)}</h3>
-            {chips(tags)}
-          </div>
-        </a>""")
-
+    rows = "".join(f"""
+          <li><a class="row" href="{prefix}{p["page"]}">
+            <img class="row__thumb" src="{prefix}{p["image"]}" alt="" loading="lazy">
+            <span class="row__body">
+              <span class="row__title">{esc(p["title"])}</span>
+              <span class="row__meta">{esc(p["subtitle"])}</span>
+            </span>
+            <span class="row__arrow">{icon("arrow")}</span>
+          </a></li>""" for p in C.PROJECTS)
     return f"""
-    <section class="section container" id="projects">
-      <div class="section__head">
-        <h2 class="section__title">Projects</h2>
-        <p class="section__intro">Hardware I've brought up and shipped. Some work was
-        under NDA, so a few write-ups describe the system without schematics.</p>
-      </div>
-      <div class="feature-list">{"".join(features)}
-      </div>
-      <div class="project-grid">{"".join(cards)}
-      </div>
-    </section>"""
+      <section class="block" id="projects" aria-labelledby="projects-title">
+        {two_tone("Recent", "Projects", "h2", "projects")}
+        <ul class="rows">{rows}
+        </ul>
+      </section>"""
 
 
-def section_skills(heading_tag="h2"):
-    groups = "".join(f"""
-        <div class="skill-group">
-          <h3 class="skill-group__title">{esc(name)}</h3>
-          {chips(items)}
-        </div>""" for name, items in SKILL_GROUPS)
+def section_experience(prefix):
+    entries = []
+    for job in C.EXPERIENCE:
+        entries.append(f"""
+          <li><a class="entry" href="{prefix}{job["page"]}">
+            <span class="entry__title">{esc(job["org"])}</span>
+            <span class="entry__role">{esc(job["role"])}</span>
+            <span class="entry__text">{esc(job["summary"])}</span>
+            <span class="entry__date">{esc(job["date"])}</span>
+            <span class="entry__arrow">{icon("arrow")}</span>
+          </a></li>""")
     return f"""
-    <section class="section container" id="skills">
-      <div class="section__head">
-        <{heading_tag} class="section__title">Skills</{heading_tag}>
-      </div>
-      <div class="skill-groups">{groups}
-      </div>
-    </section>"""
+      <section class="block" id="experience" aria-labelledby="experience-title">
+        {two_tone("3 Years of", "Experience", "h2", "experience")}
+        <ul class="entries">{"".join(entries)}
+        </ul>
+      </section>"""
 
 
-def section_education(prefix, heading_tag="h2"):
-    items = []
-    for entry in EDUCATION:
-        if entry["logo"]:
-            logo = f'<img class="edu-item__logo" src="{prefix}{entry["logo"]}" alt="" loading="lazy">'
+def section_toolkit():
+    tiles = []
+    for name, label, devicon, short_label in C.TOOLS:
+        monogram = esc(short_label)
+        if devicon:
+            logo = (f'<span class="tool__logo"><img src="{DEVICON_URL.format(devicon)}" alt="" '
+                    f'loading="lazy" data-fallback="{monogram}"></span>')
         else:
-            logo = f'<span class="edu-item__logo edu-item__logo--text" aria-hidden="true">{esc(entry["logo_text"])}</span>'
-        title = esc(entry["title"])
-        if entry["page"]:
-            title = f'<a href="{prefix}{entry["page"]}">{title}</a>'
-        items.append(f"""
-        <li class="edu-item">
-          {logo}
-          <div>
-            <h3 class="edu-item__title">{title}</h3>
-            <p class="edu-item__place">{esc(entry["place"])}</p>
-          </div>
-          <span class="edu-item__date">{esc(entry["date"])}</span>
-        </li>""")
+            logo = f'<span class="tool__logo tool__logo--mono">{monogram}</span>'
+        tiles.append(f"""
+          <li class="tool">{logo}<span><span class="tool__name">{esc(name)}</span><span class="tool__label">{esc(label)}</span></span></li>""")
 
+    groups = "".join(chips(items) for _, items in C.SKILL_GROUPS)
+    return f"""
+      <section class="block" id="toolkit" aria-labelledby="toolkit-title">
+        {two_tone("Embedded", "Toolkit", "h2", "toolkit")}
+        <ul class="tools">{"".join(tiles)}
+        </ul>
+        <details class="all-skills">
+          <summary>Every skill, grouped</summary>
+          <div class="all-skills__body">{groups}</div>
+        </details>
+      </section>"""
+
+
+def section_education(prefix):
+    entries = []
+    for item in C.EDUCATION:
+        tag_open = f'<a class="entry" href="{prefix}{item["page"]}">' if item["page"] else '<div class="entry entry--static">'
+        tag_close = "</a>" if item["page"] else "</div>"
+        arrow = f'<span class="entry__arrow">{icon("arrow")}</span>' if item["page"] else ""
+        summary = f'<span class="entry__text">{esc(item["summary"])}</span>' if item["summary"] else ""
+        entries.append(f"""
+          <li>{tag_open}
+            <span class="entry__title">{esc(item["title"])}</span>
+            <span class="entry__role">{esc(item["place"])}</span>
+            {summary}
+            <span class="entry__date">{esc(item["date"])}</span>
+            {arrow}
+          {tag_close}</li>""")
     courses = "".join(f"""
-        <li><a href="{prefix}{page}"><img src="{prefix}{image}" alt="" loading="lazy">{esc(name)}</a></li>"""
-                      for name, image, page in COURSES)
-
+          <li><a href="{prefix}{course["page"]}">{esc(course["title"])}{icon("arrow")}</a></li>"""
+                      for course in C.COURSES)
     return f"""
-    <section class="section container" id="education">
-      <div class="section__head">
-        <{heading_tag} class="section__title">Education</{heading_tag}>
-      </div>
-      <ul class="edu-list">{"".join(items)}
-      </ul>
-      <h3 class="subhead">Self-study courses</h3>
-      <ul class="course-list">{courses}
-      </ul>
-    </section>"""
+      <section class="block" id="education" aria-labelledby="education-title">
+        {two_tone("Education", "& Courses", "h2", "education")}
+        <ul class="entries">{"".join(entries)}
+        </ul>
+        <h3 class="subhead">Self-study courses</h3>
+        <ul class="courses">{courses}
+        </ul>
+      </section>"""
 
 
-def section_contact(prefix, heading_tag="h2"):
+def section_contact():
     return f"""
-    <section class="section container" id="contact">
-      <div class="contact">
-        <div>
-          <img class="contact__photo" src="{prefix}assets/profile.jpg" alt="Obaid Tanveer" loading="lazy">
-          <{heading_tag} class="contact__big">Building something with a microcontroller in it?</{heading_tag}>
-          <a class="contact__email" href="mailto:{EMAIL}">{EMAIL}</a>
-          <div class="contact__links">
-            <a class="btn btn--ghost" href="{LINKEDIN_URL}" target="_blank" rel="noopener">{icon("linkedin")} LinkedIn</a>
-            <a class="btn btn--ghost" href="{GITHUB_URL}" target="_blank" rel="noopener">{icon("github")} GitHub</a>
-          </div>
-        </div>
-        <form class="form" id="contact-form">
-          <label>Your email
-            <input type="email" id="contact-email" placeholder="you@company.com" required>
+      <section class="block" id="contact" aria-labelledby="contact-title">
+        {two_tone("Let's work", "together", "h2", "contact")}
+        <form class="form" id="contact-form" data-email="{C.EMAIL}">
+          <label>Name<input type="text" name="name" placeholder="Your name" autocomplete="name" required></label>
+          <label>Email<input type="email" name="email" placeholder="you@company.com" autocomplete="email" required></label>
+          <label class="form__wide">Looking for
+            <select name="topic">
+              <option>Internship</option>
+              <option>Apprenticeship (alternance)</option>
+              <option>Full-time role</option>
+              <option>Freelance or something else</option>
+            </select>
           </label>
-          <label>Organisation
-            <input type="text" id="contact-org" placeholder="Company or school">
-          </label>
-          <label>Message
-            <textarea id="contact-message" placeholder="Hi Obaid," required></textarea>
-          </label>
-          <button class="btn" type="submit">Open in my email app</button>
-          <p class="form__note">This opens your own email app with the message filled in.</p>
+          <label class="form__wide">Message<textarea name="message" placeholder="Tell me about the role or project" required></textarea></label>
+          <button class="btn form__wide" type="submit">Open in my email app</button>
+          <p class="form__note form__wide">Sends nothing by itself: it opens your email app with this message, addressed to {esc(C.EMAIL)}.</p>
         </form>
-      </div>
-    </section>
-  <script>
-    document.getElementById("contact-form").addEventListener("submit", (event) => {{
-      event.preventDefault();
-      const sender = document.getElementById("contact-email").value;
-      const organisation = document.getElementById("contact-org").value;
-      const message = document.getElementById("contact-message").value;
-      const body = `From: ${{sender}}\\nOrganisation: ${{organisation}}\\n\\n${{message}}`;
-      window.location.href = `mailto:{EMAIL}?subject=${{encodeURIComponent("Portfolio message")}}`
-        + `&body=${{encodeURIComponent(body)}}`;
-    }});
-  </script>"""
+      </section>"""
 
 
-HERO = """
-    <section class="container hero">
-      <div>
-        <p class="hero__status">M.Sc. student in Besançon, open to embedded internships</p>
-        <h1 class="hero__name">Obaid Tanveer</h1>
-        <p class="hero__lede">Embedded firmware engineer. I write the C that runs
-        <strong>EV chargers, battery packs and robot arms</strong>, on STM32, ESP32 and RP2040.</p>
-        <div class="hero__actions">
-          <a class="btn" href="#projects">See projects</a>
-          <a class="btn btn--ghost" href="#contact">Get in touch</a>
-        </div>
-      </div>
-      <div class="terminal" role="region" aria-label="Interactive terminal">
-        <div class="terminal__bar">
-          <span class="terminal__dots" aria-hidden="true"><span></span><span></span><span></span></span>
-          ttyACM0 · 115200 baud
-        </div>
-        <div class="terminal__body" data-terminal aria-live="polite"></div>
-        <div class="terminal__chips">
-          <button type="button" data-terminal-command="whoami">whoami</button>
-          <button type="button" data-terminal-command="ls projects">ls projects</button>
-          <button type="button" data-terminal-command="contact">contact</button>
-          <button type="button" data-terminal-command="help">help</button>
-        </div>
-      </div>
-    </section>
-    <div class="scope" aria-hidden="true">
-      <canvas data-scope></canvas>
-      <div class="scope__legend"><span class="ch1">CH1 CAN_H</span><span class="ch2">CH2 ref</span></div>
-    </div>"""
-
-
-# --------------------------------------------------------------------------
-# Page writers
-# --------------------------------------------------------------------------
-
-def write_index():
-    page = f"""{head("", f"{SITE_NAME}, embedded firmware engineer")}
-</head>
-<body>
-  {nav("")}
-  <main>{HERO}
-    {section_experience("")}
-    {section_projects("")}
-    {section_skills()}
-    {section_education("")}
-    {section_contact("")}
-  </main>
-  {footer("")}
+def write_site():
+    prefix = ""
+    page = f"""{head(prefix, f"{C.NAME}, {C.TITLE}")}
+<body class="site">
+  {pill_nav(prefix, on_site_page=True)}
+  <div class="layout">
+    {profile_card(prefix)}
+    <main class="content">{section_home()}{section_projects(prefix)}{section_experience(prefix)}{section_toolkit()}{section_education(prefix)}{section_contact()}
+    {footer(prefix)}
+    </main>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
 """
-    (REPO_ROOT / "index.html").write_text(page, encoding="utf-8")
+    (REPO_ROOT / SITE_FILE).write_text(page, encoding="utf-8")
 
 
-def write_section_pages():
-    """Standalone versions of each section, kept so old links keep working."""
-    prefix = "../"
-    pages = {
-        "experience.html": ("Experience", "experience", section_experience(prefix, "h1")),
-        "education.html": ("Education", "education", section_education(prefix, "h1")),
-        "skills.html": ("Skills", "skills", section_skills("h1")),
-        "contact.html": ("Contact", "contact", section_contact(prefix, "h1")),
-    }
-    for filename, (title, active, body) in pages.items():
-        page = f"""{head(prefix, f"{title}, {SITE_NAME}")}
+# --------------------------------------------------------------------------
+# Old section URLs → redirects (keeps links people may have saved working)
+# --------------------------------------------------------------------------
+
+def write_redirects():
+    for name, anchor in [("experience", "experience"), ("education", "education"),
+                         ("skills", "toolkit"), ("contact", "contact")]:
+        target = f"../{SITE_FILE}#{anchor}"
+        (TEMPLATES_DIR / f"{name}.html").write_text(f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{esc(C.NAME)}</title>
+  <meta http-equiv="refresh" content="0; url={target}">
+  <link rel="canonical" href="{target}">
 </head>
-<body>
-  {nav(prefix, active)}
-  <main>{body}
-  </main>
-  {footer(prefix)}
-</body>
+<body><p><a href="{target}">Continue to {name}</a></p></body>
 </html>
-"""
-        (TEMPLATES_DIR / filename).write_text(page, encoding="utf-8")
+""", encoding="utf-8")
 
 
-DETAIL_SECTION = {
+# --------------------------------------------------------------------------
+# Detail pages
+# --------------------------------------------------------------------------
+
+DETAIL_BACK = {
     "projects": ("projects", "All projects"),
     "experience": ("experience", "All experience"),
-    "education": ("education", "All education"),
+    "education": ("education", "Education"),
 }
 
-NAV_BLOCK = re.compile(r"\s*(<div class=\"bg\"[^>]*>\s*</div>\s*)?<nav\b.*?</nav>", re.S)
-SITE_NAV_BLOCK = re.compile(r"\s*(<div class=\"bg\"[^>]*>\s*</div>\s*)?<header class=\"site-nav\">.*?</header>", re.S)
-COMMENTS = re.compile(r"\s*<!--.*?-->", re.S)
+OLD_NAV = re.compile(r"\s*(<div class=\"bg\"[^>]*>\s*</div>\s*)?<nav\b.*?</nav>", re.S)
+OLD_HEADER = re.compile(r"\s*(<div class=\"bg\"[^>]*>\s*</div>\s*)?<header class=\"site-nav\">.*?</header>", re.S)
 INLINE_ACCENT = re.compile(r'\s*style="color:\s*var\(--clr-accent\);?"')
-
-# Corrections to the old detail-page text (Powersoft is no longer current).
 TEXT_FIXES = {
     "experience-powersoft.html": [
         ("Nov 2024 - Present", "Nov 2024 - Aug 2025"),
@@ -546,54 +353,124 @@ TEXT_FIXES = {
 }
 
 
+def extract_detail_body(source):
+    """Return only the page's own content, without any old or new chrome."""
+    body = re.search(r"<body[^>]*>(.*)</body>", source, re.S).group(1)
+    body = re.sub(r"\s*<!--.*?-->", "", body, flags=re.S)
+    body = OLD_NAV.sub("", body)
+    body = OLD_HEADER.sub("", body)
+    body = re.sub(r'\s*<nav class="pill-nav".*?</nav>', "", body, flags=re.S)
+    body = re.sub(r"\s*<footer\b.*?</footer>", "", body, flags=re.S)
+    body = re.sub(r"\s*<script\b.*?</script>", "", body, flags=re.S)
+    body = re.sub(r'\s*<a class="page-back".*?</a>', "", body, flags=re.S)
+    body = re.sub(r"</?main\b[^>]*>", "", body)
+    body = INLINE_ACCENT.sub("", body)
+    body = body.replace('class="project-page container glass"', 'class="project-page"')
+    return body.strip()
+
+
 def reskin_detail_page(path):
     section_dir = path.parent.name
-    active, back_label = DETAIL_SECTION[section_dir]
+    anchor, back_label = DETAIL_BACK[section_dir]
     prefix = "../../"
     source = path.read_text(encoding="utf-8")
 
     title_match = re.search(r"<title>(.*?)</title>", source, re.S)
-    title = html.unescape(title_match.group(1).strip()) if title_match else SITE_NAME
+    title = html.unescape(title_match.group(1).strip()) if title_match else C.NAME
     title = title.replace(" · ", ", ")
 
-    body_match = re.search(r"<body[^>]*>(.*)</body>", source, re.S)
-    body = body_match.group(1)
-    body = COMMENTS.sub("", body)
-    body = NAV_BLOCK.sub("", body)
-    body = SITE_NAV_BLOCK.sub("", body)
-    body = INLINE_ACCENT.sub("", body)
-    body = re.sub(r"\s*<footer\b.*?</footer>", "", body, flags=re.S)
-    body = re.sub(r"\s*<script\b.*?</script>", "", body, flags=re.S)
-    body = re.sub(r'\s*<a class="page-back".*?</a>', "", body, flags=re.S)
-    body = body.replace('class="project-page container glass"', 'class="project-page"')
-    body = re.sub(r"</?main\b[^>]*>", "", body)
+    body = extract_detail_body(source)
     for old_text, new_text in TEXT_FIXES.get(path.name, []):
         body = body.replace(old_text, new_text)
 
-    back_link = (f'<a class="page-back" href="{prefix}index.html#{active}">'
-                 f'← {back_label}</a>')
-
     page = f"""{head(prefix, title)}
-</head>
-<body>
-  {nav(prefix, active)}
-  <main class="container">
-    {back_link}
-    {body.strip()}
+<body class="detail">
+  {pill_nav(prefix, on_site_page=False)}
+  <main class="detail__main">
+    <a class="page-back" href="{prefix}{SITE_FILE}#{anchor}">← {back_label}</a>
+    {body}
   </main>
-  {footer(prefix)}
+  <div class="detail__footer">{footer(prefix)}</div>
+  <script src="{prefix}script.js"></script>
 </body>
 </html>
 """
     path.write_text(page, encoding="utf-8")
+    return body
+
+
+# --------------------------------------------------------------------------
+# Terminal data (text pulled from the detail pages)
+# --------------------------------------------------------------------------
+
+def plain_text(fragment):
+    text = re.sub(r"<[^>]+>", "", fragment)
+    return re.sub(r"\s+", " ", html.unescape(text)).strip()
+
+
+def paragraphs(body):
+    found = [plain_text(p) for p in re.findall(r"<p\b[^>]*>(.*?)</p>", body, re.S)]
+    skip_prefixes = ("Duration", "Note", "Institution", "Responsibilities")
+    return [p for p in found if p and not p.startswith(skip_prefixes)
+            and "·" not in p[:60] and len(p) > 40]
+
+
+def list_items(body):
+    return [plain_text(li) for li in re.findall(r"<li\b[^>]*>(.*?)</li>", body, re.S)]
+
+
+def first_sentences(text, count=2):
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    return " ".join(sentences[:count])
+
+
+def write_terminal_data(detail_bodies):
+    projects = []
+    for project in C.PROJECTS:
+        body = detail_bodies.get(project["page"], "")
+        intro = paragraphs(body)
+        projects.append({
+            "slug": project["slug"],
+            "title": project["title"],
+            "subtitle": project["subtitle"],
+            "tags": project["tags"],
+            "page": project["page"],
+            "about": first_sentences(intro[0], 3) if intro else project["subtitle"],
+        })
+
+    experience = []
+    for job in C.EXPERIENCE:
+        body = detail_bodies.get(job["page"], "")
+        experience.append({
+            "slug": job["slug"], "org": job["org"], "role": job["role"],
+            "date": job["date"], "summary": job["summary"], "page": job["page"],
+            "points": list_items(body)[:6],
+        })
+
+    data = {
+        "name": C.NAME, "firstName": C.FIRST_NAME, "title": C.TITLE,
+        "location": C.LOCATION, "email": C.EMAIL, "github": C.GITHUB_URL,
+        "linkedin": C.LINKEDIN_URL, "bio": C.BIO, "sitePage": SITE_FILE,
+        "projects": projects, "experience": experience,
+        "education": C.EDUCATION, "courses": C.COURSES,
+        "skills": {name: items for name, items in C.SKILL_GROUPS},
+    }
+    DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
+    DATA_FILE.write_text(
+        "/* Generated by tools/build_pages.py from tools/content.py. Do not edit by hand. */\n"
+        "window.PORTFOLIO = " + json.dumps(data, ensure_ascii=False, indent=2) + ";\n",
+        encoding="utf-8")
 
 
 def main():
-    write_index()
-    write_section_pages()
-    for section_dir in DETAIL_SECTION:
+    write_site()
+    write_redirects()
+    detail_bodies = {}
+    for section_dir in DETAIL_BACK:
         for path in sorted((TEMPLATES_DIR / section_dir).glob("*.html")):
-            reskin_detail_page(path)
+            relative = f"templates/{section_dir}/{path.name}"
+            detail_bodies[relative] = reskin_detail_page(path)
+    write_terminal_data(detail_bodies)
 
 
 if __name__ == "__main__":
