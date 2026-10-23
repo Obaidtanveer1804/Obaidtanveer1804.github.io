@@ -1,143 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Obaid Tanveer · Portfolio</title>
-  <!-- Inter font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet"/>
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
-  <!-- your main stylesheet (up one level) -->
-  <link rel="stylesheet" href="styles.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obaid Tanveer, embedded firmware engineer</title>
+  <meta name="description" content="Embedded firmware engineer: STM32, EV charging, battery management and robotics.">
+  <meta name="theme-color" content="#0f1420">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="bg"></div>
-
-  <nav class="nav glass container">
-    <span class="logo">
-      Obaid Tanveer
-      <a href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" class="nav-social"><i class="fab fa-linkedin"></i></a>
-      <a href="https://github.com/Obaidtanveer1804" target="_blank" class="nav-social"><i class="fab fa-github"></i></a>
-      <a href="mailto:obaidtanveer04@gmail.com" class="nav-social"><i class="fas fa-envelope"></i></a>
-    </span>
-    <ul class="nav__links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="index.html#projects">Projects</a></li>
-      <li><a href="templates/experience.html">Experience</a></li>
-      <li><a href="templates/education.html">Education</a></li>
-      <li><a href="templates/skills.html">Skills</a></li>
-      <li><a href="templates/contact.html">Contact</a></li>
-    </ul>
-  </nav>
-
-  <header class="hero container">
-    <h1 class="headline">
-      Electrical Engineer <span>→</span> Embedded Firmware Engineer
-    </h1>
-    <p class="sub">
-      Transforming data ✧ code ✧ creativity into real-world products.
-    </p>
-    <a href="#projects" class="btn">Explore my work</a>
-  </header>
-
-  <main id="projects" class="projects container">
-    <h2 class="section-title">Featured Work</h2>
-    <div class="grid-8" id="project-grid">
-      <a class="card tilt" href="templates/projects/project-1.html">
-        <img src="assets/dc1941d.png" alt="Battery Management System (BMS)" class="card-image">
-        <div class="card__info">
-          <h3>Battery Management System (BMS)</h3>
-          <span>STM32 · isoSPI · LTC6804 · DC1941D · Eth · .NET · C#</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-2.html">
-        <img src="assets/ev-connector-tn.png" alt="L2 EV Charger" class="card-image">
-        <div class="card__info">
-          <h3>L2 EV Charger</h3>
-          <span>STM32 · ADC · CANbus · Relays · Op-Amp</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-3.html">
-        <img src="assets/whitebeet-2.png" alt="freeV2G" class="card-image">
-        <div class="card__info">
-          <h3>freeV2G</h3>
-          <span>RPi · Whitebeet Boards · OpenEVSE · V2G · Python</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-13.html">
-        <img src="assets/ros-2.png" alt="SCARA Robot with ROS2" class="card-image">
-        <div class="card__info">
-          <h3>SCARA Robot with ROS2</h3>
-          <span>ROBOTICS · ROS2 · STM32 · CoppeliaSim · Python</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-4.html">
-        <img src="assets/fyp-6dof.jpeg" alt="6 DOF Robot" class="card-image">
-        <div class="card__info">
-          <h3>6 DOF Robot</h3>
-          <span>ROBOTICS · STM32 · COPPELIASIM · CANBUS</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-5.html">
-        <img src="assets/protien-press.JPEG" alt="Protein Bars Pressing Machine" class="card-image">
-        <div class="card__info">
-          <h3>Protein Bars Pressing Machine</h3>
-          <span>ROBOTICS · RPI-PICO · ESP32</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-6.html">
-        <img src="assets/paratha-pressing-machine-asm.JPEG" alt="Paratha Pressing Machine" class="card-image">
-        <div class="card__info">
-          <h3>Paratha Pressing Machine</h3>
-          <span>ROBOTICS · ESP32 · FreeRTOS</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-7.html">
-        <img src="assets/filling-machine-pcb.JPEG" alt="Filling Machine" class="card-image">
-        <div class="card__info">
-          <h3>Filling Machine</h3>
-          <span>RPI-PICO · ESP32 · STEPPER-MOTORS · C++</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-9.html">
-        <img src="assets/schematic-tn.png" alt="Smartwatch ESP32" class="card-image">
-        <div class="card__info">
-          <h3>Smartwatch ESP32</h3>
-          <span>FreeRTOS · ESP32 · C++</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-10.html">
-        <img src="assets/stepper-tn.jpeg" alt="Stepper Motor Control Library RPI-Pico" class="card-image">
-        <div class="card__info">
-          <h3>Stepper Motor Control Library RPI-Pico</h3>
-          <span>RPI-Pico · C++ · PIO · Stepper Motors</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-11.html">
-        <img src="assets/relay.png" alt="Smart Home Device ESP32" class="card-image">
-        <div class="card__info">
-          <h3>Smart Home Device ESP32</h3>
-          <span>ESP32 · Arduino · PlatformIO · IoT · Relay</span>
-        </div>
-      </a>
-      <a class="card tilt" href="templates/projects/project-12.html">
-        <img src="assets/pftn.png" alt="Portfolio Website (This website)" class="card-image">
-        <div class="card__info">
-          <h3>Portfolio Website (This website)</h3>
-          <span>HTML · CSS · JS · GitHub</span>
-        </div>
-      </a>
+  <div class="bg" aria-hidden="true"></div>
+  <header class="site-nav">
+    <div class="container site-nav__inner">
+      <a class="site-nav__brand" href="index.html"><span class="site-nav__led" aria-hidden="true"></span>Obaid Tanveer</a>
+      <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-links" aria-label="Menu">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      </button>
+      <ul class="site-nav__links" id="site-links">
+        <li><a href="index.html#experience">Experience</a></li><li><a href="index.html#projects">Projects</a></li><li><a href="index.html#skills">Skills</a></li><li><a href="index.html#education">Education</a></li><li><a href="index.html#contact">Contact</a></li>
+        <li class="site-nav__social"><a href="https://github.com/Obaidtanveer1804" target="_blank" rel="noopener" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a><a href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a><a href="mailto:obaidtanveer04@gmail.com" aria-label="Email"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.3-.5 7.7 6.16L19.7 5H4.3ZM20 6.3l-7.38 5.9a1 1 0 0 1-1.24 0L4 6.3v12.2c0 .28.22.5.5.5h15a.5.5 0 0 0 .5-.5V6.3Z"/></svg></a></li>
+      </ul>
     </div>
+  </header>
+  <main>
+    <section class="container hero">
+      <div>
+        <p class="hero__status">M.Sc. student in Besançon, open to embedded internships</p>
+        <h1 class="hero__name">Obaid Tanveer</h1>
+        <p class="hero__lede">Embedded firmware engineer. I write the C that runs
+        <strong>EV chargers, battery packs and robot arms</strong>, on STM32, ESP32 and RP2040.</p>
+        <div class="hero__actions">
+          <a class="btn" href="#projects">See projects</a>
+          <a class="btn btn--ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <div class="terminal" role="region" aria-label="Interactive terminal">
+        <div class="terminal__bar">
+          <span class="terminal__dots" aria-hidden="true"><span></span><span></span><span></span></span>
+          ttyACM0 · 115200 baud
+        </div>
+        <div class="terminal__body" data-terminal aria-live="polite"></div>
+        <div class="terminal__chips">
+          <button type="button" data-terminal-command="whoami">whoami</button>
+          <button type="button" data-terminal-command="ls projects">ls projects</button>
+          <button type="button" data-terminal-command="contact">contact</button>
+          <button type="button" data-terminal-command="help">help</button>
+        </div>
+      </div>
+    </section>
+    <div class="scope" aria-hidden="true">
+      <canvas data-scope></canvas>
+      <div class="scope__legend"><span class="ch1">CH1 CAN_H</span><span class="ch2">CH2 ref</span></div>
+    </div>
+    
+    <section class="section container" id="experience">
+      <div class="section__head">
+        <h2 class="section__title">Experience</h2>
+        <p class="section__intro">About three years of embedded work, from robotics and
+        food-processing machines to EV chargers, battery packs and AI dashcams.</p>
+      </div>
+      <ol class="timeline" reversed>
+        <li class="timeline__item">
+          <div class="timeline__date">Aug 2025 – Sep 2026</div>
+          <div>
+            <h3 class="timeline__role"><a href="templates/experience/experience-motive.html">Embedded Systems QA Engineer</a></h3>
+            <div class="timeline__org">Motive</div>
+            <p class="timeline__summary">Tested AI dashcams and Linux-based embedded products. Wrote test profiles and automation scripts that widened coverage and cut about two weeks of manual testing.</p>
+          </div>
+        </li>
+        <li class="timeline__item">
+          <div class="timeline__date">Nov 2024 – Aug 2025</div>
+          <div>
+            <h3 class="timeline__role"><a href="templates/experience/experience-powersoft.html">Embedded Firmware Engineer</a></h3>
+            <div class="timeline__org">Powersoft</div>
+            <p class="timeline__summary">Firmware for EV charging and battery management on dual-core STM32H7: an L2 charger built from scratch, a Li-ion BMS over isoSPI and CAN, freeV2G on Raspberry Pi, and an OTA bootloader.</p>
+          </div>
+        </li>
+        <li class="timeline__item">
+          <div class="timeline__date">Jul 2023 – Nov 2024</div>
+          <div>
+            <h3 class="timeline__role"><a href="templates/experience/experience-esforge.html">Embedded Firmware Engineer, Robotics</a></h3>
+            <div class="timeline__org">Esforge</div>
+            <p class="timeline__summary">Motor-control libraries for RP2040 (PIO) and ESP32 (FreeRTOS, LEDC), firmware and PCBs for industrial food machines, closed-loop steppers with AS5600 encoders.</p>
+          </div>
+        </li>
+        <li class="timeline__item">
+          <div class="timeline__date">Jul 2023 – Aug 2023</div>
+          <div>
+            <h3 class="timeline__role"><a href="templates/experience/experience-epteck.html">Embedded Engineering Intern</a></h3>
+            <div class="timeline__org">EPTeck Pvt. Ltd</div>
+            <p class="timeline__summary">FreeRTOS on ESP32 for IoT projects, firmware debugging with senior engineers, reusable C drivers for peripherals.</p>
+          </div>
+        </li>
+        <li class="timeline__item">
+          <div class="timeline__date">6 months</div>
+          <div>
+            <h3 class="timeline__role"><a href="templates/experience/experience-pieas.html">Lab Assistant</a></h3>
+            <div class="timeline__org">PIEAS, Microprocessors &amp; Interfacing Lab</div>
+            <p class="timeline__summary">Taught STM32 assembly and C, timers, ADCs and GPIO in STM32CubeIDE and Keil, and sensor interfacing.</p>
+          </div>
+        </li>
+        <li class="timeline__item">
+          <div class="timeline__date">Aug 2022 – Sep 2022</div>
+          <div>
+            <h3 class="timeline__role"><a href="templates/experience/experience-aed.html">Firmware Engineering Intern</a></h3>
+            <div class="timeline__org">109 AED</div>
+            <p class="timeline__summary">Robotics simulation in CoppeliaSim, SolidWorks parts for prototypes, embedded testing and debugging.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+    
+    <section class="section container" id="projects">
+      <div class="section__head">
+        <h2 class="section__title">Projects</h2>
+        <p class="section__intro">Hardware I've brought up and shipped. Some work was
+        under NDA, so a few write-ups describe the system without schematics.</p>
+      </div>
+      <div class="feature-list">
+        <a class="feature" href="templates/projects/project-1.html">
+          <div class="feature__media"><img src="assets/dc1941d.png" alt="" loading="lazy"></div>
+          <div class="feature__body">
+            <h3 class="feature__title">Battery Management System</h3>
+            <p class="feature__text">LTC6804 cell monitoring over isoSPI into an STM32, fault handling and SoC estimation, data out over CAN, and a C#/.NET desktop app for live monitoring.</p>
+            <ul class="chips"><li class="chip">STM32</li><li class="chip">isoSPI</li><li class="chip">LTC6804</li><li class="chip">CAN</li><li class="chip">C#/.NET</li></ul>
+            <span class="feature__more">Read the write-up</span>
+          </div>
+        </a>
+        <a class="feature" href="templates/projects/project-2.html">
+          <div class="feature__media"><img src="assets/ev-connector-tn.png" alt="" loading="lazy"></div>
+          <div class="feature__body">
+            <h3 class="feature__title">Level 2 EV charger</h3>
+            <p class="feature__text">A 7.4 kW single-phase charger following IEC 61851-1: Control Pilot and Proximity Pilot detection, a charging state machine and relay control on an STM32H7.</p>
+            <ul class="chips"><li class="chip">STM32H7</li><li class="chip">IEC 61851-1</li><li class="chip">ADC</li><li class="chip">CAN</li><li class="chip">Relays</li></ul>
+            <span class="feature__more">Read the write-up</span>
+          </div>
+        </a>
+        <a class="feature" href="templates/projects/project-3.html">
+          <div class="feature__media"><img src="assets/whitebeet-2.png" alt="" loading="lazy"></div>
+          <div class="feature__body">
+            <h3 class="feature__title">freeV2G</h3>
+            <p class="feature__text">Bidirectional vehicle-to-grid charging built on OpenEVSE, Whitebeet boards and a Raspberry Pi 4.</p>
+            <ul class="chips"><li class="chip">Raspberry Pi</li><li class="chip">Whitebeet</li><li class="chip">OpenEVSE</li><li class="chip">V2G</li><li class="chip">Python</li></ul>
+            <span class="feature__more">Read the write-up</span>
+          </div>
+        </a>
+      </div>
+      <div class="project-grid">
+        <a class="project" href="templates/projects/project-13.html">
+          <div class="project__media"><img src="assets/ros-2.png" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">SCARA robot with ROS2</h3>
+            <ul class="chips"><li class="chip">ROS2</li><li class="chip">STM32</li><li class="chip">CoppeliaSim</li><li class="chip">Python</li></ul>
+          </div>
+        </a>
+        <a class="project" href="templates/projects/project-4.html">
+          <div class="project__media"><img src="assets/fyp-6dof.jpeg" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">6-DOF robot arm</h3>
+            <ul class="chips"><li class="chip">STM32</li><li class="chip">CoppeliaSim</li><li class="chip">CAN</li></ul>
+          </div>
+        </a>
+        <a class="project" href="templates/projects/project-5.html">
+          <div class="project__media"><img src="assets/protien-press.JPEG" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">Protein bar pressing machine</h3>
+            <ul class="chips"><li class="chip">RP2040</li><li class="chip">ESP32</li><li class="chip">Robotics</li></ul>
+          </div>
+        </a>
+        <a class="project" href="templates/projects/project-6.html">
+          <div class="project__media"><img src="assets/paratha-pressing-machine-asm.JPEG" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">Paratha pressing machine</h3>
+            <ul class="chips"><li class="chip">ESP32</li><li class="chip">FreeRTOS</li><li class="chip">Robotics</li></ul>
+          </div>
+        </a>
+        <a class="project" href="templates/projects/project-7.html">
+          <div class="project__media"><img src="assets/filling-machine-pcb.JPEG" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">Filling machine</h3>
+            <ul class="chips"><li class="chip">RP2040</li><li class="chip">ESP32</li><li class="chip">Steppers</li><li class="chip">C++</li></ul>
+          </div>
+        </a>
+        <a class="project" href="templates/projects/project-9.html">
+          <div class="project__media"><img src="assets/schematic-tn.png" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">ESP32 smartwatch</h3>
+            <ul class="chips"><li class="chip">ESP32</li><li class="chip">FreeRTOS</li><li class="chip">C++</li></ul>
+          </div>
+        </a>
+        <a class="project" href="templates/projects/project-10.html">
+          <div class="project__media"><img src="assets/stepper-tn.jpeg" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">Stepper library for RP2040</h3>
+            <ul class="chips"><li class="chip">RP2040</li><li class="chip">PIO</li><li class="chip">C++</li></ul>
+          </div>
+        </a>
+        <a class="project" href="templates/projects/project-11.html">
+          <div class="project__media"><img src="assets/relay.png" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">Smart home relay device</h3>
+            <ul class="chips"><li class="chip">ESP32</li><li class="chip">PlatformIO</li><li class="chip">IoT</li></ul>
+          </div>
+        </a>
+        <a class="project" href="templates/projects/project-12.html">
+          <div class="project__media"><img src="assets/pftn.png" alt="" loading="lazy"></div>
+          <div class="project__body">
+            <h3 class="project__title">This portfolio</h3>
+            <ul class="chips"><li class="chip">HTML</li><li class="chip">CSS</li><li class="chip">JavaScript</li></ul>
+          </div>
+        </a>
+      </div>
+    </section>
+    
+    <section class="section container" id="skills">
+      <div class="section__head">
+        <h2 class="section__title">Skills</h2>
+      </div>
+      <div class="skill-groups">
+        <div class="skill-group">
+          <h3 class="skill-group__title">Languages</h3>
+          <ul class="chips"><li class="chip">C</li><li class="chip">Embedded C</li><li class="chip">C++</li><li class="chip">Python</li><li class="chip">Assembly</li><li class="chip">C#</li><li class="chip">JavaScript</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3 class="skill-group__title">Microcontrollers &amp; boards</h3>
+          <ul class="chips"><li class="chip">STM32 (F0, F4, H7)</li><li class="chip">ESP32</li><li class="chip">Raspberry Pi Pico</li><li class="chip">Raspberry Pi 4</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3 class="skill-group__title">RTOS &amp; operating systems</h3>
+          <ul class="chips"><li class="chip">FreeRTOS</li><li class="chip">Linux</li><li class="chip">Raspbian</li><li class="chip">ROS2</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3 class="skill-group__title">Protocols &amp; buses</h3>
+          <ul class="chips"><li class="chip">CAN</li><li class="chip">CANopen</li><li class="chip">isoSPI</li><li class="chip">SPI</li><li class="chip">UART</li><li class="chip">I²C</li><li class="chip">BLE</li><li class="chip">Ethernet</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3 class="skill-group__title">Domains</h3>
+          <ul class="chips"><li class="chip">EV charging</li><li class="chip">Battery management</li><li class="chip">Motor control</li><li class="chip">Robotics</li><li class="chip">Sensor interfacing</li><li class="chip">IoT</li><li class="chip">Embedded test automation</li></ul>
+        </div>
+        <div class="skill-group">
+          <h3 class="skill-group__title">Tools</h3>
+          <ul class="chips"><li class="chip">STM32CubeIDE</li><li class="chip">ESP-IDF</li><li class="chip">PlatformIO</li><li class="chip">Keil</li><li class="chip">Saleae logic analyzer</li><li class="chip">CAN sniffer</li><li class="chip">Oscilloscope</li><li class="chip">CoppeliaSim</li><li class="chip">Git</li></ul>
+        </div>
+      </div>
+    </section>
+    
+    <section class="section container" id="education">
+      <div class="section__head">
+        <h2 class="section__title">Education</h2>
+      </div>
+      <ul class="edu-list">
+        <li class="edu-item">
+          <span class="edu-item__logo edu-item__logo--text" aria-hidden="true">UMLP</span>
+          <div>
+            <h3 class="edu-item__title">M.Sc. Electronics, ELISE programme (M1)</h3>
+            <p class="edu-item__place">Université Marie et Louis Pasteur, Besançon</p>
+          </div>
+          <span class="edu-item__date">2026 – present</span>
+        </li>
+        <li class="edu-item">
+          <img class="edu-item__logo" src="assets/pieas.png" alt="" loading="lazy">
+          <div>
+            <h3 class="edu-item__title"><a href="templates/education/education-university.html">B.Sc. Electrical Engineering</a></h3>
+            <p class="edu-item__place">PIEAS, Pakistan Institute of Engineering and Applied Sciences</p>
+          </div>
+          <span class="edu-item__date">2020 – 2024</span>
+        </li>
+        <li class="edu-item">
+          <img class="edu-item__logo" src="assets/college.png" alt="" loading="lazy">
+          <div>
+            <h3 class="edu-item__title"><a href="templates/education/education-intermediate.html">Intermediate (FSc), Pre-Engineering</a></h3>
+            <p class="edu-item__place">College</p>
+          </div>
+          <span class="edu-item__date"></span>
+        </li>
+        <li class="edu-item">
+          <img class="edu-item__logo" src="assets/school.png" alt="" loading="lazy">
+          <div>
+            <h3 class="edu-item__title"><a href="templates/education/education-matric.html">Matric, Science</a></h3>
+            <p class="edu-item__place">High school</p>
+          </div>
+          <span class="edu-item__date"></span>
+        </li>
+      </ul>
+      <h3 class="subhead">Self-study courses</h3>
+      <ul class="course-list">
+        <li><a href="templates/education/course-ros2.html"><img src="assets/ros-2.png" alt="" loading="lazy">ROS2 for robotics</a></li>
+        <li><a href="templates/education/course-stm32-bootloader.html"><img src="assets/bootloader.png" alt="" loading="lazy">STM32 bootloader</a></li>
+        <li><a href="templates/education/course-stm32-embedded-c.html"><img src="assets/stm.png" alt="" loading="lazy">STM32 embedded C</a></li>
+        <li><a href="templates/education/course-robotics.html"><img src="assets/robotics.png" alt="" loading="lazy">Robotics fundamentals</a></li>
+        <li><a href="templates/education/course-canopen-stack.html"><img src="assets/canopen.png" alt="" loading="lazy">CANopen stack</a></li>
+      </ul>
+    </section>
+    
+    <section class="section container" id="contact">
+      <div class="contact">
+        <div>
+          <img class="contact__photo" src="assets/profile.jpg" alt="Obaid Tanveer" loading="lazy">
+          <h2 class="contact__big">Building something with a microcontroller in it?</h2>
+          <a class="contact__email" href="mailto:obaidtanveer04@gmail.com">obaidtanveer04@gmail.com</a>
+          <div class="contact__links">
+            <a class="btn btn--ghost" href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg> LinkedIn</a>
+            <a class="btn btn--ghost" href="https://github.com/Obaidtanveer1804" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg> GitHub</a>
+          </div>
+        </div>
+        <form class="form" id="contact-form">
+          <label>Your email
+            <input type="email" id="contact-email" placeholder="you@company.com" required>
+          </label>
+          <label>Organisation
+            <input type="text" id="contact-org" placeholder="Company or school">
+          </label>
+          <label>Message
+            <textarea id="contact-message" placeholder="Hi Obaid," required></textarea>
+          </label>
+          <button class="btn" type="submit">Open in my email app</button>
+          <p class="form__note">This opens your own email app with the message filled in.</p>
+        </form>
+      </div>
+    </section>
+  <script>
+    document.getElementById("contact-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const sender = document.getElementById("contact-email").value;
+      const organisation = document.getElementById("contact-org").value;
+      const message = document.getElementById("contact-message").value;
+      const body = `From: ${sender}\nOrganisation: ${organisation}\n\n${message}`;
+      window.location.href = `mailto:obaidtanveer04@gmail.com?subject=${encodeURIComponent("Portfolio message")}`
+        + `&body=${encodeURIComponent(body)}`;
+    });
+  </script>
   </main>
-
-  <footer class="footer container">
-    © <span id="year"></span> Obaid Tanveer
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <span>© <span data-year></span> Obaid Tanveer, Besançon</span>
+      <span><a href="mailto:obaidtanveer04@gmail.com">obaidtanveer04@gmail.com</a></span>
+    </div>
   </footer>
-
-  <!-- CDN tilt.js -->
-  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.3/dist/vanilla-tilt.min.js"></script>
-  <!-- Custom script -->
-  <script src="../script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

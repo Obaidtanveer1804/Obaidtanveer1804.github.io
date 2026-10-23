@@ -1,48 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smartwatch ESP32 · Obaid Tanveer</title>
-  <link rel="stylesheet" href="../../styles.css" />
-  <style>
-    .project-page p strong {
-      color: var(--clr-accent); /* Matches the theme's orange accent */
-    }
-    .title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline; /* Aligns items by their baseline */
-      margin-bottom: 1rem;
-    }
-    .title-row h1 {
-      margin: 0; /* Reset default margin on h1 */
-      line-height: 1; /* Ensure consistent line height */
-    }
-    .btn {
-      padding: 0.5rem 1.2rem; /* Adjusted padding for height */
-      font-size: 1rem;
-      line-height: 1; /* Match the line height of the title */
-      display: inline-flex;
-      align-items: center; /* Center the button text vertically */
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smartwatch ESP32, Obaid Tanveer</title>
+  <meta name="description" content="Embedded firmware engineer: STM32, EV charging, battery management and robotics.">
+  <meta name="theme-color" content="#0f1420">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
 </head>
 <body>
-  <div class="bg"></div>
-  <nav class="nav glass container">
-    <span class="logo">Obaid Tanveer</span>
-    <ul class="nav__links">
-      <li><a href="../../index.html">Home</a></li>
-      <li><a href="../../index.html#projects" class="active">Projects</a></li>
-      <li><a href="../experience.html">Experience</a></li>
-      <li><a href="../education.html">Education</a></li>
-      <li><a href="../skills.html">Skills</a></li>
-      <li><a href="../contact.html">Contact</a></li>
-    </ul>
-  </nav>
-
-  <article class="project-page container glass">
+  <div class="bg" aria-hidden="true"></div>
+  <header class="site-nav">
+    <div class="container site-nav__inner">
+      <a class="site-nav__brand" href="../../index.html"><span class="site-nav__led" aria-hidden="true"></span>Obaid Tanveer</a>
+      <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-links" aria-label="Menu">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      </button>
+      <ul class="site-nav__links" id="site-links">
+        <li><a href="../../index.html#experience">Experience</a></li><li><a href="../../index.html#projects" aria-current="page">Projects</a></li><li><a href="../../index.html#skills">Skills</a></li><li><a href="../../index.html#education">Education</a></li><li><a href="../../index.html#contact">Contact</a></li>
+        <li class="site-nav__social"><a href="https://github.com/Obaidtanveer1804" target="_blank" rel="noopener" aria-label="GitHub"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.18-3.08-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.58.23 2.75.11 3.04.74.8 1.18 1.83 1.18 3.08 0 4.41-2.69 5.39-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg></a><a href="https://www.linkedin.com/in/obaid-tanveer-1a889523b/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></svg></a><a href="mailto:obaidtanveer04@gmail.com" aria-label="Email"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 5.5A2.5 2.5 0 0 1 4.5 3h15A2.5 2.5 0 0 1 22 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 18.5v-13Zm2.3-.5 7.7 6.16L19.7 5H4.3ZM20 6.3l-7.38 5.9a1 1 0 0 1-1.24 0L4 6.3v12.2c0 .28.22.5.5.5h15a.5.5 0 0 0 .5-.5V6.3Z"/></svg></a></li>
+      </ul>
+    </div>
+  </header>
+  <main class="container">
+    <a class="page-back" href="../../index.html#projects">← All projects</a>
+    <article class="project-page">
     <div class="title-row">
       <h1>Smartwatch ESP32</h1>
       <a class="btn" href="https://github.com/obaidtanveer/smartwatch-esp32" target="_blank">View Code ↗</a>
@@ -202,10 +187,13 @@
       This Smartwatch ESP32 project was a testament to my ability to design and build a complex embedded system from scratch. From integrating sensors to optimizing power consumption, I tackled every challenge with precision, learning the intricacies of FreeRTOS, ESP32 programming, and wearable technology along the way. This project not only honed my technical skills but also fueled my passion for creating practical, user-focused devices that can make a real impact.
     </p>
   </article>
-
-  <footer class="footer container">
-    © <span id="year"></span> Obaid Tanveer
+  </main>
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <span>© <span data-year></span> Obaid Tanveer, Besançon</span>
+      <span><a href="mailto:obaidtanveer04@gmail.com">obaidtanveer04@gmail.com</a></span>
+    </div>
   </footer>
-  <script src="script.js"></script>
+  <script src="../../script.js"></script>
 </body>
 </html>
