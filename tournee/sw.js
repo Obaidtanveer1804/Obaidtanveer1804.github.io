@@ -4,12 +4,12 @@
    - Routing and address lookups: always live, never cached. */
 "use strict";
 
-const VERSION = "tournee-2026-10-20b";
+const VERSION = "tournee-2026-10-26";
 const SHELL_CACHE = `${VERSION}-shell`;
 const TILE_CACHE = "tournee-tiles-v1";
 const LIB_CACHE = "tournee-libs-v1";
 const MAX_TILES = 12000;
-const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./lib/xlsx.full.min.js"];
+const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icons/icon-180.png", "./icons/icon-192.png", "./icons/icon-512.png", "./lib/xlsx.full.min.js"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(SHELL_CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));
