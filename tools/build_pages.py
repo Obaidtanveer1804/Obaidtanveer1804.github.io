@@ -28,6 +28,27 @@ DATA_FILE = REPO_ROOT / "assets" / "js" / "portfolio-data.js"
 SITE_FILE = "site.html"
 TERMINAL_FILE = "index.html"
 
+# Motion (the vanilla-JS build of Framer Motion). Pinned version, loaded from jsDelivr.
+MOTION_CDN_URL = "https://cdn.jsdelivr.net/npm/motion@11.11.13/dist/motion.js"
+
+# Hides the intro elements before first paint so they can animate in.
+# If Motion never starts (blocked CDN, old browser), they are shown again after 2.5 s.
+MOTION_HEAD = """
+  <script>
+    (() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+      const root = document.documentElement;
+      root.classList.add("js-motion");
+      window.setTimeout(() => {
+        if (!window.__siteMotionStarted) {
+          root.classList.remove("js-motion");
+        }
+      }, 2500);
+    })();
+  </script>"""
+
 FONT_LINKS = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
@@ -94,7 +115,7 @@ def social_links(prefix=""):
     )
 
 
-def head(prefix, title, description=None):
+def head(prefix, title, description=None, extra=""):
     description = description or C.TAGLINE
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -105,7 +126,7 @@ def head(prefix, title, description=None):
   <meta name="description" content="{esc(description)}">
   <meta name="theme-color" content="#151312">
   {FONT_LINKS}
-  <link rel="stylesheet" href="{prefix}styles.css">
+  <link rel="stylesheet" href="{prefix}styles.css">{extra}
 </head>"""
 
 
@@ -154,7 +175,7 @@ def profile_card(prefix):
 
 def section_home():
     stats = "".join(f"""
-          <div class="stat"><span class="stat__value">+{esc(value)}</span><span class="stat__label">{esc(label)}</span></div>"""
+          <div class="stat"><span class="stat__value" data-count="{esc(value)}">+{esc(value)}</span><span class="stat__label">{esc(label)}</span></div>"""
                     for value, label in C.STATS)
     domains, stack = C.HIGHLIGHT_CARDS
     return f"""
@@ -295,7 +316,7 @@ def section_contact():
 
 def write_site():
     prefix = ""
-    page = f"""{head(prefix, f"{C.NAME}, {C.TITLE}")}
+    page = f"""{head(prefix, f"{C.NAME}, {C.TITLE}", extra=MOTION_HEAD)}
 <body class="site">
   {pill_nav(prefix, on_site_page=True)}
   <div class="layout">
@@ -305,6 +326,8 @@ def write_site():
     </main>
   </div>
   <script src="script.js"></script>
+  <script src="{MOTION_CDN_URL}"></script>
+  <script src="assets/js/site-motion.js"></script>
 </body>
 </html>
 """
