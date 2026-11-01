@@ -1292,7 +1292,7 @@ const Store = (() => {
     round: "tournee.round.v1",
     progress: "tournee.progress.v1",
     settings: "tournee.settings.v1",
-    geocache: "tournee.geocache.v1",
+    geocache: "tournee.geocache.v2",
     notes: "tournee.notes.v1",
     pins: "tournee.pins.v1",
   };
@@ -1384,6 +1384,7 @@ const Round = (() => {
     return {
       early: /avant\s*7|before\s*7/i.test(text),
       must: /not\s*received|non\s*re[çc]u/i.test(text),
+      redeliver: /re-?deliver|relivr|forgot|oubli|missed|extra\s*cop|\bcopies\b|\b[x×]\s?[2-9]\b|yesterday|d['’]hier|magazine/i.test(text),
       suspended: /suspend|grey|gris|skip/i.test(client.status || ""),
       isNew: Boolean(client.isNew) || /\bnew\b|nouveau/i.test(text),
       check: /\bcheck\b|v[ée]rifier|\?/i.test(client.notes || ""),
@@ -1407,7 +1408,7 @@ const Round = (() => {
       approx: Boolean(raw.approx),
       listIndex: raw.listIndex ?? 0,
       clients,
-      flags: { early: any("early"), must: any("must"), suspended: any("suspended"), isNew: any("isNew"), check: any("check"),
+      flags: { early: any("early"), must: any("must"), redeliver: any("redeliver"), suspended: any("suspended"), isNew: any("isNew"), check: any("check"),
         nothingToDeliver: clients.every((c) => c.flags.suspended) },
     };
   }
@@ -2100,6 +2101,18 @@ const Geocoder = (() => {
   const ENDPOINT = "https://data.geopf.fr/geocodage/search";
   const CONCURRENCY = 4;
   const GOOD_SCORE = 0.75;
+  const TITLE_WORDS_UPPER = /\b(PROFESSEUR|PROF|DOCTEUR|DR|GENERAL|MARECHAL|COMMANDANT|CAPITAINE|COLONEL|LIEUTENANT|ABBE|PRESIDENT)\b/gi;
+
+  /** Other spellings to try: without titles ("rue Magnin"), and local name quirks of the address base. */
+  function streetVariants(street) {
+    const plain = Util.stripAccents(street || "");
+    const out = [];
+    const noTitle = plain.replace(TITLE_WORDS_UPPER, " ").replace(/\s+/g, " ").trim();
+    if (noTitle.toLowerCase() !== plain.toLowerCase()) out.push(noTitle);
+    // The national address base files "avenue du 60e Régiment d'Infanterie" as "Avenue du Soixantième Rue I".
+    if (/60\s*(e|eme)\b.*(r[ée]giment|\bri\b)/i.test(plain)) out.push("AVENUE DU SOIXANTIEME");
+    return out;
+  }
 
   let cache = Store.loadGeocache();
 
@@ -2129,17 +2142,47 @@ const Geocoder = (() => {
     return { lat, lon, score: feature.properties.score, type: feature.properties.type, label: feature.properties.label };
   }
 
+  /* Words that are often dropped from official street names ("rue Professeur Magnin" is "rue Magnin"). */
+  const TITLE_WORDS = /\b(professeur|prof|docteur|dr|general|gal|marechal|mal|commandant|cdt|capitaine|cne|colonel|lieutenant|abbe|president|saint|ste?)\b/g;
+  const STREET_TYPES = /\b(rue|avenue|av|bd|boulevard|chemin|ch|place|pl|quai|passage|impasse|allee|all|route|square|cours|cite|voie|voies)\b/g;
+
+  /** Distinctive words of a street name: no accents, no street type, no "de/du/la", no titles. */
+  function streetWords(text) {
+    return Util.stripAccents(String(text || "")).toLowerCase().replace(/['’.,-]/g, " ")
+      .replace(STREET_TYPES, " ").replace(TITLE_WORDS, " ")
+      .split(/\s+/).filter((w) => w.length > 2 && !/^(des|les|aux|sur)$/.test(w));
+  }
+
+  /** True when the geocoder's answer is on the street we asked for (all distinctive words present). */
+  function sameStreet(asked, label) {
+    const want = streetWords(asked);
+    if (!want.length) return true;
+    const got = new Set(streetWords(label));
+    return want.every((w) => got.has(w));
+  }
+
   async function locate(stop) {
     const key = stop.key || Util.addressKey(stop.number, stop.street);
     if (cache[key]) return { ...cache[key], cached: true };
     const postcode = stop.postcode || "";
     const place = `${postcode} ${stop.city || "Besançon"}`.trim();
-    let hit = await query(`${stop.number} ${stop.street} ${place}`, postcode);
-    if (!hit || hit.score < 0.5) {
-      const streetOnly = await query(`${stop.street} ${place}`, postcode);
-      if (streetOnly) hit = { ...streetOnly, score: Math.min(streetOnly.score, 0.5) };
+    const variants = [...new Set([stop.street, ...streetVariants(stop.street)].filter(Boolean))];
+    // A confident answer is trusted; a weak one only if it is on the street we asked for
+    // (the geocoder answers "3 rue Professeur Magnin" with "3 rue Professeur Haag", score 0.65).
+    const ok = (found) => found && (found.score >= GOOD_SCORE || (found.score >= 0.5 && sameStreet(stop.street, found.label)));
+    let hit = null;
+    for (const street of variants) {
+      const found = await query(`${stop.number} ${street} ${place}`, postcode);
+      if (ok(found)) { hit = found; break; }
     }
-    if (!hit) return null;
+    if (!hit) {
+      // House number not found on the right street: fall back to the street itself, flagged approximate.
+      for (const street of variants) {
+        const streetOnly = await query(`${street} ${place}`, postcode);
+        if (ok(streetOnly)) { hit = { ...streetOnly, score: Math.min(streetOnly.score, 0.5) }; break; }
+      }
+    }
+    if (!hit) return null;   // better "not found" (shown to the user) than a pin on another street
     const entry = { lat: hit.lat, lon: hit.lon, approx: hit.score < GOOD_SCORE || hit.type !== "housenumber", score: hit.score };
     remember(key, entry);
     return entry;
@@ -2677,7 +2720,7 @@ const MapView = (() => {
       else role = "up dot";
       const classes = [role];
       if (stop.id === state.selectedId && role !== "next") classes.push("selected");
-      if (!role.includes("done") && (stop.flags.early || stop.flags.must)) classes.push("alert");
+      if (!role.includes("done") && (stop.flags.early || stop.flags.must || stop.flags.redeliver)) classes.push("alert");
       const marker = L.marker([stop.lat, stop.lon], {
         pane: "pins", icon: pinIcon(label, classes.join(" ")), keyboard: false,
         zIndexOffset: role === "next" ? 2000 : (stop.id === state.selectedId ? 1500 : (role.includes("done") ? -2000 : -stop.seq)),
@@ -3011,6 +3054,7 @@ const Cards = (() => {
     const chips = [];
     if (stop.flags.early) chips.push("<span class=\"chip alert\">Before 7:00</span>");
     if (stop.flags.must) chips.push("<span class=\"chip warnc\">Not received yesterday</span>");
+    if (stop.flags.redeliver) chips.push("<span class=\"chip warnc\">Extra / re-deliver</span>");
     const counts = Round.paperCounts([stop]);
     for (const p of Round.PAPERS.slice().reverse()) {
       if (!counts[p.key]) continue;
@@ -3283,6 +3327,7 @@ const Arrival = (() => {
     const alerts = [
       stop.flags.early ? "<div class=\"alert-row crit\">⏰ Before 7:00</div>" : "",
       stop.flags.must ? "<div class=\"alert-row warn\">⚠️ Not received yesterday — make sure</div>" : "",
+      stop.flags.redeliver ? "<div class=\"alert-row warn\">📦 Extra copies / re-delivery — read the note below</div>" : "",
     ].join("");
     const clients = stop.clients.map((c, i) => {
       const on = ticked.has(i);
@@ -3929,6 +3974,7 @@ const App = (() => {
       client.flags.suspended ? "<span class=\"chip\">Don't deliver</span>" : "",
       client.flags.isNew ? "<span class=\"chip okc\">New</span>" : "",
       client.flags.must ? "<span class=\"chip warnc\">Not received</span>" : "",
+      client.flags.redeliver ? "<span class=\"chip warnc\">Re-deliver</span>" : "",
       client.flags.early ? "<span class=\"chip alert\">Before 7:00</span>" : "",
     ].join("");
     return `
@@ -3952,6 +3998,7 @@ const App = (() => {
       isSkip ? "<div class=\"alert-row info\">Nothing to deliver here today (grey on the list)</div>" : "",
       stop.flags.early ? "<div class=\"alert-row crit\">⏰ Deliver before 7:00</div>" : "",
       stop.flags.must ? "<div class=\"alert-row warn\">⚠️ Reported not received — make sure it's delivered</div>" : "",
+      stop.flags.redeliver ? "<div class=\"alert-row warn\">📦 Extra copies / re-delivery — see the client note</div>" : "",
       stop.approx ? "<div class=\"alert-row info\">📍 Pin position is approximate — use “Fix pin” to correct it once</div>" : "",
     ].join("");
     const html = `
