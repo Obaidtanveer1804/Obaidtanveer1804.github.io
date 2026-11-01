@@ -1292,7 +1292,7 @@ const Store = (() => {
     round: "tournee.round.v1",
     progress: "tournee.progress.v1",
     settings: "tournee.settings.v1",
-    geocache: "tournee.geocache.v2",
+    geocache: "tournee.geocache.v3",
     notes: "tournee.notes.v1",
     pins: "tournee.pins.v1",
   };
@@ -2139,7 +2139,8 @@ const Geocoder = (() => {
     const feature = json.features && json.features[0];
     if (!feature) return null;
     const [lon, lat] = feature.geometry.coordinates;
-    return { lat, lon, score: feature.properties.score, type: feature.properties.type, label: feature.properties.label };
+    return { lat, lon, score: feature.properties.score, type: feature.properties.type, label: feature.properties.label,
+      housenumber: String(feature.properties.housenumber || "").toLowerCase() };
   }
 
   /* Words that are often dropped from official street names ("rue Professeur Magnin" is "rue Magnin"). */
@@ -2159,6 +2160,34 @@ const Geocoder = (() => {
     if (!want.length) return true;
     const got = new Set(streetWords(label));
     return want.every((w) => got.has(w));
+  }
+
+  /** Position of a missing house number from its neighbours on the same side (same parity): linear
+   * between the nearest lower and higher numbers found, or the nearest one if only one side exists. */
+  async function interpolate(stop, variants, place, postcode, ok) {
+    const match = String(stop.number || "").trim().match(/^(\d{1,4})/);
+    if (!match) return null;
+    const n = Number(match[1]);
+    const found = async (num) => {
+      for (const street of variants) {
+        const hit = await query(`${num} ${street} ${place}`, postcode);
+        if (ok(hit) && hit.type === "housenumber" && hit.housenumber === String(num)) return { num, ...hit };
+      }
+      return null;
+    };
+    let below = null, above = null;
+    for (const d of [2, 4, 6]) {
+      if (!below && n - d > 0) below = await found(n - d);
+      if (!above) above = await found(n + d);
+      if (below && above) break;
+    }
+    if (below && above) {
+      const t = (n - below.num) / (above.num - below.num);
+      return { lat: below.lat + t * (above.lat - below.lat), lon: below.lon + t * (above.lon - below.lon),
+        score: 0.6, type: "interpolated", label: `${stop.number} ${stop.street}` };
+    }
+    const one = below || above;
+    return one ? { lat: one.lat, lon: one.lon, score: 0.55, type: "neighbour", label: one.label } : null;
   }
 
   async function locate(stop) {
@@ -2181,6 +2210,12 @@ const Geocoder = (() => {
         const streetOnly = await query(`${street} ${place}`, postcode);
         if (ok(streetOnly)) { hit = { ...streetOnly, score: Math.min(streetOnly.score, 0.5) }; break; }
       }
+    }
+    if (!hit || hit.type !== "housenumber") {
+      // Number missing from the address base (e.g. "10B avenue Léo Lagrange"): place it between the
+      // nearest known numbers on the same side of the street instead of in the middle of the road.
+      const between = await interpolate(stop, variants, place, postcode, ok);
+      if (between) hit = between;
     }
     if (!hit) return null;   // better "not found" (shown to the user) than a pin on another street
     const entry = { lat: hit.lat, lon: hit.lon, approx: hit.score < GOOD_SCORE || hit.type !== "housenumber", score: hit.score };
