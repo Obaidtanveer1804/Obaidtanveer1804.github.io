@@ -2099,7 +2099,7 @@ const Importer = (() => {
 
 const Geocoder = (() => {
   const ENDPOINT = "https://data.geopf.fr/geocodage/search";
-  const CONCURRENCY = 4;
+  const CONCURRENCY = 3;
   const GOOD_SCORE = 0.75;
   const TITLE_WORDS_UPPER = /\b(PROFESSEUR|PROF|DOCTEUR|DR|GENERAL|MARECHAL|COMMANDANT|CAPITAINE|COLONEL|LIEUTENANT|ABBE|PRESIDENT)\b/gi;
 
@@ -2252,6 +2252,22 @@ const Geocoder = (() => {
       }
     }
     await Promise.all(Array.from({ length: Math.min(CONCURRENCY, todo.length) }, worker));
+    // Second pass, one at a time after a pause: under load the address service throttles and a few
+    // addresses come back empty even though they exist. Only what still fails alone is reported.
+    for (let round = 0; round < 2 && failed.length; round++) {
+      await new Promise((r) => setTimeout(r, 1500 * (round + 1)));
+      const retry = failed.splice(0);
+      for (const stop of retry) {
+        try {
+          const found = await locate(stop);
+          if (found) { stop.lat = found.lat; stop.lon = found.lon; stop.approx = found.approx; if (found.approx) approx++; }
+          else failed.push(stop);
+        } catch (err) {
+          failed.push(stop);
+        }
+        await new Promise((r) => setTimeout(r, 250));
+      }
+    }
     Store.saveGeocache(cache);
     return { located: todo.length - failed.length, approx, failed };
   }
