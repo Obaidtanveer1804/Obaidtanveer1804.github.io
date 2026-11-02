@@ -2229,7 +2229,12 @@ const Geocoder = (() => {
       if (between) hit = between;
     }
     if (!hit) return null;   // better "not found" (shown to the user) than a pin on another street
-    const entry = { lat: hit.lat, lon: hit.lon, approx: hit.score < GOOD_SCORE || hit.type !== "housenumber", score: hit.score };
+    // The exact house number on the right street is not approximate, even when the score is low
+    // only because the official street name is shorter ("Rue Pergaud" for "rue Louis Pergaud").
+    const sameNumber = String(hit.housenumber || "").replace(/\s+/g, "").toLowerCase() ===
+      String(stop.number || "").replace(/\s+/g, "").toLowerCase();
+    const exact = hit.type === "housenumber" && (hit.score >= GOOD_SCORE || sameNumber);
+    const entry = { lat: hit.lat, lon: hit.lon, approx: !exact, score: hit.score };
     remember(key, entry);
     return entry;
   }
