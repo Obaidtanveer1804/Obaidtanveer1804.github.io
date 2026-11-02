@@ -2163,8 +2163,14 @@ const Geocoder = (() => {
   function sameStreet(asked, label) {
     const want = streetWords(asked);
     if (!want.length) return true;
-    const got = new Set(streetWords(label));
-    return want.every((w) => got.has(w));
+    const labelStreet = String(label || "").replace(/\s+\d{5}\b.*$/, "").replace(/^\s*\d+\s*[a-z]?\b/i, "");
+    const gotList = streetWords(labelStreet);
+    const got = new Set(gotList);
+    if (want.every((w) => got.has(w))) return true;
+    // Official name without the first name ("rue Louis Pergaud" is filed as "Rue Pergaud"):
+    // same surname at the end and nothing in the answer that we didn't ask for.
+    return gotList.length > 0 && gotList[gotList.length - 1] === want[want.length - 1] &&
+      gotList.every((w) => want.includes(w));
   }
 
   /** Position of a missing house number from its neighbours on the same side (same parity): linear
